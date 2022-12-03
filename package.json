@@ -1,0 +1,28 @@
+{
+  "name": "ctn-solutions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": ">= 16.15.0",
+    "npm": ">= 8.5.5"
+  },
+  "workspaces": [
+    "apps/api",
+    "apps/web"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vanerac/ctn-solutions.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vanerac/ctn-solutions/issues"
+  },
+  "homepage": "https://github.com/vanerac/ctn-solutions#readme"
+}
