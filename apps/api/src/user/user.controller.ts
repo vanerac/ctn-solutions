@@ -4,9 +4,10 @@ import {CreateUserDto} from './dto/create-user.dto';
 import {UpdateUserDto} from './dto/update-user.dto';
 import {TypedBody, TypedRoute} from "nestia-helper";
 import {User} from "./user.entity";
-import {ApiResponse} from "@nestjs/swagger";
+import {ApiResponse, ApiTags} from "@nestjs/swagger";
 import {DeleteResult} from "typeorm";
 
+@ApiTags('user')
 @Controller('user')
 export class UserController {
     constructor(private readonly userService: UserService) {

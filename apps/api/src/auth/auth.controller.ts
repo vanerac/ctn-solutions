@@ -5,7 +5,9 @@ import {TypedRoute} from "nestia-helper";
 import {LoginDTO} from "./dto/login-d-t.o";
 import {LocalAuthGuard} from "./local.guard";
 import {JwtAuthGuard} from "./jwt.guard";
+import {ApiTags} from "@nestjs/swagger";
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {

@@ -5,8 +5,6 @@
  * desc
  * OpenAPI spec version: 1.0
  */
-import axios from "axios";
-import type { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
 import useSwr from "swr";
 import type { SWRConfiguration, Key } from "swr";
 import type {
@@ -14,16 +12,26 @@ import type {
   CreateUserDto,
   RegisterDTO,
   LoginDTO,
-} from "../core.schemas";
+} from "./core.schemas";
+import { customInstance } from "./custom-instance";
+import type { ErrorType, BodyType } from "./custom-instance";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
 type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
 
+// eslint-disable-next-line
+type SecondParameter<T extends (...args: any) => any> = T extends (
+  config: any,
+  args: infer P
+) => any
+  ? P
+  : never;
+
 export const appControllerGetHello = (
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<void>> => {
-  return axios.get(`/`, options);
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<void>({ url: `/`, method: "get" }, options);
 };
 
 export const getAppControllerGetHelloKey = () => [`/`];
@@ -31,24 +39,24 @@ export const getAppControllerGetHelloKey = () => [`/`];
 export type AppControllerGetHelloQueryResult = NonNullable<
   Awaited<ReturnType<typeof appControllerGetHello>>
 >;
-export type AppControllerGetHelloQueryError = AxiosError<unknown>;
+export type AppControllerGetHelloQueryError = ErrorType<unknown>;
 
 export const useAppControllerGetHello = <
-  TError = AxiosError<unknown>
+  TError = ErrorType<unknown>
 >(options?: {
   swr?: SWRConfiguration<
     Awaited<ReturnType<typeof appControllerGetHello>>,
     TError
   > & { swrKey?: Key; enabled?: boolean };
-  axios?: AxiosRequestConfig;
+  request?: SecondParameter<typeof customInstance>;
 }) => {
-  const { swr: swrOptions, axios: axiosOptions } = options ?? {};
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
 
   const isEnabled = swrOptions?.enabled !== false;
   const swrKey =
     swrOptions?.swrKey ??
     (() => (isEnabled ? getAppControllerGetHelloKey() : null));
-  const swrFn = () => appControllerGetHello(axiosOptions);
+  const swrFn = () => appControllerGetHello(requestOptions);
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
     swrKey,
@@ -63,16 +71,24 @@ export const useAppControllerGetHello = <
 };
 
 export const userControllerCreate = (
-  createUserDto: CreateUserDto,
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<unknown>> => {
-  return axios.post(`/user`, createUserDto, options);
+  createUserDto: BodyType<CreateUserDto>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<unknown>(
+    {
+      url: `/user`,
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      data: createUserDto,
+    },
+    options
+  );
 };
 
 export const userControllerFindAll = (
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<unknown>> => {
-  return axios.get(`/user`, options);
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<unknown>({ url: `/user`, method: "get" }, options);
 };
 
 export const getUserControllerFindAllKey = () => [`/user`];
@@ -80,22 +96,22 @@ export const getUserControllerFindAllKey = () => [`/user`];
 export type UserControllerFindAllQueryResult = NonNullable<
   Awaited<ReturnType<typeof userControllerFindAll>>
 >;
-export type UserControllerFindAllQueryError = AxiosError<User>;
+export type UserControllerFindAllQueryError = ErrorType<User>;
 
-export const useUserControllerFindAll = <TError = AxiosError<User>>(options?: {
+export const useUserControllerFindAll = <TError = ErrorType<User>>(options?: {
   swr?: SWRConfiguration<
     Awaited<ReturnType<typeof userControllerFindAll>>,
     TError
   > & { swrKey?: Key; enabled?: boolean };
-  axios?: AxiosRequestConfig;
+  request?: SecondParameter<typeof customInstance>;
 }) => {
-  const { swr: swrOptions, axios: axiosOptions } = options ?? {};
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
 
   const isEnabled = swrOptions?.enabled !== false;
   const swrKey =
     swrOptions?.swrKey ??
     (() => (isEnabled ? getUserControllerFindAllKey() : null));
-  const swrFn = () => userControllerFindAll(axiosOptions);
+  const swrFn = () => userControllerFindAll(requestOptions);
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
     swrKey,
@@ -111,9 +127,12 @@ export const useUserControllerFindAll = <TError = AxiosError<User>>(options?: {
 
 export const userControllerFindOne = (
   id: number,
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<unknown>> => {
-  return axios.get(`/user/${id}`, options);
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<unknown>(
+    { url: `/user/${id}`, method: "get" },
+    options
+  );
 };
 
 export const getUserControllerFindOneKey = (id: number) => [`/user/${id}`];
@@ -121,25 +140,25 @@ export const getUserControllerFindOneKey = (id: number) => [`/user/${id}`];
 export type UserControllerFindOneQueryResult = NonNullable<
   Awaited<ReturnType<typeof userControllerFindOne>>
 >;
-export type UserControllerFindOneQueryError = AxiosError<User>;
+export type UserControllerFindOneQueryError = ErrorType<User>;
 
-export const useUserControllerFindOne = <TError = AxiosError<User>>(
+export const useUserControllerFindOne = <TError = ErrorType<User>>(
   id: number,
   options?: {
     swr?: SWRConfiguration<
       Awaited<ReturnType<typeof userControllerFindOne>>,
       TError
     > & { swrKey?: Key; enabled?: boolean };
-    axios?: AxiosRequestConfig;
+    request?: SecondParameter<typeof customInstance>;
   }
 ) => {
-  const { swr: swrOptions, axios: axiosOptions } = options ?? {};
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
 
   const isEnabled = swrOptions?.enabled !== false && !!id;
   const swrKey =
     swrOptions?.swrKey ??
     (() => (isEnabled ? getUserControllerFindOneKey(id) : null));
-  const swrFn = () => userControllerFindOne(id, axiosOptions);
+  const swrFn = () => userControllerFindOne(id, requestOptions);
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
     swrKey,
@@ -155,36 +174,58 @@ export const useUserControllerFindOne = <TError = AxiosError<User>>(
 
 export const userControllerUpdate = (
   id: number,
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<unknown>> => {
-  return axios.patch(`/user/${id}`, undefined, options);
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<unknown>(
+    { url: `/user/${id}`, method: "patch" },
+    options
+  );
 };
 
 export const userControllerRemove = (
   id: number,
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<unknown>> => {
-  return axios.delete(`/user/${id}`, options);
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<unknown>(
+    { url: `/user/${id}`, method: "delete" },
+    options
+  );
 };
 
 export const authControllerRegister = (
-  registerDTO: RegisterDTO,
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<void>> => {
-  return axios.post(`/auth/register`, registerDTO, options);
+  registerDTO: BodyType<RegisterDTO>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<void>(
+    {
+      url: `/auth/register`,
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      data: registerDTO,
+    },
+    options
+  );
 };
 
 export const authControllerLogin = (
-  loginDTO: LoginDTO,
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<void>> => {
-  return axios.post(`/auth/login`, loginDTO, options);
+  loginDTO: BodyType<LoginDTO>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<void>(
+    {
+      url: `/auth/login`,
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      data: loginDTO,
+    },
+    options
+  );
 };
 
 export const authControllerProfile = (
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<void>> => {
-  return axios.get(`/auth/profile`, options);
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<void>({ url: `/auth/profile`, method: "get" }, options);
 };
 
 export const getAuthControllerProfileKey = () => [`/auth/profile`];
@@ -192,24 +233,24 @@ export const getAuthControllerProfileKey = () => [`/auth/profile`];
 export type AuthControllerProfileQueryResult = NonNullable<
   Awaited<ReturnType<typeof authControllerProfile>>
 >;
-export type AuthControllerProfileQueryError = AxiosError<unknown>;
+export type AuthControllerProfileQueryError = ErrorType<unknown>;
 
 export const useAuthControllerProfile = <
-  TError = AxiosError<unknown>
+  TError = ErrorType<unknown>
 >(options?: {
   swr?: SWRConfiguration<
     Awaited<ReturnType<typeof authControllerProfile>>,
     TError
   > & { swrKey?: Key; enabled?: boolean };
-  axios?: AxiosRequestConfig;
+  request?: SecondParameter<typeof customInstance>;
 }) => {
-  const { swr: swrOptions, axios: axiosOptions } = options ?? {};
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
 
   const isEnabled = swrOptions?.enabled !== false;
   const swrKey =
     swrOptions?.swrKey ??
     (() => (isEnabled ? getAuthControllerProfileKey() : null));
-  const swrFn = () => authControllerProfile(axiosOptions);
+  const swrFn = () => authControllerProfile(requestOptions);
 
   const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
     swrKey,

@@ -9,18 +9,18 @@ export default defineConfig({
         output: {
             workspace: 'libs/SDK',
             target: 'core.ts',
-            mode: 'tags-split',
+            mode: 'split',
             prettier: true,
             headers: true,
             client: 'swr',
-            // override: {
-            //     useDeprecatedOperations: true,
-            //     useDates: true,
-            //     mutator: {
-            //         path: 'fetch.ts',
-            //         name: 'fetch'
-            //     }
-            // }
+            override: {
+                mutator: {
+                    path: './custom-instance.ts',
+                    name: 'customInstance',
+                },
+                useDeprecatedOperations: true,
+                useDates: true,
+            },
         }
     }
 })
