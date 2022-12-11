@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/vanerac/ctn-solutions#readme",
   "dependencies": {
+    "@nestjs/passport": "^9.0.0",
     "axios": "^1.2.0",
     "nestia-helper": "^3.1.10",
     "orval": "^6.10.3",

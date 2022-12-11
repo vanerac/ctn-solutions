@@ -9,13 +9,9 @@ export class User {
 
     @ApiProperty()
     @Column()
-    firstName: string;
+    email: string;
 
     @ApiProperty()
     @Column()
-    lastName: string;
-
-    @ApiProperty()
-    @Column({default: true})
-    isActive: boolean;
+    password: string;
 }
