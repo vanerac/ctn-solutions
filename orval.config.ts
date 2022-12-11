@@ -7,9 +7,9 @@ export default defineConfig({
             validation: false
         },
         output: {
-            workspace: 'libs/http/src/lib',
-            target: 'sdk.ts',
-            mode: 'single',
+            workspace: 'libs/SDK',
+            target: 'core.ts',
+            mode: 'tags-split',
             prettier: true,
             headers: true,
             client: 'swr',
