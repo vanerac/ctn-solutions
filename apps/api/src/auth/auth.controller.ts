@@ -5,7 +5,8 @@ import {TypedRoute} from "nestia-helper";
 import {LoginDTO} from "./dto/login-d-t.o";
 import {LocalAuthGuard} from "./local.guard";
 import {JwtAuthGuard} from "./jwt.guard";
-import {ApiTags} from "@nestjs/swagger";
+import {ApiOkResponse, ApiTags} from "@nestjs/swagger";
+import {LoginResponse} from "./dto/loginResponse";
 
 @ApiTags('auth')
 @Controller('auth')
@@ -19,6 +20,7 @@ export class AuthController {
     }
 
     @UseGuards(LocalAuthGuard)
+    @ApiOkResponse({type: LoginResponse})
     @TypedRoute.Post('login')
     login(@Body() loginDTO: LoginDTO) {
         return this.authService.login(loginDTO);

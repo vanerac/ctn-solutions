@@ -11,6 +11,7 @@ import type {
   User,
   CreateUserDto,
   RegisterDTO,
+  LoginResponse,
   LoginDTO,
 } from "./core.schemas";
 import { customInstance } from "./custom-instance";
@@ -211,7 +212,7 @@ export const authControllerLogin = (
   loginDTO: BodyType<LoginDTO>,
   options?: SecondParameter<typeof customInstance>
 ) => {
-  return customInstance<void>(
+  return customInstance<LoginResponse>(
     {
       url: `/auth/login`,
       method: "post",

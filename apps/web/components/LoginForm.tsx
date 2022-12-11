@@ -1,12 +1,15 @@
 import {FormEvent, useState} from "react";
 import {useRouter} from "next/navigation";
 import {authControllerLogin} from "../../../libs/SDK";
+import {useCookies} from "react-cookie";
+
 
 export default function LoginForm() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
+    const [cookie, setCookie] = useCookies(['token']);
     const router = useRouter()
 
 
@@ -16,7 +19,8 @@ export default function LoginForm() {
         setError('')
 
         try {
-            await authControllerLogin({email, password})
+            const data = await authControllerLogin({email, password})
+            setCookie('token', data.access_token, {path: '/', maxAge: 3600})
             router.push('/')
         } catch (error: any) {
             setError(error.message)
@@ -24,7 +28,7 @@ export default function LoginForm() {
             setLoading(false)
         }
     }
-    
+
     return (
         <div className="flex items-center justify-center h-screen">
             <form onSubmit={handleSubmit} className="w-1/3 p-8 bg-white border rounded shadow">
@@ -64,6 +68,15 @@ export default function LoginForm() {
                     >
                         {loading ? 'Loading...' : 'Login'}
                     </button>
+                </div>
+                <hr className="mb-6 border-t"/>
+                <div className="text-center">
+                    <a
+                        className="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
+                        href="/register"
+                    >
+                        Don't have an account? Register here.
+                    </a>
                 </div>
             </form>
         </div>
