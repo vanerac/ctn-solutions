@@ -14,8 +14,6 @@ AXIOS_INSTANCE.interceptors.request.use(
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
-        } else {
-            throw new Error('No token found');
         }
         return config;
     });

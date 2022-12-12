@@ -1,8 +1,12 @@
-import Customers from "./customers";
+import SideBar from "../components/Sidebar/SideBar";
+import TopBar from "../components/TopBar";
 
 function Home() {
     return (
-        <Customers/>
+        <>
+            <TopBar/>
+            <SideBar/>
+        </>
     )
 }
 
