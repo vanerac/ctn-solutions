@@ -10,9 +10,13 @@ import type { SWRConfiguration, Key } from "swr";
 import type {
   User,
   CreateUserDto,
+  UpdateUserDto,
   RegisterDTO,
   LoginResponse,
   LoginDTO,
+  Company,
+  CreateCompanyDto,
+  UpdateCompanyDto,
 } from "./core.schemas";
 import { customInstance } from "./custom-instance";
 import type { ErrorType, BodyType } from "./custom-instance";
@@ -97,9 +101,9 @@ export const getUserControllerFindAllKey = () => [`/user`];
 export type UserControllerFindAllQueryResult = NonNullable<
   Awaited<ReturnType<typeof userControllerFindAll>>
 >;
-export type UserControllerFindAllQueryError = ErrorType<User>;
+export type UserControllerFindAllQueryError = ErrorType<User[]>;
 
-export const useUserControllerFindAll = <TError = ErrorType<User>>(options?: {
+export const useUserControllerFindAll = <TError = ErrorType<User[]>>(options?: {
   swr?: SWRConfiguration<
     Awaited<ReturnType<typeof userControllerFindAll>>,
     TError
@@ -175,10 +179,16 @@ export const useUserControllerFindOne = <TError = ErrorType<User>>(
 
 export const userControllerUpdate = (
   id: number,
+  updateUserDto: BodyType<UpdateUserDto>,
   options?: SecondParameter<typeof customInstance>
 ) => {
   return customInstance<unknown>(
-    { url: `/user/${id}`, method: "patch" },
+    {
+      url: `/user/${id}`,
+      method: "patch",
+      headers: { "Content-Type": "application/json" },
+      data: updateUserDto,
+    },
     options
   );
 };
@@ -263,4 +273,136 @@ export const useAuthControllerProfile = <
     swrKey,
     ...query,
   };
+};
+
+export const companyControllerCreate = (
+  createCompanyDto: BodyType<CreateCompanyDto>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Company>(
+    {
+      url: `/company`,
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      data: createCompanyDto,
+    },
+    options
+  );
+};
+
+export const companyControllerFindAll = (
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Company[]>({ url: `/company`, method: "get" }, options);
+};
+
+export const getCompanyControllerFindAllKey = () => [`/company`];
+
+export type CompanyControllerFindAllQueryResult = NonNullable<
+  Awaited<ReturnType<typeof companyControllerFindAll>>
+>;
+export type CompanyControllerFindAllQueryError = ErrorType<unknown>;
+
+export const useCompanyControllerFindAll = <
+  TError = ErrorType<unknown>
+>(options?: {
+  swr?: SWRConfiguration<
+    Awaited<ReturnType<typeof companyControllerFindAll>>,
+    TError
+  > & { swrKey?: Key; enabled?: boolean };
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getCompanyControllerFindAllKey() : null));
+  const swrFn = () => companyControllerFindAll(requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const companyControllerFindOne = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Company>(
+    { url: `/company/${id}`, method: "get" },
+    options
+  );
+};
+
+export const getCompanyControllerFindOneKey = (id: string) => [
+  `/company/${id}`,
+];
+
+export type CompanyControllerFindOneQueryResult = NonNullable<
+  Awaited<ReturnType<typeof companyControllerFindOne>>
+>;
+export type CompanyControllerFindOneQueryError = ErrorType<unknown>;
+
+export const useCompanyControllerFindOne = <TError = ErrorType<unknown>>(
+  id: string,
+  options?: {
+    swr?: SWRConfiguration<
+      Awaited<ReturnType<typeof companyControllerFindOne>>,
+      TError
+    > & { swrKey?: Key; enabled?: boolean };
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false && !!id;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getCompanyControllerFindOneKey(id) : null));
+  const swrFn = () => companyControllerFindOne(id, requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const companyControllerUpdate = (
+  id: string,
+  updateCompanyDto: BodyType<UpdateCompanyDto>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Company>(
+    {
+      url: `/company/${id}`,
+      method: "patch",
+      headers: { "Content-Type": "application/json" },
+      data: updateCompanyDto,
+    },
+    options
+  );
+};
+
+export const companyControllerRemove = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<void>(
+    { url: `/company/${id}`, method: "delete" },
+    options
+  );
 };
