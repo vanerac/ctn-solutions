@@ -5,6 +5,27 @@
  * desc
  * OpenAPI spec version: 1.0
  */
+export interface UpdateCustomerDto {
+  id?: number;
+  email?: string;
+  password?: string;
+  company?: number;
+}
+
+export interface Customer {
+  id: number;
+  email: string;
+  password: string;
+  company: number;
+}
+
+export interface CreateCustomerDto {
+  id: number;
+  email: string;
+  password: string;
+  company: number;
+}
+
 export interface UpdateCompanyDto {
   legalname?: string;
   taxid?: string;
@@ -86,6 +107,7 @@ export interface User {
   email: string;
   password: string;
   Company: number;
+  customers: string[];
 }
 
 export interface CreateUserDto {
@@ -93,4 +115,5 @@ export interface CreateUserDto {
   email: string;
   password: string;
   Company: number;
+  customers: string[];
 }

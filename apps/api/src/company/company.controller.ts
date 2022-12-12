@@ -1,9 +1,9 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post, UseGuards} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Patch, Post, Request, UseGuards} from '@nestjs/common';
 import {CompanyService} from './company.service';
 import {CreateCompanyDto} from './dto/create-company.dto';
 import {UpdateCompanyDto} from './dto/update-company.dto';
 import {ApiOkResponse, ApiTags} from "@nestjs/swagger";
-import {Company} from "./entities/company.entity";
+import {Company} from "./company.entity";
 import {JwtAuthGuard} from "../auth/jwt.guard";
 
 @ApiTags('company')
@@ -15,7 +15,7 @@ export class CompanyController {
     @UseGuards(JwtAuthGuard)
     @ApiOkResponse({type: Company})
     @Post()
-    create(@Body() createCompanyDto: CreateCompanyDto) {
+    create(@Request() req, @Body() createCompanyDto: CreateCompanyDto) {
         return this.companyService.create(createCompanyDto);
     }
 

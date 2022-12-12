@@ -1,4 +1,4 @@
-import { DataSource } from 'typeorm';
+import {DataSource} from 'typeorm';
 
 export const databaseProviders = [
     {
@@ -15,6 +15,7 @@ export const databaseProviders = [
                     __dirname + '/../**/*.entity{.ts,.js}',
                 ],
                 synchronize: true,
+
             });
 
             return dataSource.initialize();
