@@ -5,6 +5,60 @@
  * desc
  * OpenAPI spec version: 1.0
  */
+export interface UpdateCompanyDto {
+  legalname?: string;
+  taxid?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  siret?: string;
+  ape?: string;
+  legalform?: string;
+  phone?: string;
+  email?: string;
+  website?: string;
+  logo?: string;
+  description?: string;
+  industry?: string;
+}
+
+export interface Company {
+  legalname: string;
+  taxid: string;
+  address: string;
+  city: string;
+  state: string;
+  zip: string;
+  siret: string;
+  ape: string;
+  legalform: string;
+  phone: string;
+  email: string;
+  website: string;
+  logo: string;
+  description: string;
+  industry: string;
+}
+
+export interface CreateCompanyDto {
+  legalname: string;
+  taxid: string;
+  address: string;
+  city: string;
+  state: string;
+  zip: string;
+  siret: string;
+  ape: string;
+  legalform: string;
+  phone: string;
+  email: string;
+  website: string;
+  logo: string;
+  description: string;
+  industry: string;
+}
+
 export interface LoginResponse {
   access_token: string;
 }
@@ -23,14 +77,20 @@ export interface DeleteResult {
   [key: string]: any;
 }
 
+export interface UpdateUserDto {
+  [key: string]: any;
+}
+
 export interface User {
   id: number;
   email: string;
   password: string;
+  Company: number;
 }
 
 export interface CreateUserDto {
   id: number;
   email: string;
   password: string;
+  Company: number;
 }

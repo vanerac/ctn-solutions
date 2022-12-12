@@ -1,5 +1,6 @@
-import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import {Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
 import {ApiProperty} from "@nestjs/swagger";
+import {Company} from '../company/entities/company.entity';
 
 @Entity()
 export class User {
@@ -14,4 +15,8 @@ export class User {
     @ApiProperty()
     @Column()
     password: string;
+
+    @ApiProperty()
+    @OneToOne(type => Company) @JoinColumn()
+    Company: number;
 }

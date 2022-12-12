@@ -1,7 +1,6 @@
-import {Body, Controller, Request, UseGuards} from '@nestjs/common';
+import {Body, Controller, Get, Post, Request, UseGuards} from '@nestjs/common';
 import {AuthService} from './auth.service';
 import {RegisterDTO} from './dto/register-d-t.o';
-import {TypedRoute} from "nestia-helper";
 import {LoginDTO} from "./dto/login-d-t.o";
 import {LocalAuthGuard} from "./local.guard";
 import {JwtAuthGuard} from "./jwt.guard";
@@ -14,20 +13,20 @@ export class AuthController {
     constructor(private readonly authService: AuthService) {
     }
 
-    @TypedRoute.Post('register')
+    @Post('register')
     register(@Body() registerDTO: RegisterDTO) {
         return this.authService.register(registerDTO);
     }
 
     @UseGuards(LocalAuthGuard)
     @ApiOkResponse({type: LoginResponse})
-    @TypedRoute.Post('login')
+    @Post('login')
     login(@Body() loginDTO: LoginDTO) {
         return this.authService.login(loginDTO);
     }
 
     @UseGuards(JwtAuthGuard)
-    @TypedRoute.Get('profile')
+    @Get('profile')
     profile(@Request() req) {
         return req.user
     }
