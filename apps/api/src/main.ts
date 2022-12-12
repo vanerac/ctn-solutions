@@ -7,6 +7,8 @@ import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
+    app.enableCors({})
+
 
     const path = '../../swagger.json'
 
@@ -16,6 +18,7 @@ async function bootstrap() {
             SwaggerModule
                 .createDocument(app,
                     new DocumentBuilder()
+                        .addServer('http://localhost:3000')
                         .setTitle('NestJS API')
                         .setDescription('desc')
                         .setVersion('1.0')

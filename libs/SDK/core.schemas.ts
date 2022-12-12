@@ -5,6 +5,10 @@
  * desc
  * OpenAPI spec version: 1.0
  */
+export interface LoginResponse {
+  access_token: string;
+}
+
 export interface LoginDTO {
   email?: string;
   password?: string;

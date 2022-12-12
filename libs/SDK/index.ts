@@ -1,2 +1,2 @@
-export * from "./default/default";
+export * from "./core";
 export * from "./core.schemas";
