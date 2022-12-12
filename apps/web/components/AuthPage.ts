@@ -4,7 +4,6 @@
 // If the user is logged in, the wrapped component is rendered
 
 import Router from "next/router";
-import {useCookies} from "react-cookie";
 import {useEffect} from "react";
 
 // get token from cookies
@@ -14,10 +13,8 @@ import {useEffect} from "react";
 // @ts-ignore
 export default function AuthPage({children}) {
 
-    const [cookie, $setCookie] = useCookies(['token']);
-
     useEffect(() => {
-        if (!cookie.token) {
+        if (!localStorage.getItem('token')) {
             Router.push('/login');
         }
     })

@@ -24,14 +24,11 @@ export class AuthService {
             }
         });
 
-        console.log(user)
-
-        if (bcrypt.compareSync(pass, user.password)) {
+        if (user && bcrypt.compareSync(pass, user.password)) {
             const {password, ...result} = user;
             return result;
         }
 
-        console.log('nope')
         return null;
     }
 

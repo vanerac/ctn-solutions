@@ -1,11 +1,8 @@
-import AuthPage from "../components/AuthPage";
-import CompanyDetails from "../components/CompanyDetails";
+import Customers from "./customers";
 
 function Home() {
     return (
-        <AuthPage>
-            <CompanyDetails/>
-        </AuthPage>
+        <Customers/>
     )
 }
 
