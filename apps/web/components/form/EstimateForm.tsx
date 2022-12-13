@@ -1,7 +1,8 @@
-import {Customer, Estimate, EstimateField, useCustomerControllerFindAll} from "../../../../libs/SDK";
+import {Customer, Estimate, useCustomerControllerFindAll} from "../../../../libs/SDK";
 import {useState} from "react";
 import FormField from "./FormField";
 import BillingInfo from "./BillingInfo";
+import Breakdown from "./Breakdown";
 
 export default function EstimateForm({
                                          estimate,
@@ -14,7 +15,7 @@ export default function EstimateForm({
 ) {
 
     const {data: customers, error: customersError} = useCustomerControllerFindAll();
-    const [customer, setCustomer] = useState<Customer>();
+    const [customer, setCustomer] = useState<Customer | undefined>(customers?.find((c => c.id === estimate?.customer)));
     const [title, setTitle] = useState<string>(estimate?.title || "");
     const [description, setDescription] = useState<string>(estimate?.description || "");
     const [creationDate, setCreationDate] = useState<Date>(estimate?.date || new Date());
@@ -27,12 +28,6 @@ export default function EstimateForm({
     const [tax, setTax] = useState<number>(estimate?.tax || 0);
     const [discount, setDiscount] = useState<number>(estimate?.globalDiscount || 0);
 
-    const [itemName, setItemName] = useState<string>("");
-    const [itemDescription, setItemDescription] = useState<string>("");
-    const [itemQuantity, setItemQuantity] = useState<number>(0);
-    const [itemPrice, setItemPrice] = useState<number>(0);
-    const [totalPrice, setTotalPrice] = useState<number>(0);
-
 
     const onFieldChange = (index: number, field: Estimate["items"][number]) => {
         const newFields = [...fields];
@@ -40,24 +35,37 @@ export default function EstimateForm({
         setFields(newFields);
     }
 
-    const onFieldDelete = (index: number) => {
-        const newFields = [...fields];
-        newFields.splice(index, 1);
-        setFields(newFields);
-    }
-
-    const onFieldAdd = (data: EstimateField) => {
-        const newFields = [...fields];
-        newFields.push(data);
-        setFields(newFields);
-    }
 
     const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        const newEstimate = {
+            ...estimate,
+            title: title,
+            description: description,
+            date: creationDate,
+            dueDate: dueDate,
+            items: fields,
+            notes: notes,
+            terms: terms,
+            tax: tax,
+            globalDiscount: discount,
+            customer: customer?.id as any,
+            status: "draft",
+            updatedAt: new Date(),
+            createdAt: new Date(),
+
+            // Todo: missing fields
+            // billingAddress: customer?.billingAddress,
+            // shippingAddress: customer?.shippingAddress,
+            // id: estimate?.id,
+            // owner: estimate?.owner,
+        }
+
+        onSubmit(newEstimate as Estimate);
     }
 
-    const [fieldData, setFieldData] = useState([null, null, null, null, null, null, null, null, null, null]);
+    const [fieldData, setFieldData] = useState([null, null]);
 
     return (
         // Start with the card container and the first part, the customer info
@@ -68,14 +76,26 @@ export default function EstimateForm({
                     <div className="text-2xl font-bold">Customer Information</div>
                     <div className="my-4 border-b border-gray-200"/>
 
-                    <BillingInfo/>
+                    <BillingInfo
+                        customers={customers}
+                        selectedCustomer={customer}
+                        setCustomer={setCustomer}
+                        title={title}
+                        setTitle={setTitle}
+                        creationDate={creationDate}
+                        description={description}
+                        dueDate={dueDate}
+                        setCreationDate={setCreationDate}
+                        setDescription={setDescription}
+                        setDueDate={setDueDate}
+                    />
                     <div className="my-4 border-b border-gray-200">
                         <div className="text-2xl font-bold">Estimate Items</div>
                         {
                             fieldData.map((item, index) => (
                                 <>
                                     <div className="my-4 border-b border-gray-200"/>
-                                    <FormField/>
+                                    <FormField formData={item} onChange={(data) => onFieldChange(index, data)}/>
                                 </>
                             ))
                         }
@@ -100,13 +120,19 @@ export default function EstimateForm({
                                 <label className="block text-sm font-medium text-gray-700">Notes</label>
                                 <textarea id="notes" name="notes" rows={3}
                                           className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                          defaultValue={""}/>
+                                          defaultValue={""}
+                                          onChange={(e) => setNotes(e.target.value)}
+                                          value={notes}
+                                />
                             </div>
                             <div className="col-span-2">
                                 <label className="block text-sm font-medium text-gray-700">Terms</label>
                                 <textarea id="terms" name="terms" rows={3}
                                           className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                          defaultValue={""}/>
+                                          defaultValue={""}
+                                          onChange={(e) => setTerms(e.target.value)}
+                                          value={terms}
+                                />
                             </div>
                         </div>
                     </div>
@@ -122,14 +148,14 @@ export default function EstimateForm({
                                 <input type="number" name="tax" id="tax" required
                                        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                        value={tax}
-                                       onChange={(e) => setTax(e.target.value)}/>
+                                       onChange={(e) => setTax(e.target.value as any)}/>
                             </div>
                             <div className="col-span-2">
                                 <label className="block text-sm font-medium text-gray-700">Discount</label>
                                 <input type="number" name="discount" id="discount" required
                                        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                        value={discount}
-                                       onChange={(e) => setDiscount(e.target.value)}/>
+                                       onChange={(e) => setDiscount(e.target.value as any)}/>
                             </div>
                         </div>
                     </div>
@@ -139,48 +165,7 @@ export default function EstimateForm({
 
                     {/* Total, give the total, before and after taxes & discounts*/}
                     {/* Display only, fields should not be inputs*/}
-                    <div className="mt-6">
-                        <div className="grid grid-cols-1 gap-4 p-8 bg-white border rounded shadow">
-                            {/*  Display as a rows (Field: Value) */}
-                            {/*  Grand Total is underlined and strong color   */}
-                            {/*  Total is bold color  */}
-                            {/*  Tax & discount are slightly offset and light colored  */}
-                            {/*  These data are display only, <input> tags should not be used  */}
-
-                            {/* Format as goes:
-
-                                   total
-                                    - discount
-                                    + tax
-                                  --------
-                                 grand total
-
-                        */}
-
-
-                            {/* TODO: Add details under each category*/}
-                            <div className="flex justify-between">
-                                <div className="text-gray-700">Total</div>
-                                <div className="text-gray-700">10000.00</div>
-                            </div>
-                            <div className="flex justify-between">
-                                <div className="text-gray-700">Discount</div>
-                                <div className="text-gray-700 text-green-500">-10.00</div>
-                            </div>
-
-                            <div className="flex justify-between">
-                                <div className="text-gray-700">Tax</div>
-                                {/* Red text*/}
-                                <div className="text-gray-700 text-red-500">+20.00</div>
-                            </div>
-                            {/* Underline, bold and bigger text*/}
-                            <div className="flex justify-between">
-                                <div className="text-gray-700 text-lg font-bold">Grand Total</div>
-                                <div className="text-gray-700 text-lg font-bold">12312.00</div>
-                            </div>
-
-                        </div>
-                    </div>
+                    <Breakdown tax={20} discount={10} total={1000}/>
 
 
                     {/* Submit */}
