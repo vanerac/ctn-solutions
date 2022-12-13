@@ -1,50 +1,79 @@
-// Form that lets user fill in the company details.
-// Required fields are:
-// - Company name
-// - Company address
-// - Company Siret
-// - Company Tax ID
-// - Company website
-// - Company Logo
-// - Legal form
-// - Optional fields ares:
-// - APE code
-// - Description
-// In a second section, the user can fill in the company's contact details.
-// Required fields are:
-// - Company contact name
-// - Company contact email
-// - Company contact phone number
 import {FormEvent, useState} from "react";
-import {companyControllerCreate} from "../../../libs/SDK";
+import {Company, companyControllerCreate, companyControllerUpdate} from "../../../libs/SDK";
 
 
-export default function CompanyDetails() {
-    // Set as a single page form
+export default function CompanyDetailsForm({
+                                           companyData, submitAction
+                                       }: { companyData?: Company, submitAction: (data: Company) => void }) {
+
 
     // Company details
-    const [companyName, setCompanyName] = useState("");
-    const [companyAddress, setCompanyAddress] = useState("");
-    const [companySiret, setCompanySiret] = useState("");
-    const [companyTaxId, setCompanyTaxId] = useState("");
-    const [companyWebsite, setCompanyWebsite] = useState("");
-    const [companyLogo, setCompanyLogo] = useState("");
-    const [legalForm, setLegalForm] = useState("");
-    const [apeCode, setApeCode] = useState("");
-    const [description, setDescription] = useState("");
-
-    // Contact details
-    const [contactName, setContactName] = useState("");
-    const [contactEmail, setContactEmail] = useState("");
-    const [contactPhone, setContactPhone] = useState("");
+    const [companyName, setCompanyName] = useState(companyData?.legalname ?? "");
+    const [companyAddress, setCompanyAddress] = useState(companyData?.address ?? "");
+    const [companySiret, setCompanySiret] = useState(companyData?.siret ?? "");
+    const [companyTaxId, setCompanyTaxId] = useState(companyData?.taxid ?? "");
+    const [companyWebsite, setCompanyWebsite] = useState(companyData?.website ?? "");
+    const [companyLogo, setCompanyLogo] = useState(companyData?.logo ?? "");
+    const [legalForm, setLegalForm] = useState(companyData?.legalform ?? "");
+    const [apeCode, setApeCode] = useState(companyData?.ape ?? "");
+    const [description, setDescription] = useState(companyData?.description ?? "");
+    const [companyCity, setCompanyCity] = useState(companyData?.city ?? "");
+    const [companyState, setCompanyState] = useState(companyData?.state ?? "");
+    const [companyZip, setCompanyZip] = useState(companyData?.zip ?? "");
+    const [companyIndustry, setCompanyIndustry] = useState(companyData?.industry ?? "");
 
 
     // Handle form submission
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
-        await companyControllerCreate(
+        submitAction({
+            legalname: companyName,
+            address: companyAddress,
+            siret: companySiret,
+            taxid: companyTaxId,
+            website: companyWebsite,
+            logo: companyLogo,
+            legalform: legalForm,
+            ape: apeCode,
+            description: description,
+            id: companyData?.id as number,
+            city: companyCity,
+            state: companyState,
+            zip: companyZip,
+            industry: companyIndustry
+        })
+
+        // alert("Company details Saved");
+
+    }
+
+    const createCompany = async () => {
+
+        return await companyControllerCreate(
             {
-                email: contactEmail,
+                id: companyData?.id as number,
+                legalname: companyName as string,
+                siret: companySiret as string,
+                taxid: companyTaxId as string,
+                website: companyWebsite as string,
+                logo: companyLogo as string,
+                legalform: legalForm as string,
+                description: description as string,
+                address: companyAddress as string,
+                state: companyAddress as string,
+                ape: apeCode as string,
+                city: companyAddress as string,
+                zip: companyAddress as string,
+                industry: apeCode as string,
+            }
+        );
+
+    }
+
+    const updateCompany = async () => {
+        return await companyControllerUpdate(
+            String(companyData?.id),
+            {
                 legalname: companyName,
                 siret: companySiret,
                 taxid: companyTaxId,
@@ -53,15 +82,13 @@ export default function CompanyDetails() {
                 legalform: legalForm,
                 description: description,
                 address: companyAddress,
-                phone: contactPhone,
                 state: companyAddress,
                 ape: apeCode,
                 city: companyAddress,
                 zip: companyAddress,
                 industry: apeCode,
             }
-        )
-        alert("Company created")
+        );
     }
 
     // Use Tailwind CSS to style the form
@@ -78,6 +105,7 @@ export default function CompanyDetails() {
                         Company name
                     </label>
                     <input
+                        required={true}
                         className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                         id="companyName"
                         type="text"
@@ -87,23 +115,11 @@ export default function CompanyDetails() {
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="companyAddress">
-                        Company address
-                    </label>
-                    <input
-                        className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                        id="companyAddress"
-                        type="text"
-                        placeholder="Company address"
-                        value={companyAddress}
-                        onChange={(e) => setCompanyAddress(e.target.value)}
-                    />
-                </div>
-                <div className="mb-4">
                     <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="companySiret">
                         Company Siret
                     </label>
                     <input
+                        required={true}
                         className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                         id="companySiret"
                         type="text"
@@ -117,6 +133,7 @@ export default function CompanyDetails() {
                         Company Tax ID
                     </label>
                     <input
+                        required={true}
                         className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border
                         rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                         id="companyTaxId"
@@ -157,6 +174,7 @@ export default function CompanyDetails() {
                         Legal form
                     </label>
                     <input
+                        required={true}
                         className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                         id="legalForm"
                         type="text"
@@ -170,6 +188,7 @@ export default function CompanyDetails() {
                         APE code
                     </label>
                     <input
+                        required={true}
                         className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                         id="apeCode"
                         type="text"
@@ -191,57 +210,109 @@ export default function CompanyDetails() {
                         onChange={(e) => setDescription(e.target.value)}
                     />
                 </div>
+                <div className="mb-4">
+                    <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="companyAddress">
+                        Industry
+                    </label>
+                    <input
+                        required={true}
+                        className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                        id="companyAddress"
+                        type="text"
+                        placeholder="Company address"
+                        value={companyIndustry}
+                        onChange={(e) => setCompanyIndustry(e.target.value)}
+                    />
+                </div>
             </div>
-            <h1 className="text-3xl font-bold mb-6 text-center">Contact details</h1>
+            <h2 className="text-2xl font-bold mb-6 text-center">Address</h2>
             <div className="grid grid-cols-2 gap-4">
                 <div className="mb-4">
-                    <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="firstName">
-                        Name
+                    <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="companyAddress">
+                        Address
                     </label>
                     <input
+                        required={true}
                         className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                        id="contactName"
+                        id="companyAddress"
                         type="text"
-                        placeholder="Name"
-                        value={contactName}
-                        onChange={(e) => setContactName(e.target.value)}
+                        placeholder="Company address"
+                        value={companyAddress}
+                        onChange={(e) => setCompanyAddress(e.target.value)}
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="lastName">
-                        Phone number
+                    <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="companyZipCode">
+                        Zip code
                     </label>
                     <input
+                        required={true}
                         className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                        id="contactPhone"
+                        id="companyZipCode"
                         type="text"
-                        placeholder="Phone number"
-                        value={contactPhone}
-                        onChange={(e) => setContactPhone(e.target.value)}
+                        placeholder="Company zip code"
+                        value={companyZip}
+                        onChange={(e) => setCompanyZip(e.target.value)}
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="email">
-                        Email
+                    <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="companyCity">
+                        City
                     </label>
                     <input
+                        required={true}
                         className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                        id="contactEmail"
+                        id="companyCity"
                         type="text"
-                        placeholder="Email"
-                        value={contactEmail}
-                        onChange={(e) => setContactEmail(e.target.value)}
+                        placeholder="Company city"
+                        value={companyCity}
+                        onChange={(e) => setCompanyCity(e.target.value)}
                     />
                 </div>
+
+                <div className="mb-4">
+                    <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="companyCountry">
+                        State
+                    </label>
+                    <input
+                        required={true}
+                        className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                        id="companyCountry"
+                        type="text"
+                        placeholder="Company country"
+                        value={companyState}
+                        onChange={(e) => setCompanyState(e.target.value)}
+                    />
+                </div>
+
             </div>
             <div className="flex justify-center">
-                <button
-                    className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3
-                    bg-green-400 hover:bg-green-500 focus:outline-none my-6"
-                    onClick={handleSubmit}
-                >
-                    Submit
-                </button>
+                {companyName == '' ||
+                companyAddress == '' ||
+                companySiret == '' ||
+                companyTaxId == '' ||
+                legalForm == '' ||
+                apeCode == '' ||
+                companyZip == '' ||
+                companyCity == '' ||
+                companyState == ''
+                    ? (
+                        <button
+                            className="w-full px-4 py-2 font-bold text-white bg-gray-500 rounded-full hover:bg-gray-700 focus:outline-none focus:shadow-outline"
+                            type="button"
+                        >
+                            Save
+                        </button>
+                    ) : (
+                        <button
+                            className="w-full px-4 py-2 font-bold text-white bg-green-500 rounded-full hover:bg-green-700 focus:outline-none focus:shadow-outline"
+                            onClick={handleSubmit}
+                        >
+                            Save
+                        </button>
+                    )}
+
+
             </div>
         </form>
 

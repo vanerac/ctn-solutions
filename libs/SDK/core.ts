@@ -14,6 +14,7 @@ import type {
   RegisterDTO,
   LoginResponse,
   LoginDTO,
+  ChangePasswordDTO,
   Company,
   CreateCompanyDto,
   UpdateCompanyDto,
@@ -276,6 +277,21 @@ export const useAuthControllerProfile = <
     swrKey,
     ...query,
   };
+};
+
+export const authControllerChangePassword = (
+  changePasswordDTO: BodyType<ChangePasswordDTO>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<void>(
+    {
+      url: `/auth/change-password`,
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      data: changePasswordDTO,
+    },
+    options
+  );
 };
 
 export const companyControllerCreate = (

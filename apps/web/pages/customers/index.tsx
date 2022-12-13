@@ -3,10 +3,10 @@ import {
     customerControllerRemove,
     customerControllerUpdate,
     useCustomerControllerFindAll
-} from "../../../libs/SDK";
+} from "../../../../libs/SDK";
 import Router from "next/router";
-import SideBar from "../components/Sidebar/SideBar";
-import TopBar from "../components/TopBar";
+import SideBar from "../../components/Sidebar/SideBar";
+import TopBar from "../../components/TopBar";
 
 export default function Customers() {
     // Tbale that displays all customers

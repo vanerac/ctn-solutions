@@ -5,28 +5,32 @@ import {User} from "../user/user.entity";
 
 @Entity()
 export class Customer {
-    @ApiProperty()
+    @ApiProperty({readOnly: true})
     @PrimaryGeneratedColumn()
     id: number;
+
+
+    @ApiProperty()
+    @Column()
+    firstname: string;
+
+    @ApiProperty()
+    @Column()
+    lastname: string;
+
+    @ApiProperty()
+    @Column()
+    phone: string;
 
     @ApiProperty()
     @Column()
     email: string;
 
-    @ApiProperty()
-    @Column({
-        default: null
-    })
-    password: string;
 
-    @ApiProperty()
-    @Column({
-        default: null
-    })
-
-    @ApiProperty()
-    @OneToOne(() => Company) @JoinColumn()
-    company: number;
+    @ApiProperty({nullable: true})
+    @OneToOne(() => Company) @JoinColumn(
+    ) @Column({nullable: true})
+    company?: number;
 
     @ManyToOne(() => User, (user) => user.customers)
     user: User

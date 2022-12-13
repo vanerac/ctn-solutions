@@ -6,6 +6,7 @@ import {LocalAuthGuard} from "./local.guard";
 import {JwtAuthGuard} from "./jwt.guard";
 import {ApiOkResponse, ApiTags} from "@nestjs/swagger";
 import {LoginResponse} from "./dto/loginResponse";
+import {ChangePasswordDTO} from "./dto/change-password-dot";
 
 @ApiTags('auth')
 @Controller('auth')
@@ -29,6 +30,13 @@ export class AuthController {
     @Get('profile')
     profile(@Request() req) {
         return req.user
+    }
+
+    // Change password
+    @UseGuards(JwtAuthGuard)
+    @Post('change-password')
+    changePassword(@Body() body: ChangePasswordDTO, @Request() req,) {
+        return this.authService.changePassword(req.user, body);
     }
 
 
