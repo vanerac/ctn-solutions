@@ -2,7 +2,7 @@ import {Inject, Injectable} from '@nestjs/common';
 import {CreateCompanyDto} from './dto/create-company.dto';
 import {UpdateCompanyDto} from './dto/update-company.dto';
 import {Repository} from "typeorm";
-import {Company} from "./entities/company.entity";
+import {Company} from "./company.entity";
 
 @Injectable()
 export class CompanyService {
@@ -14,9 +14,7 @@ export class CompanyService {
     }
 
     async create(createCompanyDto: CreateCompanyDto) {
-        const company = await this.companyRepository.create(createCompanyDto);
-
-        console.log(company);
+        const company = await this.companyRepository.create({...createCompanyDto});
 
         return this.companyRepository.save(company);
     }
@@ -25,12 +23,12 @@ export class CompanyService {
         return this.companyRepository.find();
     }
 
-    findOne(id: number) {
-        return this.companyRepository.findOne({
+    async findOne(id: number) {
+        return await this.companyRepository.findOne({
             where: {
                 id
             }
-        });
+        })
     }
 
     async update(id: number, updateCompanyDto: UpdateCompanyDto) {

@@ -14,6 +14,7 @@ enum LegalForm {
 @Entity()
 export class Company {
     @PrimaryGeneratedColumn()
+    @ApiProperty()
     id: number;
 
     @ApiProperty()
@@ -57,7 +58,6 @@ export class Company {
         unique: true,
         nullable: false
     })
-
     siret: string;
 
     @ApiProperty()
@@ -68,19 +68,11 @@ export class Company {
     @Column({
         type: "enum",
         enum: LegalForm,
+        nullable: false,
     })
     legalform: LegalForm;
 
-
-    // Optional fields
-
-    @ApiProperty()
-    @Column()
-    phone: string;
-
-    @ApiProperty()
-    @Column()
-    email: string;
+    // Display Settings
 
     @ApiProperty()
     @Column()
@@ -97,4 +89,5 @@ export class Company {
     @ApiProperty()
     @Column()
     industry: string;
+
 }

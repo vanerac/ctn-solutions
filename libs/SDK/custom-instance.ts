@@ -2,7 +2,21 @@
 
 import Axios, {AxiosError, AxiosRequestConfig} from 'axios';
 
-export const AXIOS_INSTANCE = Axios.create({baseURL: 'http://localhost:3000'}); // use your own URL here or environment variable
+export const AXIOS_INSTANCE = Axios.create({baseURL: process.env.API_URL ?? 'http://localhost:3000'}); // use your own URL here or environment variable
+
+AXIOS_INSTANCE.interceptors.request.use(
+    config => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers = {
+                ...config.headers,
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        }
+        return config;
+    });
 
 // add a second `options` argument here if you want to pass extra options to each generated query
 export const customInstance = <T>(

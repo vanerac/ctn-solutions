@@ -21,6 +21,7 @@ export default function LoginForm() {
         try {
             const data = await authControllerLogin({email, password})
             setCookie('token', data.access_token, {path: '/', maxAge: 3600})
+            localStorage.setItem('token', data.access_token)
             router.push('/')
         } catch (error: any) {
             setError(error.message)

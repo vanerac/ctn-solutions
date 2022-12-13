@@ -1,6 +1,7 @@
-import {Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
 import {ApiProperty} from "@nestjs/swagger";
-import {Company} from '../company/entities/company.entity';
+import {Company} from '../company/company.entity';
+import {Customer} from "../customer/customer.entity";
 
 @Entity()
 export class User {
@@ -19,4 +20,9 @@ export class User {
     @ApiProperty()
     @OneToOne(type => Company) @JoinColumn()
     Company: number;
+
+    // Customers
+    @ApiProperty()
+    @OneToMany(type => Customer, customer => customer.user)
+    customers: Customer[];
 }

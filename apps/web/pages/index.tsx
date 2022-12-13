@@ -1,11 +1,18 @@
-import AuthPage from "../components/AuthPage";
-import CompanyDetails from "../components/CompanyDetails";
+import SideBar from "../components/Sidebar/SideBar";
+import TopBar from "../components/TopBar";
+import HierarchyBar from "../components/HierarchyBar";
 
 function Home() {
     return (
-        <AuthPage>
-            <CompanyDetails/>
-        </AuthPage>
+        <>
+            <TopBar/>
+            <div className="flex flex-row">
+                <SideBar/>
+                <HierarchyBar items={[
+                    {href: null, name: "Home"}]}/>
+            </div>
+
+        </>
     )
 }
 
