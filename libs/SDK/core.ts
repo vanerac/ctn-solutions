@@ -15,6 +15,9 @@ import type {
   LoginResponse,
   LoginDTO,
   ChangePasswordDTO,
+  Estimate,
+  CreateEstimateDto,
+  UpdateEstimateDto,
   Company,
   CreateCompanyDto,
   UpdateCompanyDto,
@@ -290,6 +293,141 @@ export const authControllerChangePassword = (
       headers: { "Content-Type": "application/json" },
       data: changePasswordDTO,
     },
+    options
+  );
+};
+
+export const estimateControllerCreate = (
+  createEstimateDto: BodyType<CreateEstimateDto>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Estimate>(
+    {
+      url: `/estimate`,
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      data: createEstimateDto,
+    },
+    options
+  );
+};
+
+export const estimateControllerFindAll = (
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Estimate[]>(
+    { url: `/estimate`, method: "get" },
+    options
+  );
+};
+
+export const getEstimateControllerFindAllKey = () => [`/estimate`];
+
+export type EstimateControllerFindAllQueryResult = NonNullable<
+  Awaited<ReturnType<typeof estimateControllerFindAll>>
+>;
+export type EstimateControllerFindAllQueryError = ErrorType<unknown>;
+
+export const useEstimateControllerFindAll = <
+  TError = ErrorType<unknown>
+>(options?: {
+  swr?: SWRConfiguration<
+    Awaited<ReturnType<typeof estimateControllerFindAll>>,
+    TError
+  > & { swrKey?: Key; enabled?: boolean };
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getEstimateControllerFindAllKey() : null));
+  const swrFn = () => estimateControllerFindAll(requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const estimateControllerFindOne = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Estimate>(
+    { url: `/estimate/${id}`, method: "get" },
+    options
+  );
+};
+
+export const getEstimateControllerFindOneKey = (id: string) => [
+  `/estimate/${id}`,
+];
+
+export type EstimateControllerFindOneQueryResult = NonNullable<
+  Awaited<ReturnType<typeof estimateControllerFindOne>>
+>;
+export type EstimateControllerFindOneQueryError = ErrorType<unknown>;
+
+export const useEstimateControllerFindOne = <TError = ErrorType<unknown>>(
+  id: string,
+  options?: {
+    swr?: SWRConfiguration<
+      Awaited<ReturnType<typeof estimateControllerFindOne>>,
+      TError
+    > & { swrKey?: Key; enabled?: boolean };
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false && !!id;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getEstimateControllerFindOneKey(id) : null));
+  const swrFn = () => estimateControllerFindOne(id, requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const estimateControllerUpdate = (
+  id: string,
+  updateEstimateDto: BodyType<UpdateEstimateDto>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Estimate>(
+    {
+      url: `/estimate/${id}`,
+      method: "patch",
+      headers: { "Content-Type": "application/json" },
+      data: updateEstimateDto,
+    },
+    options
+  );
+};
+
+export const estimateControllerRemove = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<void>(
+    { url: `/estimate/${id}`, method: "delete" },
     options
   );
 };
