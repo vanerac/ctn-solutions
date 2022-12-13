@@ -1,12 +1,8 @@
-import {
-    Customer,
-    customerControllerRemove,
-    customerControllerUpdate,
-    useCustomerControllerFindAll
-} from "../../../../libs/SDK";
+import {customerControllerRemove, useCustomerControllerFindAll} from "../../../../libs/SDK";
 import Router from "next/router";
 import SideBar from "../../components/Sidebar/SideBar";
 import TopBar from "../../components/TopBar";
+import HierarchyBar from "../../components/HierarchyBar";
 
 export default function Customers() {
     // Tbale that displays all customers
@@ -42,10 +38,6 @@ export default function Customers() {
         await mutate();
     }
 
-    const editCustomer = async (id: string, data: Customer) => {
-        await customerControllerUpdate(id, data)
-    }
-
     // Use tailwind to style the table
     // Same style as the products table
 
@@ -69,52 +61,60 @@ export default function Customers() {
         <>
             <TopBar/>
 
-            <div className="flex">
+            <div className="flex flex-row">
 
                 <SideBar/>
-
-                <div className='container w-3/4 mx-auto my-10 bg-white rounded-lg shadow-lg'>
-
-                    <h1 className='text-3xl text-center my-5'>Customers</h1>
-
-                    <div className='flex justify-end px-5 py-3 border-b border-gray-200'>
-                        <button
-                            className='px-3 py-2 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600'
-                            onClick={() => Router.push('/customers/new')}>New customer
-                        </button>
+                <div className="flex flex-col w-3/4">
+                    <div className="flex flex-col">
+                        <HierarchyBar items={[
+                            {href: "/", name: "Home"},
+                            {href: null, name: "Customers"}]}/>
                     </div>
-                    <table className='w-full table-auto'>
-                        <thead className='bg-gray-100'>
-                        <tr>
-                            <th className='px-4 py-2 text-sm font-medium text-gray-600'>Name</th>
-                            <th className='px-4 py-2 text-sm font-medium text-gray-600'>Address</th>
-                            <th className='px-4 py-2 text-sm font-medium text-gray-600'>City</th>
-                            <th className='px-4 py-2 text-sm font-medium text-gray-600'>Country</th>
-                            <th className='px-4 py-2 text-sm font-medium text-gray-600'>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {customers.map((customer) => (
-                            <tr key={customer.id}
-                                className='hover:bg-gray-100'>
-                                <td className='px-4 py-2 text-sm font-medium text-gray-600'>{customer.email}</td>
-                                <td className='px-4 py-2 text-sm font-medium text-gray-600'>{customer.email}</td>
-                                <td className='px-4 py-2 text-sm font-medium text-gray-600'>{customer.email}</td>
-                                <td className='px-4 py-2 text-sm font-medium text-gray-600'>{customer.email}</td>
-                                <td className='flex justify-center'>
-                                    <button
-                                        className='px-3 py-2 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600'
-                                        onClick={() => Router.push(`/customers/${customer.id}`)}>Edit
-                                    </button>
-                                    <button
-                                        className='px-3 py-2 text-sm font-medium text-white bg-red-500 rounded hover:bg-red-600'
-                                        onClick={() => deleteCustomer(customer.id.toString())}>Delete
-                                    </button>
-                                </td>
+
+
+                    <div className='container w-3/4 mx-auto my-10 bg-white rounded-lg shadow-lg'>
+                        <h1 className='text-3xl text-center my-5'>Customers</h1>
+
+                        <div className='flex justify-end px-5 py-3 border-b border-gray-200'>
+                            <button
+                                className='px-3 py-2 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600'
+                                onClick={() => Router.push('/customers/new')}>New customer
+                            </button>
+                        </div>
+                        <table className='w-full table-auto'>
+                            <thead className='bg-gray-100'>
+                            <tr>
+                                <th className='px-4 py-2 text-sm font-medium text-gray-600'>Firstname</th>
+                                <th className='px-4 py-2 text-sm font-medium text-gray-600'>Lastname</th>
+                                <th className='px-4 py-2 text-sm font-medium text-gray-600'>Email</th>
+                                <th className='px-4 py-2 text-sm font-medium text-gray-600'>Phone</th>
+                                <th className='px-4 py-2 text-sm font-medium text-gray-600'>Company ID</th>
                             </tr>
-                        ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            {customers.map((customer) => (
+                                <tr key={customer.id}
+                                    className='hover:bg-gray-100'>
+                                    <td className='px-4 py-2 text-sm font-medium text-gray-600 text-center'>{customer.firstname}</td>
+                                    <td className='px-4 py-2 text-sm font-medium text-gray-600 text-center'>{customer.lastname}</td>
+                                    <td className='px-4 py-2 text-sm font-medium text-gray-600 text-center'>{customer.email}</td>
+                                    <td className='px-4 py-2 text-sm font-medium text-gray-600 text-center'>{customer.phone}</td>
+                                    <td className='px-4 py-2 text-sm font-medium text-gray-600 text-center'>{customer.company}</td>
+                                    <td className='flex justify-center'>
+                                        <button
+                                            className='px-3 py-2 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600'
+                                            onClick={() => Router.push(`/customers/${customer.id}`)}>View
+                                        </button>
+                                        <button
+                                            className='px-3 py-2 text-sm font-medium text-white bg-red-500 rounded hover:bg-red-600'
+                                            onClick={() => deleteCustomer(String(customer?.id))}>Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </>

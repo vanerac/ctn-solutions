@@ -58,7 +58,6 @@ export class Company {
         unique: true,
         nullable: false
     })
-
     siret: string;
 
     @ApiProperty()
@@ -69,6 +68,7 @@ export class Company {
     @Column({
         type: "enum",
         enum: LegalForm,
+        nullable: false,
     })
     legalform: LegalForm;
 
@@ -90,15 +90,4 @@ export class Company {
     @Column()
     industry: string;
 
-    @ApiProperty()
-    @Column({
-        nullable: true,
-    })
-    phone: string;
-
-    @ApiProperty()
-    @Column({
-        nullable: true,
-    })
-    email: string;
 }

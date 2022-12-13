@@ -28,12 +28,22 @@ export class CustomerService {
         return this.customerRepository.find();
     }
 
-    findOne(id: number) {
-        return this.customerRepository.findOne({
+    async findOne(id: number) {
+        const data = await this.customerRepository.findOne({
             where: {
                 id
-            }
+            },
+            select: [
+                "email",
+                "id",
+                "company",
+                "firstname",
+                "lastname",
+                "phone"
+            ]
         });
+
+        return data;
     }
 
     update(id: number, updateCustomerDto: UpdateCustomerDto) {

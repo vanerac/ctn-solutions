@@ -24,15 +24,11 @@ export class CompanyService {
     }
 
     async findOne(id: number) {
-
-        console.log('findOne', id);
-        const data = await this.companyRepository.findOne({
+        return await this.companyRepository.findOne({
             where: {
                 id
             }
-        });
-        console.log(data)
-        return data
+        })
     }
 
     async update(id: number, updateCompanyDto: UpdateCompanyDto) {
