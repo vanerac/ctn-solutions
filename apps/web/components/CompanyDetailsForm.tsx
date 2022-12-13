@@ -1,5 +1,5 @@
 import {FormEvent, useState} from "react";
-import {Company, companyControllerCreate, companyControllerUpdate} from "../../../libs/SDK";
+import {Company, companyControllerCreate, companyControllerUpdate, LegalForm} from "../../../libs/SDK";
 
 
 export default function CompanyDetailsForm({
@@ -14,7 +14,7 @@ export default function CompanyDetailsForm({
     const [companyTaxId, setCompanyTaxId] = useState(companyData?.taxid ?? "");
     const [companyWebsite, setCompanyWebsite] = useState(companyData?.website ?? "");
     const [companyLogo, setCompanyLogo] = useState(companyData?.logo ?? "");
-    const [legalForm, setLegalForm] = useState(companyData?.legalform ?? "");
+    const [legalForm, setLegalForm] = useState(companyData?.legalform ?? LegalForm.AE);
     const [apeCode, setApeCode] = useState(companyData?.ape ?? "");
     const [description, setDescription] = useState(companyData?.description ?? "");
     const [companyCity, setCompanyCity] = useState(companyData?.city ?? "");
@@ -57,7 +57,7 @@ export default function CompanyDetailsForm({
                 taxid: companyTaxId as string,
                 website: companyWebsite as string,
                 logo: companyLogo as string,
-                legalform: legalForm as string,
+                legalform: legalForm as LegalForm,
                 description: description as string,
                 address: companyAddress as string,
                 state: companyAddress as string,
@@ -178,19 +178,13 @@ export default function CompanyDetailsForm({
                         className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline bg-white"
                         id="legalForm"
                         value={legalForm}
-                        onChange={(e) => setLegalForm(e.target.value)}
+                        onChange={(e) => setLegalForm(e.target.value as LegalForm)}
                     >
-                        <option value={undefined}>Choose Form</option>
-                        <option value="SARL">SARL</option>
-                        <option value="SAS">SAS</option>
-                        <option value="SASU">SASU</option>
-                        <option value="EURL">EURL</option>
-                        <option value="SA">SA</option>
-                        <option value="SNC">SNC</option>
-                        <option value="SC">SC</option>
-                        <option value="EI">AE</option>
-                        <option value="EIU">EIU</option>
-                        <option value="EIRL">EIRL</option>
+                        {Object.keys(LegalForm).map((key) => (
+                            <option key={key} value={key}>
+                                {LegalForm[key as keyof typeof LegalForm]}
+                            </option>
+                        ))}
                     </select>
 
 
@@ -256,7 +250,7 @@ export default function CompanyDetailsForm({
                         <option value="Transportation">Transportation</option>
                         <option value="Travel">Travel</option>
                     </select>
-                    
+
 
                 </div>
             </div>
@@ -326,7 +320,7 @@ export default function CompanyDetailsForm({
                 companyAddress == '' ||
                 companySiret == '' ||
                 companyTaxId == '' ||
-                legalForm == '' ||
+                legalForm == '' as LegalForm ||
                 apeCode == '' ||
                 companyZip == '' ||
                 companyCity == '' ||

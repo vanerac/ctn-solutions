@@ -32,6 +32,19 @@ export interface CreateCustomerDto {
   company: number | null;
 }
 
+export type LegalForm = typeof LegalForm[keyof typeof LegalForm];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const LegalForm = {
+  AE: "AE",
+  SARL: "SARL",
+  SAS: "SAS",
+  SASU: "SASU",
+  EURL: "EURL",
+  EI: "EI",
+  EIRL: "EIRL",
+} as const;
+
 export interface UpdateCompanyDto {
   id?: number;
   legalname?: string;
@@ -42,7 +55,7 @@ export interface UpdateCompanyDto {
   zip?: string;
   siret?: string;
   ape?: string;
-  legalform?: string;
+  legalform?: LegalForm;
   website?: string;
   logo?: string;
   description?: string;
@@ -59,7 +72,7 @@ export interface Company {
   zip: string;
   siret: string;
   ape: string;
-  legalform: string;
+  legalform: LegalForm;
   website: string;
   logo: string;
   description: string;
@@ -76,11 +89,44 @@ export interface CreateCompanyDto {
   zip: string;
   siret: string;
   ape: string;
-  legalform: string;
+  legalform: LegalForm;
   website: string;
   logo: string;
   description: string;
   industry: string;
+}
+
+export type EstimateStatus = typeof EstimateStatus[keyof typeof EstimateStatus];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const EstimateStatus = {
+  draft: "draft",
+  sent: "sent",
+  accepted: "accepted",
+  declined: "declined",
+  cancelled: "cancelled",
+  changes_requested: "changes_requested",
+  expired: "expired",
+} as const;
+
+export interface UpdateEstimateDto {
+  id?: number;
+  customer?: number;
+  billingAddress?: number;
+  shippingAddress?: number;
+  items?: EstimateFields[];
+  title?: string;
+  description?: string;
+  date?: Date;
+  dueDate?: Date;
+  terms?: string;
+  notes?: string;
+  tax?: number;
+  globalDiscount?: number;
+  owner?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+  status?: EstimateStatus;
 }
 
 export interface Estimate {
@@ -98,6 +144,9 @@ export interface Estimate {
   tax: number;
   globalDiscount: number;
   owner: number;
+  createdAt: Date;
+  updatedAt: Date;
+  status: EstimateStatus;
 }
 
 export interface EstimateFields {
@@ -109,23 +158,6 @@ export interface EstimateFields {
   unitPrice: number;
   discount: number;
   tax: number;
-}
-
-export interface UpdateEstimateDto {
-  id?: number;
-  customer?: number;
-  billingAddress?: number;
-  shippingAddress?: number;
-  items?: EstimateFields[];
-  title?: string;
-  description?: string;
-  date?: Date;
-  dueDate?: Date;
-  terms?: string;
-  notes?: string;
-  tax?: number;
-  globalDiscount?: number;
-  owner?: number;
 }
 
 export interface CreateEstimateDto {
@@ -143,6 +175,9 @@ export interface CreateEstimateDto {
   tax: number;
   globalDiscount: number;
   owner: number;
+  createdAt: Date;
+  updatedAt: Date;
+  status: EstimateStatus;
 }
 
 export interface ChangePasswordDTO {

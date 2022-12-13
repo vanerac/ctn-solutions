@@ -64,7 +64,12 @@ export class Company {
     @Column()
     ape: string;
 
-    @ApiProperty()
+    @ApiProperty(
+        {
+            enum: LegalForm,
+            enumName: 'LegalForm',
+        }
+    )
     @Column({
         type: "enum",
         enum: LegalForm,

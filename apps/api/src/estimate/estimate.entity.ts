@@ -5,6 +5,17 @@ import {Company} from "../company/company.entity";
 import {User} from "../user/user.entity";
 import {EstimateFields} from "./estimate-field.entity";
 
+enum EstimateStatus {
+    DRAFT = 'draft',
+    SENT = 'sent',
+    ACCEPTED = 'accepted',
+    DECLINED = 'declined',
+    CANCELLED = 'cancelled',
+    CHANGES_REQUESTED = 'changes_requested',
+    EXPIRED = 'expired',
+}
+
+
 @Entity()
 export class Estimate {
     @ApiProperty()
@@ -81,4 +92,19 @@ export class Estimate {
     @ApiProperty()
     @OneToOne(type => User) @JoinColumn()
     owner: number;
+
+    @ApiProperty()
+    @Column()
+    createdAt: Date;
+
+    @ApiProperty()
+    @Column()
+    updatedAt: Date;
+
+    @ApiProperty({
+        enum: EstimateStatus,
+        enumName: 'EstimateStatus',
+    })
+    @Column()
+    status: string;
 }
