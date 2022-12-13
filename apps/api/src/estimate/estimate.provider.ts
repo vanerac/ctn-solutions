@@ -1,6 +1,6 @@
 import {DataSource} from 'typeorm';
 import {Estimate} from './estimate.entity';
-import {EstimateFields} from "./estimate-field.entity";
+import {EstimateField} from "./estimate-field.entity";
 
 export const estimateProviders = [
     {
@@ -10,7 +10,7 @@ export const estimateProviders = [
     },
     {
         provide: 'ESTIMATE_FIELD_REPOSITORY',
-        useFactory: (dataSource: DataSource) => dataSource.getRepository(EstimateFields),
+        useFactory: (dataSource: DataSource) => dataSource.getRepository(EstimateField),
         inject: ['DATA_SOURCE'],
     }
 ];

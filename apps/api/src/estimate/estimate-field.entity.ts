@@ -3,7 +3,7 @@ import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typ
 import {Estimate} from "./estimate.entity";
 
 @Entity()
-export class EstimateFields {
+export class EstimateField {
     @ApiProperty()
     @PrimaryGeneratedColumn()
     id: number;

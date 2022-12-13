@@ -3,7 +3,7 @@ import {CreateEstimateDto} from './dto/create-estimate.dto';
 import {UpdateEstimateDto} from './dto/update-estimate.dto';
 import {Repository} from "typeorm";
 import {Estimate} from "./estimate.entity";
-import {EstimateFields} from "./estimate-field.entity";
+import {EstimateField} from "./estimate-field.entity";
 
 @Injectable()
 export class EstimateService {
@@ -12,7 +12,7 @@ export class EstimateService {
         @Inject('ESTIMATE_REPOSITORY')
         private estimateRepository: Repository<Estimate>,
         @Inject('ESTIMATE_FIELD_REPOSITORY')
-        private estimateFieldRepository: Repository<EstimateFields>,
+        private estimateFieldRepository: Repository<EstimateField>,
     ) {
     }
 

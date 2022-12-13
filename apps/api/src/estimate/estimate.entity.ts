@@ -3,7 +3,7 @@ import {ApiProperty} from "@nestjs/swagger";
 import {Customer} from "../customer/customer.entity";
 import {Company} from "../company/company.entity";
 import {User} from "../user/user.entity";
-import {EstimateFields} from "./estimate-field.entity";
+import {EstimateField} from "./estimate-field.entity";
 
 enum EstimateStatus {
     DRAFT = 'draft',
@@ -45,9 +45,9 @@ export class Estimate {
     @OneToOne(type => Company) @JoinColumn()
     shippingAddress: number;
 
-    @ApiProperty({type: () => EstimateFields, isArray: true})
-    @OneToMany(type => EstimateFields, item => item.estimate)
-    items: EstimateFields[];
+    @ApiProperty({type: () => EstimateField, isArray: true})
+    @OneToMany(type => EstimateField, item => item.estimate)
+    items: EstimateField[];
 
     @ApiProperty()
     @Column()

@@ -114,7 +114,7 @@ export interface UpdateEstimateDto {
   customer?: number;
   billingAddress?: number;
   shippingAddress?: number;
-  items?: EstimateFields[];
+  items?: EstimateField[];
   title?: string;
   description?: string;
   date?: Date;
@@ -134,7 +134,7 @@ export interface Estimate {
   customer: number;
   billingAddress: number;
   shippingAddress: number;
-  items: EstimateFields[];
+  items: EstimateField[];
   title: string;
   description: string;
   date: Date;
@@ -149,7 +149,7 @@ export interface Estimate {
   status: EstimateStatus;
 }
 
-export interface EstimateFields {
+export interface EstimateField {
   id: number;
   estimate: Estimate;
   title: string;
@@ -165,7 +165,7 @@ export interface CreateEstimateDto {
   customer: number;
   billingAddress: number;
   shippingAddress: number;
-  items: EstimateFields[];
+  items: EstimateField[];
   title: string;
   description: string;
   date: Date;
