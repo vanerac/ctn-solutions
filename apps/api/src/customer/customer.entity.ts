@@ -28,10 +28,10 @@ export class Customer {
 
 
     @ApiProperty({nullable: true, type: () => Company})
-    @OneToOne(() => Company, {nullable: true}) @JoinColumn(
+    @OneToOne(() => Company, {nullable: true, onDelete: "CASCADE"}) @JoinColumn(
     )
     company: Company;
 
-    @ManyToOne(() => User, (user) => user.customers)
+    @ManyToOne(() => User, (user) => user.customers, {onDelete: 'CASCADE'})
     user: User
 }
