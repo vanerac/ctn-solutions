@@ -21,10 +21,10 @@ export default function SideBar() {
     const links = [
         {href: '/', text: 'Dashboard'},
         {href: '/customers', text: 'Customers'},
-        {href: '/products', text: 'Products'},
-        {href: '/orders', text: 'Orders'},
-        {href: '/invoices', text: 'Invoices'},
-        {href: '/payments', text: 'Payments'},
+        {href: '/estimate', text: 'Estimate'},
+        // {href: '/orders', text: 'Orders'},
+        // {href: '/invoices', text: 'Invoices'},
+        // {href: '/payments', text: 'Payments'},
     ];
 
     return (

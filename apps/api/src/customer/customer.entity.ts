@@ -27,10 +27,10 @@ export class Customer {
     email: string;
 
 
-    @ApiProperty({nullable: true})
-    @OneToOne(() => Company) @JoinColumn(
-    ) @Column({nullable: true})
-    company?: number;
+    @ApiProperty({nullable: true, type: () => Company})
+    @OneToOne(() => Company, {nullable: true}) @JoinColumn(
+    )
+    company: Company;
 
     @ManyToOne(() => User, (user) => user.customers)
     user: User

@@ -67,14 +67,6 @@ export default function EditCustomerPage() {
         <div>
             <TopBar/>
             <div className="flex flex-row">
-                <button
-                    onClick={() => Router.push("/customers/" + id)}
-
-                    className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-l"
-                >Back
-                </button>
-            </div>
-            <div className="flex flex-row">
                 <SideBar/>
                 <div className="flex flex-col">
                     <HierarchyBar items={[

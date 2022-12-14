@@ -1,10 +1,10 @@
 import {FormEvent, useState} from "react";
-import {Company, companyControllerCreate, companyControllerUpdate} from "../../../libs/SDK";
+import {Company, companyControllerCreate, companyControllerUpdate, LegalForm} from "../../../libs/SDK";
 
 
 export default function CompanyDetailsForm({
-                                           companyData, submitAction
-                                       }: { companyData?: Company, submitAction: (data: Company) => void }) {
+                                               companyData, submitAction
+                                           }: { companyData?: Company, submitAction: (data: Company) => void }) {
 
 
     // Company details
@@ -14,7 +14,7 @@ export default function CompanyDetailsForm({
     const [companyTaxId, setCompanyTaxId] = useState(companyData?.taxid ?? "");
     const [companyWebsite, setCompanyWebsite] = useState(companyData?.website ?? "");
     const [companyLogo, setCompanyLogo] = useState(companyData?.logo ?? "");
-    const [legalForm, setLegalForm] = useState(companyData?.legalform ?? "");
+    const [legalForm, setLegalForm] = useState(companyData?.legalform ?? LegalForm.AE);
     const [apeCode, setApeCode] = useState(companyData?.ape ?? "");
     const [description, setDescription] = useState(companyData?.description ?? "");
     const [companyCity, setCompanyCity] = useState(companyData?.city ?? "");
@@ -57,7 +57,7 @@ export default function CompanyDetailsForm({
                 taxid: companyTaxId as string,
                 website: companyWebsite as string,
                 logo: companyLogo as string,
-                legalform: legalForm as string,
+                legalform: legalForm as LegalForm,
                 description: description as string,
                 address: companyAddress as string,
                 state: companyAddress as string,
@@ -122,7 +122,8 @@ export default function CompanyDetailsForm({
                         required={true}
                         className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                         id="companySiret"
-                        type="text"
+                        // validate format="### ### ### ####"
+                        type="number"
                         placeholder="Company Siret"
                         value={companySiret}
                         onChange={(e) => setCompanySiret(e.target.value)}
@@ -173,15 +174,20 @@ export default function CompanyDetailsForm({
                     <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="legalForm">
                         Legal form
                     </label>
-                    <input
-                        required={true}
-                        className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                    <select
+                        className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline bg-white"
                         id="legalForm"
-                        type="text"
-                        placeholder="Legal form"
                         value={legalForm}
-                        onChange={(e) => setLegalForm(e.target.value)}
-                    />
+                        onChange={(e) => setLegalForm(e.target.value as LegalForm)}
+                    >
+                        {Object.keys(LegalForm).map((key) => (
+                            <option key={key} value={key}>
+                                {LegalForm[key as keyof typeof LegalForm]}
+                            </option>
+                        ))}
+                    </select>
+
+
                 </div>
                 <div className="mb-4">
                     <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="apeCode">
@@ -214,15 +220,38 @@ export default function CompanyDetailsForm({
                     <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="companyAddress">
                         Industry
                     </label>
-                    <input
-                        required={true}
-                        className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                        id="companyAddress"
-                        type="text"
-                        placeholder="Company address"
+                    <select
+                        className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline bg-white"
+                        id="industry"
                         value={companyIndustry}
                         onChange={(e) => setCompanyIndustry(e.target.value)}
-                    />
+                    >
+                        <option value={undefined}>Choose Industry</option>
+                        <option value="Agriculture">Agriculture</option>
+                        <option value="Automotive">Automotive</option>
+                        <option value="Banking">Banking</option>
+                        <option value="Construction">Construction</option>
+                        <option value="Education">Education</option>
+                        <option value="Energy">Energy</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Fashion">Fashion</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Food">Food</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Hospitality">Hospitality</option>
+                        <option value="Insurance">Insurance</option>
+                        <option value="Manufacturing">Manufacturing</option>
+                        <option value="Media">Media</option>
+                        <option value="Mining">Mining</option>
+                        <option value="Real Estate">Real Estate</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Telecommunications">Telecommunications</option>
+                        <option value="Transportation">Transportation</option>
+                        <option value="Travel">Travel</option>
+                    </select>
+
+
                 </div>
             </div>
             <h2 className="text-2xl font-bold mb-6 text-center">Address</h2>
@@ -291,7 +320,7 @@ export default function CompanyDetailsForm({
                 companyAddress == '' ||
                 companySiret == '' ||
                 companyTaxId == '' ||
-                legalForm == '' ||
+                legalForm == '' as LegalForm ||
                 apeCode == '' ||
                 companyZip == '' ||
                 companyCity == '' ||
