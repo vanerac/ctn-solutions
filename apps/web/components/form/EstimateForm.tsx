@@ -18,8 +18,8 @@ export default function EstimateForm({
     const [customer, setCustomer] = useState<Customer | undefined>(customers?.find((c => c.id === estimate?.customer.id)));
     const [title, setTitle] = useState<string>(estimate?.title || "");
     const [description, setDescription] = useState<string>(estimate?.description || "");
-    const [creationDate, setCreationDate] = useState<Date>(new Date(estimate?.date as unknown as string) || new Date());
-    const [dueDate, setDueDate] = useState<Date>(new Date(estimate?.dueDate as unknown as string) || new Date());
+    const [creationDate, setCreationDate] = useState<Date>(estimate?.date ? new Date(estimate?.date as unknown as string) : new Date());
+    const [dueDate, setDueDate] = useState<Date>(estimate?.dueDate ? new Date(estimate?.dueDate as unknown as string) : new Date());
 
     const [fields, setFields] = useState<Array<EstimateField | null>>(estimate?.items || []);
 
@@ -32,6 +32,12 @@ export default function EstimateForm({
     const onFieldChange = (index: number, field: Estimate["items"][number]) => {
         const newFields = [...fields];
         newFields[index] = field;
+        setFields(newFields);
+    }
+
+    const onFieldDelete = (index: number) => {
+        const newFields = [...fields];
+        newFields.splice(index, 1);
         setFields(newFields);
     }
 
@@ -99,7 +105,8 @@ export default function EstimateForm({
                             fields.map((item, index) => (
                                 <>
                                     <div className="my-4 border-b border-gray-200"/>
-                                    <FormField formData={item} onChange={(data) => onFieldChange(index, data)}/>
+                                    <FormField formData={item} onChange={(data) => onFieldChange(index, data)}
+                                               onDelete={() => onFieldDelete(index)}/>
                                 </>
                             ))
                         }

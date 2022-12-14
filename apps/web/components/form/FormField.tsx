@@ -100,14 +100,16 @@ export default function FormField({
                                 className="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Total Price</span>
                             <p className="text-gray-700">{(unitPrice * quantity).toFixed(2)}</p>
                         </td>
-                        {/*     Add delete button*/}
                         <td className="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
                             <span
                                 className="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Delete</span>
                             <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
-                                    onClick={onDelete ?? (() => {
-                                    })}>
-
+                                    onClick={(event) => {
+                                        event.preventDefault();
+                                        if (onDelete) {
+                                            onDelete();
+                                        }
+                                    }}>
                                 Delete
                             </button>
                         </td>
