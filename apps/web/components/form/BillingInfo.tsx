@@ -35,6 +35,8 @@ export default function BillingInfo({
 }) {
 
 
+    console.log(selectedCustomer?.company);
+
     return (
         <div className="grid grid-cols-2 gap-4 p-8 bg-white border rounded shadow">
             <div className="grid grid-cols-2 gap-4">
@@ -90,6 +92,33 @@ export default function BillingInfo({
                            onChange={(e) => setDueDate(new Date(e.target.value))}/>
                 </div>
             </div>
+
+            {/*/!* Address*!/*/}
+            {/*<div className="col-span-2">*/}
+            {/*    <label className="block text-sm font-medium text-gray-700">Address</label>*/}
+            {/*    <input type="text" name="address" id="address" required*/}
+            {/*           className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"*/}
+            {/*           value={selectedCustomer?.company?.address ?? ""}*/}
+            {/*           disabled/>*/}
+            {/*</div>*/}
+            {/*<div className="col-span-2">*/}
+            {/*    <label className="block text-sm font-medium text-gray-700">City</label>*/}
+            {/*    <input type="text" name="city" id="city" required*/}
+            {/*           className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"*/}
+            {/*           value={selectedCustomer?.company?.city ?? ""}*/}
+            {/*           disabled/>*/}
+
+            {/*</div>*/}
+            {/*<div className="col-span-2">*/}
+            {/*    <label className="block text-sm font-medium text-gray-700">Zip</label>*/}
+            {/*    <input type="text" name="country" id="country" required*/}
+            {/*           className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"*/}
+            {/*           value={selectedCustomer?.company?.zip ?? ""}*/}
+            {/*           disabled/>*/}
+
+            {/*</div>*/}
+
+
         </div>
     )
 }
