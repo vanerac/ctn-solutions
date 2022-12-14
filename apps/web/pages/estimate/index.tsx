@@ -60,11 +60,11 @@ export default function Estimate() {
                             {estimates.map((estimate) => (
                                 <tr key={estimate.id}>
                                     <td className='px-4 py-2 text-sm text-gray-600'>{estimate.title}</td>
-                                    <td className='px-4 py-2 text-sm text-gray-600'>{estimate.items.reduce(
+                                    <td className='px-4 py-2 text-sm text-gray-600'>{estimate?.items?.reduce(
                                         (acc, curr) => acc + (curr.quantity * curr.unitPrice), 0)}</td>
                                     <td className='px-4 py-2 text-sm text-gray-600'>{estimate.status}</td>
-                                    <td className='px-4 py-2 text-sm text-gray-600'>{estimate.date.toDateString()}</td>
-                                    <td className='px-4 py-2 text-sm text-gray-600'>{estimate.dueDate.toDateString()}</td>
+                                    <td className='px-4 py-2 text-sm text-gray-600'>{new Date(estimate.date).toDateString()}</td>
+                                    <td className='px-4 py-2 text-sm text-gray-600'>{new Date(estimate.dueDate).toDateString()}</td>
                                     <td className='px-4 py-2 text-sm text-gray-600'>{estimate.customer.id}</td>
                                     <td className='px-4 py-2 text-sm text-gray-600'>
                                         <button

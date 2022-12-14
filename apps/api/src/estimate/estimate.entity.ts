@@ -1,4 +1,4 @@
-import {Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {ApiProperty} from "@nestjs/swagger";
 import {Customer} from "../customer/customer.entity";
 import {Company} from "../company/company.entity";
@@ -34,15 +34,15 @@ export class Estimate {
     // Global Discount
 
     @ApiProperty({type: () => Customer})
-    @OneToOne(type => Customer) @JoinColumn()
+    @ManyToOne(type => Customer, {nullable: true}) @JoinColumn()
     customer: Customer;
 
     @ApiProperty({type: () => Company})
-    @OneToOne(type => Company) @JoinColumn()
+    @ManyToOne(type => Company, {nullable: true}) @JoinColumn()
     billingAddress: Company;
 
     @ApiProperty({type: () => Company})
-    @OneToOne(type => Company) @JoinColumn()
+    @ManyToOne(type => Company, {nullable: true}) @JoinColumn()
     shippingAddress: Company;
 
     @ApiProperty({type: () => EstimateField, isArray: true})
@@ -90,7 +90,7 @@ export class Estimate {
 
     // Owner
     @ApiProperty()
-    @OneToOne(type => User, {nullable: false}) @JoinColumn()
+    @ManyToOne(type => User, {nullable: false}) @JoinColumn()
     owner: User;
 
     @ApiProperty()

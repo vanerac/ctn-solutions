@@ -4,6 +4,7 @@ import {UpdateEstimateDto} from './dto/update-estimate.dto';
 import {Repository} from "typeorm";
 import {Estimate} from "./estimate.entity";
 import {EstimateField} from "./estimate-field.entity";
+import {User} from "../user/user.entity";
 
 @Injectable()
 export class EstimateService {
@@ -17,20 +18,53 @@ export class EstimateService {
     }
 
 
-    async create(createEstimateDto: CreateEstimateDto) {
+    async create(createEstimateDto: CreateEstimateDto, user: User) {
 
-        return this.estimateRepository.save(createEstimateDto);
+
+        const estimate = this.estimateRepository.create({
+            ...createEstimateDto,
+            owner: user
+        })
+
+        await this.estimateRepository.save(estimate);
+
+        for (const item of createEstimateDto.items) {
+            const estimateField = new EstimateField();
+            estimateField.title = item.title;
+            estimateField.quantity = item.quantity;
+            estimateField.unitPrice = item.unitPrice;
+            estimateField.tax = item.tax;
+            estimateField.discount = item.discount;
+            estimateField.description = item.description;
+            estimateField.estimate = estimate;
+
+            await this.estimateFieldRepository.save(estimateField);
+
+        }
 
     }
 
     async findAll() {
-        return this.estimateRepository.find();
+        return this.estimateRepository.find({
+            relations:
+                [
+                    "customer",
+                    "items"
+                ],
+            relationLoadStrategy: "join"
+        });
     }
 
     async findOne(id: number) {
         return this.estimateRepository.findOne(
             {
                 where: {id: id},
+                relations:
+                    [
+                        "customer",
+                        "items"
+                    ],
+                relationLoadStrategy: "join"
             }
         )
     }

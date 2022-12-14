@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Param, Patch, Post, UseGuards} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards} from '@nestjs/common';
 import {EstimateService} from './estimate.service';
 import {CreateEstimateDto} from './dto/create-estimate.dto';
 import {UpdateEstimateDto} from './dto/update-estimate.dto';
@@ -15,8 +15,8 @@ export class EstimateController {
     @UseGuards(JwtAuthGuard)
     @ApiOkResponse({type: Estimate})
     @Post()
-    create(@Body() createEstimateDto: CreateEstimateDto) {
-        return this.estimateService.create(createEstimateDto);
+    create(@Body() createEstimateDto: CreateEstimateDto, @Req() req) {
+        return this.estimateService.create(createEstimateDto, req.user);
     }
 
     @UseGuards(JwtAuthGuard)
