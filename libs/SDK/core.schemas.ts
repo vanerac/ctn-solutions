@@ -5,6 +5,50 @@
  * desc
  * OpenAPI spec version: 1.0
  */
+export type InvoiceStatus = typeof InvoiceStatus[keyof typeof InvoiceStatus];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const InvoiceStatus = {
+  draft: "draft",
+  sent: "sent",
+  accepted: "accepted",
+  declined: "declined",
+  cancelled: "cancelled",
+  changes_requested: "changes_requested",
+  expired: "expired",
+} as const;
+
+export interface Invoice {
+  id: number;
+  customer: Customer;
+  billingAddress: Company;
+  shippingAddress: Company;
+  items: InvoiceField[];
+  title: string;
+  description: string;
+  date: Date;
+  dueDate: Date;
+  terms: string;
+  notes: string;
+  tax: number;
+  globalDiscount: number;
+  owner: User;
+  createdAt: Date;
+  updatedAt: Date;
+  status: InvoiceStatus;
+}
+
+export interface InvoiceField {
+  id: number;
+  invoice: Invoice;
+  title: string;
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  discount: number;
+  tax: number;
+}
+
 export type CreateCustomerDtoCompany = Company | null;
 
 export interface CreateCustomerDto {
@@ -184,6 +228,46 @@ export interface Customer {
   phone: string;
   email: string;
   company: CustomerCompany;
+}
+
+export interface UpdateInvoiceDto {
+  id?: number;
+  customer?: Customer;
+  billingAddress?: Company;
+  shippingAddress?: Company;
+  items?: InvoiceField[];
+  title?: string;
+  description?: string;
+  date?: Date;
+  dueDate?: Date;
+  terms?: string;
+  notes?: string;
+  tax?: number;
+  globalDiscount?: number;
+  owner?: User;
+  createdAt?: Date;
+  updatedAt?: Date;
+  status?: InvoiceStatus;
+}
+
+export interface CreateInvoiceDto {
+  id: number;
+  customer: Customer;
+  billingAddress: Company;
+  shippingAddress: Company;
+  items: InvoiceField[];
+  title: string;
+  description: string;
+  date: Date;
+  dueDate: Date;
+  terms: string;
+  notes: string;
+  tax: number;
+  globalDiscount: number;
+  owner: User;
+  createdAt: Date;
+  updatedAt: Date;
+  status: InvoiceStatus;
 }
 
 export interface ChangePasswordDTO {

@@ -1,16 +1,16 @@
 import TopBar from "../../../components/TopBar";
 import SideBar from "../../../components/Sidebar/SideBar";
 import HierarchyBar from "../../../components/HierarchyBar";
-import EstimateForm from "../../../components/estimate/EstimateForm";
-import {Estimate, estimateControllerUpdate, useEstimateControllerFindOne} from "../../../../../libs/SDK";
+import InvoiceForm from "../../../components/invoice/InvoiceForm";
+import {Invoice, invoiceControllerUpdate, useInvoiceControllerFindOne} from "../../../../../libs/SDK";
 import Router, {useRouter} from "next/router";
 
-export default function EditEstimate() {
+export default function EditInvoice() {
 
     const router = useRouter()
     const {id} = router.query
 
-    const {data: estimate, error: estimateError, mutate: mutateEstimate} = useEstimateControllerFindOne(String(id), {
+    const {data: invoice, error: invoiceError, mutate: mutateInvoice} = useInvoiceControllerFindOne(String(id), {
         swr: {
             onError: (err) => {
                 if (err?.response?.status === 401) {
@@ -20,18 +20,18 @@ export default function EditEstimate() {
         }
     })
 
-    if (!estimate) {
+    if (!invoice) {
         return <div>loading...</div>
     }
 
-    if (estimateError) {
+    if (invoiceError) {
         return <div>failed to load</div>
     }
 
-    const handleEstimateUpdate = async (data: Estimate) => {
+    const handleInvoiceUpdate = async (data: Invoice) => {
         console.log(data);
-        await estimateControllerUpdate(String(id), data);
-        await mutateEstimate();
+        await invoiceControllerUpdate(String(id), data);
+        await mutateInvoice();
     }
 
     return <div>
@@ -41,13 +41,13 @@ export default function EditEstimate() {
             <div className="flex flex-col">
                 <HierarchyBar items={[
                     {href: "/", name: "Home"},
-                    {href: "/estimate", name: "Estimates"},
-                    {href: "/estimate/" + id, name: String(estimate?.title)},
+                    {href: "/invoice", name: "Invoices"},
+                    {href: "/invoice/" + id, name: String(invoice?.title)},
                     {href: null, name: "Edit"}
                 ]}/>
 
                 <div className="flex flex-row">
-                    <EstimateForm estimate={estimate} onSubmit={handleEstimateUpdate}/>
+                    <InvoiceForm invoice={invoice} onSubmit={handleInvoiceUpdate}/>
                 </div>
             </div>
         </div>

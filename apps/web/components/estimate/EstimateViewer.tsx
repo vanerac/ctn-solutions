@@ -1,5 +1,5 @@
 import {Estimate} from "../../../../libs/SDK";
-import Breakdown from "./Breakdown";
+import Breakdown from "../form/Breakdown";
 
 export default function EstimateViewer({
                                            estimate,
