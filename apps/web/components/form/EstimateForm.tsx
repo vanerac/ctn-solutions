@@ -1,5 +1,5 @@
-import {Customer, Estimate, useCustomerControllerFindAll} from "../../../../libs/SDK";
-import {useState} from "react";
+import {Customer, Estimate, EstimateField, useCustomerControllerFindAll} from "../../../../libs/SDK";
+import {useEffect, useState} from "react";
 import FormField from "./FormField";
 import BillingInfo from "./BillingInfo";
 import Breakdown from "./Breakdown";
@@ -21,7 +21,7 @@ export default function EstimateForm({
     const [creationDate, setCreationDate] = useState<Date>(estimate?.date || new Date());
     const [dueDate, setDueDate] = useState<Date>(estimate?.dueDate || new Date());
 
-    const [fields, setFields] = useState<Estimate["items"]>(estimate?.items || []);
+    const [fields, setFields] = useState<Array<EstimateField | null>>(estimate?.items || []);
 
     const [notes, setNotes] = useState<string>(estimate?.notes || "");
     const [terms, setTerms] = useState<string>(estimate?.terms || "");
@@ -65,7 +65,11 @@ export default function EstimateForm({
         onSubmit(newEstimate as Estimate);
     }
 
-    const [fieldData, setFieldData] = useState([null, null]);
+    // const [fieldData, setFieldData] = useState<Array<EstimateField | null>>([null, null]);
+
+    useEffect(() => {
+        console.log(fields);
+    }, [fields])
 
     return (
         // Start with the card container and the first part, the customer info
@@ -92,7 +96,7 @@ export default function EstimateForm({
                     <div className="my-4 border-b border-gray-200">
                         <div className="text-2xl font-bold">Estimate Items</div>
                         {
-                            fieldData.map((item, index) => (
+                            fields.map((item, index) => (
                                 <>
                                     <div className="my-4 border-b border-gray-200"/>
                                     <FormField formData={item} onChange={(data) => onFieldChange(index, data)}/>
@@ -105,7 +109,7 @@ export default function EstimateForm({
                     <button
                         className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         type="button"
-                        onClick={() => setFieldData([...fieldData, null])}
+                        onClick={() => setFields([...fields, null])}
                     >
                         Add Field
                     </button>
@@ -148,14 +152,14 @@ export default function EstimateForm({
                                 <input type="number" name="tax" id="tax" required
                                        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                        value={tax}
-                                       onChange={(e) => setTax(e.target.value as any)}/>
+                                       onChange={(e) => setTax(+e.target.value)}/>
                             </div>
                             <div className="col-span-2">
                                 <label className="block text-sm font-medium text-gray-700">Discount</label>
                                 <input type="number" name="discount" id="discount" required
                                        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                        value={discount}
-                                       onChange={(e) => setDiscount(e.target.value as any)}/>
+                                       onChange={(e) => setDiscount(+e.target.value)}/>
                             </div>
                         </div>
                     </div>
@@ -165,7 +169,18 @@ export default function EstimateForm({
 
                     {/* Total, give the total, before and after taxes & discounts*/}
                     {/* Display only, fields should not be inputs*/}
-                    <Breakdown tax={20} discount={10} total={1000}/>
+                    <Breakdown tax={
+                        tax
+                    } discount={
+                        discount
+                    } total={
+                        fields.reduce(
+                            (acc, item) =>
+                                acc +
+                                ((
+                                    (item?.unitPrice ?? 0) * (item?.quantity ?? 0)) ?? 0)
+                            , 0)
+                    }/>
 
 
                     {/* Submit */}
