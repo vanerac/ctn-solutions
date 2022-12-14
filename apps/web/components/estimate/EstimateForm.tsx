@@ -1,8 +1,8 @@
 import {Customer, Estimate, EstimateField, useCustomerControllerFindAll} from "../../../../libs/SDK";
-import {useEffect, useState} from "react";
-import FormField from "./FormField";
-import BillingInfo from "./BillingInfo";
-import Breakdown from "./Breakdown";
+import {useState} from "react";
+import EstimateFormField from "./EstimateFormField";
+import BillingInfo from "../form/BillingInfo";
+import Breakdown from "../form/Breakdown";
 
 export default function EstimateForm({
                                          estimate,
@@ -99,8 +99,8 @@ export default function EstimateForm({
                             fields.map((item, index) => (
                                 <>
                                     <div className="my-4 border-b border-gray-200"/>
-                                    <FormField formData={item} onChange={(data) => onFieldChange(index, data)}
-                                               onDelete={() => onFieldDelete(index)}/>
+                                    <EstimateFormField formData={item} onChange={(data) => onFieldChange(index, data)}
+                                                       onDelete={() => onFieldDelete(index)}/>
                                 </>
                             ))
                         }

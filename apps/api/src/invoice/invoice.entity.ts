@@ -3,9 +3,9 @@ import {ApiProperty} from "@nestjs/swagger";
 import {Customer} from "../customer/customer.entity";
 import {Company} from "../company/company.entity";
 import {User} from "../user/user.entity";
-import {EstimateField} from "./estimate-field.entity";
+import {InvoiceField} from "./invoice-fields.entity";
 
-enum EstimateStatus {
+enum InvoiceStatus {
     DRAFT = 'draft',
     SENT = 'sent',
     ACCEPTED = 'accepted',
@@ -17,21 +17,12 @@ enum EstimateStatus {
 
 
 @Entity()
-export class Estimate {
+export class Invoice {
+
     @ApiProperty()
     @PrimaryGeneratedColumn()
     id: number;
 
-    // Client / Customer
-    // Billing Address
-    // Shipping Address
-    // Items
-    // Date
-    // Due Date
-    // Terms
-    // Notes
-    // Tax
-    // Global Discount
 
     @ApiProperty({type: () => Customer})
     @ManyToOne(type => Customer, {nullable: false, onDelete: "CASCADE"}) @JoinColumn()
@@ -45,9 +36,9 @@ export class Estimate {
     @ManyToOne(type => Company, {nullable: true}) @JoinColumn()
     shippingAddress: Company;
 
-    @ApiProperty({type: () => EstimateField, isArray: true})
-    @OneToMany(type => EstimateField, item => item.estimate)
-    items: EstimateField[];
+    @ApiProperty({type: () => InvoiceField, isArray: true})
+    @OneToMany(type => InvoiceField, item => item.invoice)
+    items: InvoiceField[];
 
     @ApiProperty()
     @Column()
@@ -102,15 +93,9 @@ export class Estimate {
     updatedAt: Date;
 
     @ApiProperty({
-        enum: EstimateStatus,
-        enumName: 'EstimateStatus',
+        enum: InvoiceStatus,
+        enumName: 'InvoiceStatus',
     })
-    @Column(
-        {
-            type: 'enum',
-            enum: EstimateStatus,
-            default: EstimateStatus.DRAFT,
-        }
-    )
-    status: EstimateStatus;
+    @Column()
+    status: InvoiceStatus;
 }

@@ -24,6 +24,9 @@ import type {
   Customer,
   CreateCustomerDto,
   UpdateCustomerDto,
+  Invoice,
+  CreateInvoiceDto,
+  UpdateInvoiceDto,
 } from "./core.schemas";
 import { customInstance } from "./custom-instance";
 import type { ErrorType, BodyType } from "./custom-instance";
@@ -695,6 +698,138 @@ export const customerControllerRemove = (
 ) => {
   return customInstance<void>(
     { url: `/customer/${id}`, method: "delete" },
+    options
+  );
+};
+
+export const invoiceControllerCreate = (
+  createInvoiceDto: BodyType<CreateInvoiceDto>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Invoice>(
+    {
+      url: `/invoice`,
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      data: createInvoiceDto,
+    },
+    options
+  );
+};
+
+export const invoiceControllerFindAll = (
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Invoice[]>({ url: `/invoice`, method: "get" }, options);
+};
+
+export const getInvoiceControllerFindAllKey = () => [`/invoice`];
+
+export type InvoiceControllerFindAllQueryResult = NonNullable<
+  Awaited<ReturnType<typeof invoiceControllerFindAll>>
+>;
+export type InvoiceControllerFindAllQueryError = ErrorType<unknown>;
+
+export const useInvoiceControllerFindAll = <
+  TError = ErrorType<unknown>
+>(options?: {
+  swr?: SWRConfiguration<
+    Awaited<ReturnType<typeof invoiceControllerFindAll>>,
+    TError
+  > & { swrKey?: Key; enabled?: boolean };
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getInvoiceControllerFindAllKey() : null));
+  const swrFn = () => invoiceControllerFindAll(requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const invoiceControllerFindOne = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Invoice>(
+    { url: `/invoice/${id}`, method: "get" },
+    options
+  );
+};
+
+export const getInvoiceControllerFindOneKey = (id: string) => [
+  `/invoice/${id}`,
+];
+
+export type InvoiceControllerFindOneQueryResult = NonNullable<
+  Awaited<ReturnType<typeof invoiceControllerFindOne>>
+>;
+export type InvoiceControllerFindOneQueryError = ErrorType<unknown>;
+
+export const useInvoiceControllerFindOne = <TError = ErrorType<unknown>>(
+  id: string,
+  options?: {
+    swr?: SWRConfiguration<
+      Awaited<ReturnType<typeof invoiceControllerFindOne>>,
+      TError
+    > & { swrKey?: Key; enabled?: boolean };
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false && !!id;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getInvoiceControllerFindOneKey(id) : null));
+  const swrFn = () => invoiceControllerFindOne(id, requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const invoiceControllerUpdate = (
+  id: string,
+  updateInvoiceDto: BodyType<UpdateInvoiceDto>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Invoice>(
+    {
+      url: `/invoice/${id}`,
+      method: "patch",
+      headers: { "Content-Type": "application/json" },
+      data: updateInvoiceDto,
+    },
+    options
+  );
+};
+
+export const invoiceControllerRemove = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<void>(
+    { url: `/invoice/${id}`, method: "delete" },
     options
   );
 };

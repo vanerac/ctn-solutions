@@ -1,16 +1,16 @@
 import TopBar from "../../components/TopBar";
 import SideBar from "../../components/Sidebar/SideBar";
 import HierarchyBar from "../../components/HierarchyBar";
-import EstimateForm from "../../components/estimate/EstimateForm";
-import {Estimate, estimateControllerCreate} from "../../../../libs/SDK";
+import InvoiceForm from "../../components/invoice/InvoiceForm";
+import {Invoice, invoiceControllerCreate} from "../../../../libs/SDK";
 
 
-export default function NewEstimate() {
+export default function NewInvoice() {
 
 
-    const handleEstimateCreate = async (data: Estimate) => {
+    const handleInvoiceCreate = async (data: Invoice) => {
         console.log(data);
-        await estimateControllerCreate(data);
+        await invoiceControllerCreate(data);
     }
 
     return (
@@ -21,13 +21,13 @@ export default function NewEstimate() {
                 <div className="flex flex-col">
                     <HierarchyBar items={[
                         {href: "/", name: "Home"},
-                        {href: "/estimate", name: "Estimates"},
+                        {href: "/invoice", name: "Invoices"},
                         {href: null, name: "Create"}
                     ]}/>
 
 
                     <div className="flex flex-row">
-                        <EstimateForm estimate={null} onSubmit={handleEstimateCreate}/>
+                        <InvoiceForm invoice={null} onSubmit={handleInvoiceCreate}/>
                     </div>
                 </div>
             </div>

@@ -22,7 +22,7 @@ export default function SideBar() {
         {href: '/', text: 'Dashboard'},
         {href: '/customers', text: 'Customers'},
         {href: '/estimate', text: 'Estimate'},
-        // {href: '/orders', text: 'Orders'},
+        {href: '/invoice', text: 'Invoice'},
         // {href: '/invoices', text: 'Invoices'},
         // {href: '/payments', text: 'Payments'},
     ];

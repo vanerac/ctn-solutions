@@ -1,13 +1,13 @@
 import {useEffect, useState} from "react";
-import {EstimateField} from "../../../../libs/SDK";
+import {InvoiceField} from "../../../../libs/SDK";
 
-export default function FormField({
-                                      formData,
-                                      onChange,
-                                      onDelete,
-                                  }: {
-    formData?: EstimateField | null,
-    onChange?: (data: EstimateField) => void,
+export default function InvoiceFormField({
+                                             formData,
+                                             onChange,
+                                             onDelete,
+                                         }: {
+    formData?: InvoiceField | null,
+    onChange?: (data: InvoiceField) => void,
     onDelete?: () => void,
 }) {
 
