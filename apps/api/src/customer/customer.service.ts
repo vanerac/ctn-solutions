@@ -25,7 +25,13 @@ export class CustomerService {
     }
 
     findAll() {
-        return this.customerRepository.find();
+        return this.customerRepository.find(
+            {
+                relations: [
+                    'company',
+                ]
+            }
+        );
     }
 
     async findOne(id: number) {
@@ -33,13 +39,8 @@ export class CustomerService {
             where: {
                 id
             },
-            select: [
-                "email",
-                "id",
-                "company",
-                "firstname",
-                "lastname",
-                "phone"
+            relations: [
+                'company',
             ]
         });
 

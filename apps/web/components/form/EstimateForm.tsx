@@ -71,12 +71,6 @@ export default function EstimateForm({
         onSubmit(newEstimate as Estimate);
     }
 
-    // const [fieldData, setFieldData] = useState<Array<EstimateField | null>>([null, null]);
-
-    useEffect(() => {
-        console.log(fields);
-    }, [fields])
-
     return (
         // Start with the card container and the first part, the customer info
         <div className="container mx-auto justify-center item-center">

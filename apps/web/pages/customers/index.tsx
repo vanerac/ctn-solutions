@@ -99,7 +99,7 @@ export default function Customers() {
                                     <td className='px-4 py-2 text-sm font-medium text-gray-600 text-center'>{customer.lastname}</td>
                                     <td className='px-4 py-2 text-sm font-medium text-gray-600 text-center'>{customer.email}</td>
                                     <td className='px-4 py-2 text-sm font-medium text-gray-600 text-center'>{customer.phone}</td>
-                                    <td className='px-4 py-2 text-sm font-medium text-gray-600 text-center'>{customer.company}</td>
+                                    <td className='px-4 py-2 text-sm font-medium text-gray-600 text-center'>{customer.company?.legalname}</td>
                                     <td className='flex justify-center'>
                                         <button
                                             className='px-3 py-2 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600'

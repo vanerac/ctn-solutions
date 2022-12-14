@@ -9,7 +9,7 @@ export class EstimateField {
     id: number;
 
     @ApiProperty({type: () => Estimate})
-    @ManyToOne(type => Estimate, estimate => estimate.items) @JoinColumn()
+    @ManyToOne(type => Estimate, estimate => estimate.items, {onDelete: "CASCADE"}) @JoinColumn()
     estimate: Estimate;
 
 

@@ -34,7 +34,7 @@ export class Estimate {
     // Global Discount
 
     @ApiProperty({type: () => Customer})
-    @ManyToOne(type => Customer, {nullable: true}) @JoinColumn()
+    @ManyToOne(type => Customer, {nullable: false, onDelete: "CASCADE"}) @JoinColumn()
     customer: Customer;
 
     @ApiProperty({type: () => Company})

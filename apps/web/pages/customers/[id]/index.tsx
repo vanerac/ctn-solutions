@@ -9,7 +9,7 @@ export default function CustomerPage() {
     const router = useRouter()
     const {id} = router.query
 
-    const {data: customerData, error: customerError} = useCustomerControllerFindOne(id as string, {
+    const {data: customerData, error: customerError} = useCustomerControllerFindOne(String(id), {
         swr: {
             onError: (err) => {
                 if (err?.response?.status === 401) {
@@ -18,7 +18,7 @@ export default function CustomerPage() {
             }
         }
     })
-    const {data: companyData, error: companyError} = useCompanyControllerFindOne(String(customerData?.company), {
+    const {data: companyData, error: companyError} = useCompanyControllerFindOne(String(customerData?.company?.id), {
         swr: {
             onError: (err) => {
                 if (err?.response?.status === 401) {

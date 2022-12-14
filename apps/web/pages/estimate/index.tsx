@@ -19,10 +19,6 @@ export default function Estimate() {
     if (error) return <div>failed to load</div>
     if (!estimates) return <div>loading...</div>
 
-    console.log(estimates);
-
-    // Use tailwind to style the table
-    // Same style as the customers
     return (
         <>
             <TopBar/>

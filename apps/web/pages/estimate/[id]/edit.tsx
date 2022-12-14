@@ -42,7 +42,7 @@ export default function EditEstimate() {
                 <HierarchyBar items={[
                     {href: "/", name: "Home"},
                     {href: "/estimate", name: "Estimates"},
-                    {href: "/estimate" + id, name: String(estimate?.title)},
+                    {href: "/estimate/" + id, name: String(estimate?.title)},
                     {href: null, name: "Edit"}
                 ]}/>
 
