@@ -15,7 +15,7 @@ export default function EstimateForm({
 ) {
 
     const {data: customers, error: customersError} = useCustomerControllerFindAll();
-    const [customer, setCustomer] = useState<Customer | undefined>(customers?.find((c => c.id === estimate?.customer)));
+    const [customer, setCustomer] = useState<Customer | undefined>(customers?.find((c => c.id === estimate?.customer.id)));
     const [title, setTitle] = useState<string>(estimate?.title || "");
     const [description, setDescription] = useState<string>(estimate?.description || "");
     const [creationDate, setCreationDate] = useState<Date>(estimate?.date || new Date());
@@ -50,16 +50,16 @@ export default function EstimateForm({
             terms: terms,
             tax: tax,
             globalDiscount: discount,
-            customer: customer?.id as any,
+            customer: customer,
             status: "draft",
             updatedAt: new Date(),
             createdAt: new Date(),
 
             // Todo: missing fields
-            // billingAddress: customer?.billingAddress,
-            // shippingAddress: customer?.shippingAddress,
-            // id: estimate?.id,
-            // owner: estimate?.owner,
+            billingAddress: customer?.company,
+            shippingAddress: customer?.company,
+            id: estimate?.id,
+            owner: estimate?.owner,
         }
 
         onSubmit(newEstimate as Estimate);

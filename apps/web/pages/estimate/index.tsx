@@ -65,7 +65,7 @@ export default function Estimate() {
                                     <td className='px-4 py-2 text-sm text-gray-600'>{estimate.status}</td>
                                     <td className='px-4 py-2 text-sm text-gray-600'>{estimate.date.toDateString()}</td>
                                     <td className='px-4 py-2 text-sm text-gray-600'>{estimate.dueDate.toDateString()}</td>
-                                    <td className='px-4 py-2 text-sm text-gray-600'>{estimate.customer}</td>
+                                    <td className='px-4 py-2 text-sm text-gray-600'>{estimate.customer.id}</td>
                                     <td className='px-4 py-2 text-sm text-gray-600'>
                                         <button
                                             className='px-3 py-2 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600'

@@ -21,8 +21,8 @@ export default function ContactForm({
             email: contactEmail,
             firstname: contactFirstName,
             lastname: contactLastName,
-            company: null,
-            id: null
+            company: customerData?.company ?? null,
+            id: customerData?.id as any,
         })
         // await customerControllerCreate(
         //     {

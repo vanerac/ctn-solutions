@@ -55,7 +55,7 @@ export class Company {
 
     @ApiProperty()
     @Column({
-        unique: true,
+        // unique: true,
         nullable: false
     })
     siret: string;

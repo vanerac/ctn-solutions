@@ -33,17 +33,17 @@ export class Estimate {
     // Tax
     // Global Discount
 
-    @ApiProperty()
+    @ApiProperty({type: () => Customer})
     @OneToOne(type => Customer) @JoinColumn()
-    customer: number;
+    customer: Customer;
 
-    @ApiProperty()
+    @ApiProperty({type: () => Company})
     @OneToOne(type => Company) @JoinColumn()
-    billingAddress: number;
+    billingAddress: Company;
 
-    @ApiProperty()
+    @ApiProperty({type: () => Company})
     @OneToOne(type => Company) @JoinColumn()
-    shippingAddress: number;
+    shippingAddress: Company;
 
     @ApiProperty({type: () => EstimateField, isArray: true})
     @OneToMany(type => EstimateField, item => item.estimate)
@@ -90,8 +90,8 @@ export class Estimate {
 
     // Owner
     @ApiProperty()
-    @OneToOne(type => User) @JoinColumn()
-    owner: number;
+    @OneToOne(type => User, {nullable: false}) @JoinColumn()
+    owner: User;
 
     @ApiProperty()
     @Column()

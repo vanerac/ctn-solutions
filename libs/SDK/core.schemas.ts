@@ -5,23 +5,7 @@
  * desc
  * OpenAPI spec version: 1.0
  */
-export interface UpdateCustomerDto {
-  readonly id?: number;
-  firstname?: string;
-  lastname?: string;
-  phone?: string;
-  email?: string;
-  company?: number | null;
-}
-
-export interface Customer {
-  readonly id: number;
-  firstname: string;
-  lastname: string;
-  phone: string;
-  email: string;
-  company: number | null;
-}
+export type CreateCustomerDtoCompany = Company | null;
 
 export interface CreateCustomerDto {
   readonly id: number;
@@ -29,21 +13,8 @@ export interface CreateCustomerDto {
   lastname: string;
   phone: string;
   email: string;
-  company: number | null;
+  company: CreateCustomerDtoCompany;
 }
-
-export type LegalForm = typeof LegalForm[keyof typeof LegalForm];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const LegalForm = {
-  AE: "AE",
-  SARL: "SARL",
-  SAS: "SAS",
-  SASU: "SASU",
-  EURL: "EURL",
-  EI: "EI",
-  EIRL: "EIRL",
-} as const;
 
 export interface UpdateCompanyDto {
   id?: number;
@@ -60,23 +31,6 @@ export interface UpdateCompanyDto {
   logo?: string;
   description?: string;
   industry?: string;
-}
-
-export interface Company {
-  id: number;
-  legalname: string;
-  taxid: string;
-  address: string;
-  city: string;
-  state: string;
-  zip: string;
-  siret: string;
-  ape: string;
-  legalform: LegalForm;
-  website: string;
-  logo: string;
-  description: string;
-  industry: string;
 }
 
 export interface CreateCompanyDto {
@@ -111,9 +65,9 @@ export const EstimateStatus = {
 
 export interface UpdateEstimateDto {
   id?: number;
-  customer?: number;
-  billingAddress?: number;
-  shippingAddress?: number;
+  customer?: Customer;
+  billingAddress?: Company;
+  shippingAddress?: Company;
   items?: EstimateField[];
   title?: string;
   description?: string;
@@ -123,17 +77,17 @@ export interface UpdateEstimateDto {
   notes?: string;
   tax?: number;
   globalDiscount?: number;
-  owner?: number;
+  owner?: User;
   createdAt?: Date;
   updatedAt?: Date;
   status?: EstimateStatus;
 }
 
-export interface Estimate {
+export interface CreateEstimateDto {
   id: number;
-  customer: number;
-  billingAddress: number;
-  shippingAddress: number;
+  customer: Customer;
+  billingAddress: Company;
+  shippingAddress: Company;
   items: EstimateField[];
   title: string;
   description: string;
@@ -143,7 +97,27 @@ export interface Estimate {
   notes: string;
   tax: number;
   globalDiscount: number;
-  owner: number;
+  owner: User;
+  createdAt: Date;
+  updatedAt: Date;
+  status: EstimateStatus;
+}
+
+export interface Estimate {
+  id: number;
+  customer: Customer;
+  billingAddress: Company;
+  shippingAddress: Company;
+  items: EstimateField[];
+  title: string;
+  description: string;
+  date: Date;
+  dueDate: Date;
+  terms: string;
+  notes: string;
+  tax: number;
+  globalDiscount: number;
+  owner: User;
   createdAt: Date;
   updatedAt: Date;
   status: EstimateStatus;
@@ -160,24 +134,56 @@ export interface EstimateField {
   tax: number;
 }
 
-export interface CreateEstimateDto {
+export type LegalForm = typeof LegalForm[keyof typeof LegalForm];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const LegalForm = {
+  AE: "AE",
+  SARL: "SARL",
+  SAS: "SAS",
+  SASU: "SASU",
+  EURL: "EURL",
+  EI: "EI",
+  EIRL: "EIRL",
+} as const;
+
+export interface Company {
   id: number;
-  customer: number;
-  billingAddress: number;
-  shippingAddress: number;
-  items: EstimateField[];
-  title: string;
+  legalname: string;
+  taxid: string;
+  address: string;
+  city: string;
+  state: string;
+  zip: string;
+  siret: string;
+  ape: string;
+  legalform: LegalForm;
+  website: string;
+  logo: string;
   description: string;
-  date: Date;
-  dueDate: Date;
-  terms: string;
-  notes: string;
-  tax: number;
-  globalDiscount: number;
-  owner: number;
-  createdAt: Date;
-  updatedAt: Date;
-  status: EstimateStatus;
+  industry: string;
+}
+
+export type UpdateCustomerDtoCompany = Company | null;
+
+export interface UpdateCustomerDto {
+  readonly id?: number;
+  firstname?: string;
+  lastname?: string;
+  phone?: string;
+  email?: string;
+  company?: UpdateCustomerDtoCompany;
+}
+
+export type CustomerCompany = Company | null;
+
+export interface Customer {
+  readonly id: number;
+  firstname: string;
+  lastname: string;
+  phone: string;
+  email: string;
+  company: CustomerCompany;
 }
 
 export interface ChangePasswordDTO {
