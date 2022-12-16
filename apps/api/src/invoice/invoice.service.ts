@@ -69,7 +69,43 @@ export class InvoiceService {
     }
 
     async update(id: number, updateInvoiceDto: UpdateInvoiceDto) {
-        return this.invoiceRepository.update(id, updateInvoiceDto);
+
+        console.log(updateInvoiceDto)
+
+        const invoice = await this.invoiceRepository.findOne(
+            {
+                where: {id: id},
+            }
+        )
+
+
+        const itemsPromise = Promise.all(updateInvoiceDto.items.map(async item => {
+            const i = new InvoiceField();
+            i.id = item.id;
+            i.title = item.title;
+            i.quantity = item.quantity;
+            i.unitPrice = item.unitPrice;
+            i.tax = item.tax;
+            i.discount = item.discount;
+            i.description = item.description;
+            i.invoice = invoice;
+
+
+            if (item.id) {
+                return this.invoiceFieldRepository.update(item.id, i);
+            } else {
+                return this.invoiceFieldRepository.save(i);
+            }
+        }))
+
+
+        const {items, ...invoiceData} = updateInvoiceDto;
+        const updatePromise = this.invoiceRepository.update(id, {
+            ...invoiceData,
+        });
+
+        await Promise.all([itemsPromise, updatePromise]);
+
     }
 
     async remove(id: number) {

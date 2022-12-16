@@ -70,6 +70,39 @@ export class EstimateService {
     }
 
     async update(id: number, updateEstimateDto: UpdateEstimateDto) {
+
+        const estimate = await this.estimateRepository.findOne({
+            where: {id: id},
+        });
+
+        const itemsPromise = Promise.all(updateEstimateDto.items.map(async item => {
+            const i = new EstimateField();
+            i.id = item.id;
+            i.title = item.title;
+            i.quantity = item.quantity;
+            i.unitPrice = item.unitPrice;
+            i.tax = item.tax;
+            i.discount = item.discount;
+            i.description = item.description;
+            i.estimate = estimate;
+
+
+            if (item.id) {
+                return this.estimateRepository.update(item.id, i);
+            } else {
+                return this.estimateRepository.save(i);
+            }
+        }))
+
+
+        const {items, ...estimateData} = updateEstimateDto;
+        const updatePromise = this.estimateRepository.update(id, {
+            ...estimateData,
+        });
+
+        await Promise.all([itemsPromise, updatePromise]);
+
+
         return this.estimateRepository.update(id, updateEstimateDto);
     }
 

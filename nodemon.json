@@ -1,0 +1,11 @@
+{
+  "exec": "orval",
+  "watch": [
+    "swagger.json"
+  ],
+  "ext": "json",
+  "ignore": [
+    "node_modules"
+  ],
+  "verbose": true
+}
