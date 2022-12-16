@@ -30,7 +30,9 @@ export default function InvoiceForm({
     const [terms, setTerms] = useState<string>(invoice?.terms || "");
     const [tax, setTax] = useState<number>(invoice?.tax || 0);
     const [discount, setDiscount] = useState<number>(invoice?.globalDiscount || 0);
+
     const [activeStep, setActiveStep] = useState(0);
+    const [completed, setCompleted] = useState<{ [k: number]: boolean }>({});
 
 
     const onFieldChange = (index: number, field: Invoice["items"][number]) => {
@@ -67,7 +69,7 @@ export default function InvoiceForm({
             status: "draft",
             updatedAt: new Date(),
             createdAt: new Date(),
-            
+
             billingAddress: customer?.company,
             shippingAddress: customer?.company,
             id: invoice?.id,
@@ -80,10 +82,12 @@ export default function InvoiceForm({
     return (
         <div className="w-full ml-5 container mx-auto justify-center item-center">
             <Stepper orientation="vertical" activeStep={activeStep}>
-                <Step>
-                    <StepLabel>
+                <Step completed={completed[0] ?? false}>
+                    <StepLabel error={completed[0] && !customer}>
                         <button onClick={() => setActiveStep(0)}>
-                            <Typography>
+                            <Typography color={
+                                completed[0] && !customer ? "error" : "textPrimary"
+                            }>
                                 <div className="text-2xl font-bold">Customer Information</div>
                             </Typography>
                         </button>
@@ -104,13 +108,18 @@ export default function InvoiceForm({
                             setDueDate={setDueDate}
                         />
                         <div className="mt-2 flex flex-row justify-end">
-                            <Button onClick={() => setActiveStep(1)}>Next</Button>
+                            <Button onClick={() => {
+                                setActiveStep(1)
+                                setCompleted({...completed, 0: true})
+                            }}>Next</Button>
                         </div>
 
                     </StepContent>
                 </Step>
-                <Step>
-                    <StepLabel>
+                <Step completed={completed[1] ?? false}>
+                    <StepLabel error={
+                        completed[1] && fields.length === 0
+                    }>
                         <button onClick={() => setActiveStep(1)}>
                             <div className="text-2xl font-bold">Invoice Items</div>
                         </button>
@@ -140,13 +149,16 @@ export default function InvoiceForm({
                         <div className="mt-2 flex flex-row justify-end">
                             <Button type={"reset"} appearance={"minimal"}
                                     onClick={() => setActiveStep(0)}>Back</Button>
-                            <Button type={"reset"} onClick={() => setActiveStep(2)}>Next</Button>
+                            <Button type={"reset"} onClick={() => {
+                                setActiveStep(2)
+                                setCompleted({...completed, 1: true})
+                            }}>Next</Button>
                         </div>
 
 
                     </StepContent>
                 </Step>
-                <Step>
+                <Step completed={completed[2] ?? false}>
                     <StepLabel>
                         <button onClick={() => setActiveStep(2)}>
                             <div className="mt-2 mb-2 text-2xl font-bold">Notes & terms</div>
@@ -154,7 +166,7 @@ export default function InvoiceForm({
                     </StepLabel>
                     <StepContent>
                         <div className="mt-6">
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-2 gap-4 p-8 bg-white border rounded shadow">
                                 <div className="col-span-2">
                                     <label className="block text-sm font-medium text-gray-700">Notes</label>
                                     <textarea id="notes" name="notes" rows={3}
@@ -177,11 +189,14 @@ export default function InvoiceForm({
                         </div>
                         <div className="mt-2 flex flex-row justify-end">
                             <Button appearance={"minimal"} onClick={() => setActiveStep(1)}>Back</Button>
-                            <Button onClick={() => setActiveStep(3)}>Next</Button>
+                            <Button onClick={() => {
+                                setActiveStep(3)
+                                setCompleted({...completed, 2: true})
+                            }}>Next</Button>
                         </div>
                     </StepContent>
                 </Step>
-                <Step>
+                <Step completed={completed[3] ?? false}>
                     <StepLabel>
                         <button onClick={() => setActiveStep(3)}>
                             <div className="text-2xl font-bold">Taxes & Discounts</div>
@@ -190,7 +205,7 @@ export default function InvoiceForm({
                     </StepLabel>
                     <StepContent>
                         <div className="mt-6">
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-2 gap-4 p-8 bg-white border rounded shadow">
                                 <div className="col-span-2">
                                     <label className="block text-sm font-medium text-gray-700">Tax</label>
                                     <input type="number" name="tax" id="tax" required
@@ -209,11 +224,14 @@ export default function InvoiceForm({
                         </div>
                         <div className="mt-2 flex flex-row justify-end">
                             <Button appearance={"minimal"} onClick={() => setActiveStep(2)}>Back</Button>
-                            <Button onClick={() => setActiveStep(4)}>Next</Button>
+                            <Button onClick={() => {
+                                setActiveStep(4)
+                                setCompleted({...completed, 3: true})
+                            }}>Next</Button>
                         </div>
                     </StepContent>
                 </Step>
-                <Step>
+                <Step completed={completed[4] ?? false}>
                     <StepLabel>
                         <button onClick={() => setActiveStep(4)}>
                             <div className="text-2xl font-bold">Total breakdown</div>
