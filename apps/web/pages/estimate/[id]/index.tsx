@@ -89,17 +89,22 @@ export default function ViewEstimate() {
                     <Pane>
                         <Dialog
                             isShown={showDialog}
-                            onConfirm={() => setShowDialog(false)}
                             title="Sign"
+                            onConfirm={() => {
+                                
+                                setShowDialog(false)
+                            }}
                             intent="success"
-                            onCloseComplete={() => setShowDialog(false)}
+                            onCloseComplete={() => {
+
+                                setShowDialog(false)
+                            }}
                             confirmLabel="Save"
                             onCancel={() => setShowDialog(false)}
                             shouldCloseOnEscapePress={true}
                         >
 
-                            <Signature onSave={() => {
-                            }}/>
+                            <Signature/>
                         </Dialog>
                     </Pane>
 

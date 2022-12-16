@@ -4,6 +4,7 @@ import HierarchyBar from "../../../components/HierarchyBar";
 import EstimateForm from "../../../components/estimate/EstimateForm";
 import {Estimate, estimateControllerUpdate, useEstimateControllerFindOne} from "../../../../../libs/SDK";
 import Router, {useRouter} from "next/router";
+import {toaster} from "evergreen-ui";
 
 export default function EditEstimate() {
 
@@ -31,6 +32,7 @@ export default function EditEstimate() {
     const handleEstimateUpdate = async (data: Estimate) => {
         console.log(data);
         await estimateControllerUpdate(String(id), data);
+        toaster.success('Update successful', {duration: 3, description: 'Estimate updated successfully'})
         await mutateEstimate();
     }
 

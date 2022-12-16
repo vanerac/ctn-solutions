@@ -1,8 +1,10 @@
-import {useInvoiceControllerFindAll} from "../../../../libs/SDK";
+import {Invoice as InvoiceType, InvoiceStatus, useInvoiceControllerFindAll} from "../../../../libs/SDK";
 import Router from "next/router";
 import TopBar from "../../components/TopBar";
 import SideBar from "../../components/Sidebar/SideBar";
 import HierarchyBar from "../../components/HierarchyBar";
+import {Badge, Checkbox, EyeOpenIcon, IconButton} from "evergreen-ui";
+import {useState} from "react";
 
 export default function Invoice() {
 
@@ -15,6 +17,27 @@ export default function Invoice() {
             }
         }
     })
+
+
+    const [selection, setSelection] = useState<InvoiceType[]>([])
+
+    const statusEnum: { [K in InvoiceStatus]: "neutral" | "blue" | "green" | "red" | "yellow" | "automatic" | "orange" | "teal" | "purple" | undefined } = {
+        draft: 'neutral',
+        sent: 'blue',
+        accepted: 'green',
+        declined: 'red',
+        cancelled: 'neutral',
+        changes_requested: 'yellow',
+        expired: 'neutral'
+    }
+
+    const select = (estimate: InvoiceType) => {
+        if (selection.includes(estimate)) {
+            setSelection(selection.filter(e => e !== estimate))
+        } else {
+            setSelection([...selection, estimate])
+        }
+    }
 
     if (error) return <div>failed to load</div>
     if (!invoices) return <div>loading...</div>
@@ -43,6 +66,18 @@ export default function Invoice() {
                         <table className='w-full table-auto'>
                             <thead className='bg-gray-100'>
                             <tr>
+                                <th className='px-4 py-2 text-sm font-medium text-gray-600'><
+                                    Checkbox
+                                    indeterminate={selection.length > 0 && selection.length < invoices.length}
+                                    checked={selection.length === invoices.length}
+                                    onChange={e => {
+                                        if (e.target.checked) {
+                                            setSelection(invoices)
+                                        } else {
+                                            setSelection([])
+                                        }
+                                    }}/>
+                                </th>
                                 <th className='px-4 py-2 text-sm font-medium text-gray-600'>Title</th>
                                 <th className='px-4 py-2 text-sm font-medium text-gray-600'>Value</th>
                                 <th className='px-4 py-2 text-sm font-medium text-gray-600'>Status</th>
@@ -53,20 +88,29 @@ export default function Invoice() {
                             </tr>
                             </thead>
                             <tbody>
-                            {invoices.map((invoice) => (
-                                <tr key={invoice.id}>
-                                    <td className='px-4 py-2 text-sm text-gray-600'>{invoice.title}</td>
-                                    <td className='px-4 py-2 text-sm text-gray-600'>{invoice?.items?.reduce(
-                                        (acc, curr) => acc + (curr.quantity * curr.unitPrice), 0)}</td>
-                                    <td className='px-4 py-2 text-sm text-gray-600'>{invoice.status}</td>
-                                    <td className='px-4 py-2 text-sm text-gray-600'>{new Date(invoice.date).toDateString()}</td>
-                                    <td className='px-4 py-2 text-sm text-gray-600'>{new Date(invoice.dueDate).toDateString()}</td>
-                                    <td className='px-4 py-2 text-sm text-gray-600'>{invoice.customer.id}</td>
+                            {invoices.map((invoiceItem) => (
+                                <tr key={invoiceItem.id} className="text-center justify-center">
                                     <td className='px-4 py-2 text-sm text-gray-600'>
-                                        <button
-                                            className='px-3 py-2 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600'
-                                            onClick={() => Router.push(`/invoice/${invoice.id}`)}>View
-                                        </button>
+                                        <Checkbox checked={selection.includes(invoiceItem)} onChange={(estimate) => {
+                                            select(invoiceItem)
+                                        }}/>
+                                    </td>
+                                    <td className='px-4 py-2 text-sm text-gray-600'>{invoiceItem.title}</td>
+                                    <td className='px-4 py-2 text-sm text-gray-600'>{invoiceItem?.items?.reduce(
+                                        (acc, curr) => acc + (curr.quantity * curr.unitPrice), 0)}</td>
+                                    <td className='px-4 py-2 text-sm text-gray-600'>
+                                        <Badge color={statusEnum[invoiceItem.status]}>
+                                            {invoiceItem.status}
+                                        </Badge>
+                                    </td>
+                                    <td className='px-4 py-2 text-sm text-gray-600'>{new Date(invoiceItem.date).toDateString()}</td>
+                                    <td className='px-4 py-2 text-sm text-gray-600'>{new Date(invoiceItem.dueDate).toDateString()}</td>
+                                    <td className='px-4 py-2 text-sm text-gray-600'>{invoiceItem?.customer?.company?.legalname}</td>
+                                    <td className='px-4 py-2 text-sm text-gray-600'>
+                                        <IconButton
+                                            icon={EyeOpenIcon}
+                                            onClick={() => Router.push(`/invoice/${invoiceItem.id}`)}>View
+                                        </IconButton>
                                     </td>
                                 </tr>
                             ))}

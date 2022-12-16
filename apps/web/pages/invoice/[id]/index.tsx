@@ -6,7 +6,7 @@ import Router, {useRouter} from "next/router";
 import InvoiceViewer from "../../../components/invoice/InvoiceViewer";
 import Signature from "../../../components/Signature";
 // import {Dialog} from "@mantine/core";
-import {useState} from "react";
+import {useRef, useState} from "react";
 import {Button, Dialog, EditIcon, HighlightIcon, Pane, TrashIcon} from "evergreen-ui";
 
 export default function ViewInvoice() {
@@ -28,6 +28,8 @@ export default function ViewInvoice() {
         }
     })
 
+    const signatureRef = useRef(null)
+
     const deleteButton = async () => {
         await invoiceControllerRemove(String(id))
         mutateInvoice()
@@ -40,6 +42,7 @@ export default function ViewInvoice() {
     if (invoiceError) {
         return <div>failed to load</div>
     }
+
 
     return (
         <div>
@@ -104,8 +107,7 @@ export default function ViewInvoice() {
                             shouldCloseOnEscapePress={true}
                         >
 
-                            <Signature onSave={() => {
-                            }}/>
+                            <Signature/>
                         </Dialog>
                     </Pane>
                 </div>

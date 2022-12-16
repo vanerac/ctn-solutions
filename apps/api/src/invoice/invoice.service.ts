@@ -19,27 +19,32 @@ export class InvoiceService {
 
     async create(createInvoiceDto: CreateInvoiceDto, user: User) {
 
+        const {items, ...invoiceData} = createInvoiceDto;
 
-        const estimate = this.invoiceRepository.create({
-            ...createInvoiceDto,
+        const invoice = this.invoiceRepository.create({
+            ...invoiceData,
             owner: user
         })
 
-        await this.invoiceRepository.save(estimate);
+        const invoiceDB = await this.invoiceRepository.save(invoice);
 
-        for (const item of createInvoiceDto.items) {
-            const estimateField = new InvoiceField();
-            estimateField.title = item.title;
-            estimateField.quantity = item.quantity;
-            estimateField.unitPrice = item.unitPrice;
-            estimateField.tax = item.tax;
-            estimateField.discount = item.discount;
-            estimateField.description = item.description;
-            estimateField.invoice = estimate;
+        invoiceDB.items = await Promise.all((items ?? [])?.map(async (item) => {
+            const invoiceField = new InvoiceField();
+            invoiceField.title = item.title;
+            invoiceField.quantity = item.quantity;
+            invoiceField.unitPrice = item.unitPrice;
+            invoiceField.tax = item.tax;
+            invoiceField.discount = item.discount;
+            invoiceField.description = item.description;
+            invoiceField.invoice = invoiceData as Invoice;
 
-            await this.invoiceFieldRepository.save(estimateField);
+            return invoiceField;
 
-        }
+            // return await this.invoiceFieldRepository.save(invoiceField);
+        }))
+
+        return invoiceDB;
+
 
     }
 
@@ -48,6 +53,7 @@ export class InvoiceService {
             relations:
                 [
                     "customer",
+                    "customer.company",
                     "items"
                 ],
             relationLoadStrategy: "join"
@@ -61,6 +67,7 @@ export class InvoiceService {
                 relations:
                     [
                         "customer",
+                        "customer.company",
                         "items"
                     ],
                 relationLoadStrategy: "join"

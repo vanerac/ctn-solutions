@@ -3,14 +3,9 @@ import {useRef} from "react";
 import {Button} from "evergreen-ui";
 
 
-export default function Signature({
-                                      onSave,
-                                  }: {
-                                      onSave: (signature: HTMLCanvasElement) => void,
-                                  }
-) {
+export default function Signature() {
 
-    const sigCanvas = useRef<any>()
+    const sigRef = useRef<any>()
 
     return (
         <div className="border-slate-200 w-full">
@@ -20,7 +15,7 @@ export default function Signature({
                                  height: 200,
                                  className: 'sigCanvas bg-white border rounded shadow w-full h-full'
                              }}
-                             ref={sigCanvas}
+                             ref={sigRef}
             />
             <div className="flex flex-row">
                 <Button alignContent={"center"}
@@ -31,8 +26,7 @@ export default function Signature({
                             "danger"
                         }
                         onClick={() => {
-                            sigCanvas.current.clear()
-
+                            sigRef?.current?.clear()
                         }}>
                     Clear
                 </Button>

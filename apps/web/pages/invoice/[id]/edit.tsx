@@ -4,6 +4,7 @@ import HierarchyBar from "../../../components/HierarchyBar";
 import InvoiceForm from "../../../components/invoice/InvoiceForm";
 import {Invoice, invoiceControllerUpdate, useInvoiceControllerFindOne} from "../../../../../libs/SDK";
 import Router, {useRouter} from "next/router";
+import {toaster} from "evergreen-ui";
 
 export default function EditInvoice() {
 
@@ -31,7 +32,8 @@ export default function EditInvoice() {
     const handleInvoiceUpdate = async (data: Invoice) => {
         console.log(data);
         await invoiceControllerUpdate(String(id), data);
-        await mutateInvoice();
+        toaster.success('Update successful', {duration: 3, description: 'Invoice updated successfully'})
+        Router.push('/invoice/' + id);
     }
 
     return <div>
