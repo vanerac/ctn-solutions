@@ -1,5 +1,6 @@
 import {useEffect, useRef, useState} from "react";
 import {PDFPageProxy} from "pdfjs-dist";
+import SignatureCanvas from 'react-signature-canvas'
 
 export default function CustomPDFPage({page, parentContainer, options}: {
     page: PDFPageProxy,
@@ -7,6 +8,7 @@ export default function CustomPDFPage({page, parentContainer, options}: {
     options?: Object
 }) {
     const canvasRef = useRef<any>(null);
+    const sigRef = useRef<any>(null);
     const [viewport, setViewport] = useState<any>(null);
 
     console.log(page);
@@ -36,14 +38,22 @@ export default function CustomPDFPage({page, parentContainer, options}: {
                 position: "absolute",
                 top: (viewport?.height ?? 0) / 2,
                 left: (viewport?.width ?? 0) / 2,
-                width: '25%',
-                height: '8%',
-                backgroundColor: 'rgba(0,0,0,0.5)'
+                // width: '100%',
+                // height: '100%',
+                backgroundColor: 'rgba(0,0,0x,0.5)'
             }}>
-                <button
-                    onClick={() => alert('Hello')}
-                >Sign
-                </button>
+                <SignatureCanvas penColor='black'
+                                 canvasProps={{
+                                     width: 500 / 3,
+                                     height: 200 / 3,
+                                     className: 'sigCanvas bg-white border rounded shadow w-full h-full'
+                                 }}
+                                 velocityFilterWeight={0.5}
+                                 dotSize={((500 / 3) + (200 / 3)) / 4}
+                                 throttle={0}
+                                 ref={sigRef}
+                />
+
             </div>
         </div>
     );
