@@ -79,7 +79,8 @@ export class InvoiceService {
                         "customer.company",
                         "items",
                         "exports",
-                        "exports.export.document"
+                        "exports.export.document",
+                        "exports.export.document.signatures"
                     ],
                 relationLoadStrategy: "join"
             }

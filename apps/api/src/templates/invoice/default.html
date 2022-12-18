@@ -1,95 +1,98 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
 <head>
     <meta charset="utf-8"/>
+    <script src="https://cdn.tailwindcss.com/3.2.4"></script>
+    <title></title>
 </head>
 <body>
-<div>
-    <!--  This is a mustache Template
-          Classic invoice format
-            Header contains the logo and the invoice number
-            Second part contains the invoice date and the due date
-            Third part contains the customer information
-            Fourth part contains the invoice items
-            Fifth part contains the invoice total and signature box
-    -->
-    <div style="width: 100%; height: 100px; background-color: #f0f0f0; padding: 10px;">
-        <div style="width: 50%; float: left;">
-            {{#logo}}
-            <img src="{{logo}}" style="width: 100px; height: 100px;"/>
-            {{/logo}}
-        </div>
-        <div style="width: 50%; float: left; text-align: right;">
-            <h1 style="margin: 0px; padding: 0px;">Invoice</h1>
-            <h2 style="margin: 0px; padding: 0px;">#{{invoice_number}}</h2>
-        </div>
+
+<div className="flex justify-between">
+    <div className="flex flex-col">
+        <div className="text-2xl font-bold text-gray-700">Invoice</div>
+        <div className="text-sm text-gray-700">Invoice #{invoiceNumber}</div>
     </div>
-    <div style="width: 100%; height: 100px; background-color: #f0f0f0; padding: 10px;">
-        <div style="width: 50%; float: left;">
-            <h3 style="margin: 0px; padding: 0px;">Invoice Date</h3>
-            <h4 style="margin: 0px; padding: 0px;">{{invoice_date}}</h4>
-        </div>
-        <div style="width: 50%; float: left;">
-            <h3 style="margin: 0px; padding: 0px;">Due Date</h3>
-            <h4 style="margin: 0px; padding: 0px;">{{due_date}}</h4>
-        </div>
-    </div>
-    <div style="width: 100%; height: 100px; background-color: #f0f0f0; padding: 10px;">
-        <div style="width: 50%; float: left;">
-            <h3 style="margin: 0px; padding: 0px;">Customer</h3>
-            <h4 style="margin: 0px; padding: 0px;">{{customer_name}}</h4>
-            <h4 style="margin: 0px; padding: 0px;">{{customer_address}}</h4>
-            <h4 style="margin: 0px; padding: 0px;">{{customer_city}}</h4>
-            <h4 style="margin: 0px; padding: 0px;">{{customer_state}}</h4>
-            <h4 style="margin: 0px; padding: 0px;">{{customer_zip}}</h4>
-            <h4 style="margin: 0px; padding: 0px;">{{customer_country}}</h4>
-        </div>
-        <div style="width: 50%; float: left;">
-            <h3 style="margin: 0px; padding: 0px;">Bill To</h3>
-            <h4 style="margin: 0px; padding: 0px;">{{bill_to_name}}</h4>
-            <h4 style="margin: 0px; padding: 0px;">{{bill_to_address}}</h4>
-            <h4 style="margin: 0px; padding: 0px;">{{bill_to_city}}</h4>
-            <h4 style="margin: 0px; padding: 0px;">{{bill_to_state}}</h4>
-            <h4 style="margin: 0px; padding: 0px;">{{bill_to_zip}}</h4>
-            <h4 style="margin: 0px; padding: 0px;">{{bill_to_country}}</h4>
-        </div>
+    <div className="flex flex-col">
+        <div className="text-sm text-gray-700">Date: {date}</div>
+        <div className="text-sm text-gray-700">Due Date: {dueDate}</div>
     </div>
 
-    <div style="width: 100%; height: 100px; background-color: #f0f0f0; padding: 10px;">
-        <table style="width: 100%; border: 1px solid black;">
-            <thead>
-            <tr>
-                <th style="border: 1px solid black;">Item</th>
-                <th style="border: 1px solid black;">Description</th>
-                <th style="border: 1px solid black;">Quantity</th>
-                <th style="border: 1px solid black;">Unit Price</th>
-                <th style="border: 1px solid black;">Amount</th>
-            </tr>
-            </thead>
-            <tbody>
-            {{#items}}
-            <tr>
-                <td style="border: 1px solid black;">{{item}}</td>
-                <td style="border: 1px solid black;">{{description}}</td>
-                <td style="border: 1px solid black;">{{quantity}}</td>
-                <td style="border: 1px solid black;">{{unit_price}}</td>
-                <td style="border: 1px solid black;">{{amount}}</td>
-            </tr>
-            {{/items}}
-            </tbody>
-        </table>
+</div>
+
+<!--  Billing info  -->
+
+<div className="flex justify-between mt-6">
+    <div className="flex flex-col">
+        <div className="text-sm text-gray-700">Bill To</div>
+        <div className="text-sm text-gray-700">{customerName}</div>
+        <div className="text-sm text-gray-700">{customerAddress}</div>
+        <div className="text-sm text-gray-700">{customerEmail}</div>
+        <div className="text-sm text-gray-700">{customerPhone}</div>
+    </div>
+    <div className="flex flex-col">
+        <div className="text-sm text-gray-700">Ship To</div>
+        <div className="text-sm text-gray-700">{customerName}</div>
+        <div className="text-sm text-gray-700">{customerAddress}</div>
+        <div className="text-sm text-gray-700">{customerEmail}</div>
+        <div className="text-sm text-gray-700">{customerPhone}</div>
     </div>
 
-    <div style="width: 100%; height: 100px; background-color: #f0f0f0; padding: 10px;">
-        <div style="width: 50%; float: left;">
-            <h3 style="margin: 0px; padding: 0px;">Total</h3>
-            <h4 style="margin: 0px; padding: 0px;">{{total}}</h4>
-        </div>
-        <div style="width: 50%; float: left;">
-            <h3 style="margin: 0px; padding: 0px;">Signature</h3>
+</div>
+
+<div className="mb-6">
+    <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="password">
+        Invoice Items
+    </label>
+    <table className="table-auto w-full border-collapse border border-gray-200">
+        <thead>
+        <tr>
+            <th className="border border-gray-200 px-4 py-2">Title</th>
+            <th className="border border-gray-200 px-4 py-2">Description</th>
+            <th className="border border-gray-200 px-4 py-2">Quantity</th>
+            <th className="border border-gray-200 px-4 py-2">Price</th>
+            <th className="border border-gray-200 px-4 py-2">Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#items}}
+        <tr>
+            <td className="border border-gray-200 px-4 py-2 underline">{{item}}</td>
+            <td className="border border-gray-200 px-4 py-2">{{description}}</td>
+            <td className="border border-gray-200 px-4 py-2">{{quantity}}</td>
+            <td className="border border-gray-200 px-4 py-2">{{unit_price}}</td>
+            <td className="border border-gray-200 px-4 py-2 font-bold text-gray-700 center">{{amount}}</td>
+        </tr>
+        {{/items}}
+        </tbody>
+    </table>
+</div>
+
+<!--    Break down-->
+<div className="mb-6">
+    <div className="mt-6 w-full">
+        <div className="grid grid-cols-1 gap-4 p-8 bg-white border rounded shadow">
+            <div className="flex justify-between">
+                <div className="text-gray-700">Total</div>
+                <div className="text-gray-700">{{total}}</div>
+            </div>
+            <div className="flex justify-between">
+                <div className="text-gray-700">Discount</div>
+                <div className="text-gray-700 text-green-500">- {{discount}}</div>
+            </div>
+
+            <div className="flex justify-between">
+                <div className="text-gray-700">Tax</div>
+                <div className="text-gray-700 text-red-500">+ {{tax}}</div>
+            </div>
+            <div className="flex justify-between">
+                <div className="text-gray-700 text-lg font-bold">Grand Total</div>
+                <div className="text-gray-700 text-lg font-bold">{{grand_total}}</div>
+            </div>
+
         </div>
     </div>
 
 </div>
+
 </body>
 </html>

@@ -4,6 +4,7 @@ import * as pdfJS from 'pdfjs-dist';
 import {PDFPageProxy} from 'pdfjs-dist';
 import CustomPDFPage from "./CustomPDFPage";
 import {GetDocumentParameters} from "pdfjs-dist/types/src/display/api";
+import {Pane, Spinner} from "evergreen-ui";
 
 export default function DisplayPDF({
                                        src
@@ -35,7 +36,11 @@ export default function DisplayPDF({
 
 
     if (pages.length === 0) {
-        return <div>Loading...</div>
+        return (
+            <Pane display="flex" alignItems="center" justifyContent="center" height={400}>
+                <Spinner/>
+            </Pane>
+        )
     }
 
     return (

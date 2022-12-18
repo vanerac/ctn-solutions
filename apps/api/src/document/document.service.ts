@@ -40,7 +40,8 @@ export class DocumentService {
         return this.documentRepository.findOne({
             where: {
                 id: id
-            }
+            },
+            relations: ['signatures']
         });
     }
 

@@ -3,6 +3,7 @@ import {Cluster} from "puppeteer-cluster";
 import {Repository} from "typeorm";
 import {Export, ExportStatus} from "./export.entity";
 import {DocumentService} from "../document/document.service";
+import {Signature, SignatureStatus, SignatureType} from "../document/document.entity";
 
 @Injectable()
 export class ExportService {
@@ -13,6 +14,8 @@ export class ExportService {
         private ExportRepository: Repository<Export>,
         @Inject(DocumentService)
         private documentService: DocumentService,
+        @Inject('SIGNATURE_REPOSITORY')
+        private signatureRepository: Repository<Signature>,
     ) {
         this.init();
     }
@@ -106,12 +109,52 @@ export class ExportService {
 
             const base64 = Buffer.from(html).toString('base64');
             await page.goto(`data:text/html;base64,${base64}`, {waitUntil: 'networkidle0'});
-            const pdf = await page.pdf({format: 'A4'});
+            // Inject script to run function in browser
+
+
+            console.log(html)
+
+            // TODO: implement signature anchors
+            const signatureMetaDataPromise = page.$$eval(".signature", (elements) => {
+                return elements.map((element) => {
+                    const {x, y, width, height} = element.getBoundingClientRect()
+                    const id = element.getAttribute('id');
+                    return {x, y, width, height, anchorId: id};
+                })
+            })
+
+            const pdfPromise = page.pdf({format: 'A4'});
+
+            const [pdf, signatureMetaData] = await Promise.all([pdfPromise, signatureMetaDataPromise]);
 
             console.timeEnd('Render ' + exportId);
 
             const doc = await this.documentService.uploadFile(pdf, 'export_' + exportId + '.pdf');
 
+
+            console.log(signatureMetaData);
+
+            // Save signature anchors
+            await Promise.all(signatureMetaData.map(async (metaData) => {
+                const sig = this.signatureRepository.create({
+                    anchors: {
+                        id: metaData.anchorId,
+                        height: metaData.height,
+                        width: metaData.width,
+                        left: metaData.x,
+                        top: metaData.y
+                    },
+                    type: SignatureType.SIGNATURE,
+                    createdAt: new Date(),
+                    status: SignatureStatus.PENDING,
+                    document: doc
+                })
+
+                console.log(sig)
+
+                return this.signatureRepository.save(sig);
+
+            }))
 
             await this.ExportRepository.update(exportId, {
                 processedAt: new Date(),
@@ -123,7 +166,7 @@ export class ExportService {
 
             console.log(doc.url)
 
-            return {url: doc.url};
+            return {url: doc.url, signatureMetaData};
         })
 
     }
