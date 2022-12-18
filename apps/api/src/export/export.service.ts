@@ -55,20 +55,19 @@ export class ExportService {
     private async init() {
         this.cluster = await Cluster.launch({
             concurrency: Cluster.CONCURRENCY_CONTEXT,
-            maxConcurrency: 2,
+            maxConcurrency: 5,
         });
 
         await this.cluster.task(async ({page, data: {html, exportId}}) => {
 
-            console.log('Processing export', exportId);
+            console.time('Render ' + exportId);
             await page.goto(`data:text/html,${html}`, {waitUntil: 'networkidle0'});
             const pdf = await page.pdf({format: 'A4'});
 
-            console.log('pdf', pdf);
+            console.timeEnd('Render ' + exportId);
 
             const doc = await this.documentService.uploadFile(pdf, Date.now() + '.pdf');
 
-            console.log(doc)
 
             await this.ExportRepository.update(exportId, {
                 processedAt: new Date(),

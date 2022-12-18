@@ -67,27 +67,18 @@ export class DocumentService {
             ACL: 'public-read'
         };
 
-        console.log(uploadParams);
 
         await s3.send(new PutObjectCommand(uploadParams)).catch((err) => {
             console.log('Error', err);
 
         })
 
-        console.log('File uploaded successfully. ');
-
         const doc = this.documentRepository.create({
             url: `https://${configuration.AWS_S3_BUCKET_NAME}.s3.${configuration.AWS_REGION}.amazonaws.com/${name}`
         })
 
-        console.log(doc);
 
         return this.documentRepository.save(doc);
-
-        // return {
-        //     key: name,
-        //     url: `https://${configuration.AWS_S3_BUCKET_NAME}.s3.${s3.config.region}.amazonaws.com/${name}`
-        // }
     }
 
     public async deleteFileByKey(key: string) {
