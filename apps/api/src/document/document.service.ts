@@ -44,10 +44,6 @@ export class DocumentService {
         });
     }
 
-    // update(id: number, updateDocumentDto: UpdateDocumentDto) {
-    //
-    // }
-
     async remove(id: number) {
 
         const document = await this.findOne(id);
@@ -59,7 +55,6 @@ export class DocumentService {
     }
 
     public async uploadFile(buffer: Buffer, name: string) {
-        // const fileStream = fs.createReadStream(file.path);
         const uploadParams = {
             Bucket: configuration.AWS_S3_BUCKET_NAME,
             Key: name,

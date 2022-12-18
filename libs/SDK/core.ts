@@ -851,15 +851,6 @@ export const invoiceControllerRemove = (
   );
 };
 
-export const exportControllerCreate = (
-  options?: SecondParameter<typeof customInstance>
-) => {
-  return customInstance<Export>(
-    { url: `/export/test`, method: "post" },
-    options
-  );
-};
-
 export const exportControllerFindAll = (
   options?: SecondParameter<typeof customInstance>
 ) => {

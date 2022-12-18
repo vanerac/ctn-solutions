@@ -1,4 +1,4 @@
-import {Controller, Delete, Get, Param, Post, Req, Res, UseInterceptors} from '@nestjs/common';
+import {Controller, Delete, Get, Param, Post, Req, Res, UseGuards, UseInterceptors} from '@nestjs/common';
 import {DocumentService} from './document.service';
 import {ApiOkResponse, ApiTags} from "@nestjs/swagger";
 import {Document} from "./document.entity";
@@ -6,6 +6,7 @@ import {FilesInterceptor} from "@nestjs/platform-express";
 import configuration from "../configuration";
 import {S3Client} from '@aws-sdk/client-s3';
 import * as multerS3 from 'multer-s3';
+import {JwtAuthGuard} from "../auth/jwt.guard";
 
 
 const s3 = new S3Client({
@@ -22,17 +23,7 @@ export class DocumentController {
     constructor(private readonly documentService: DocumentService) {
     }
 
-//     multer({
-//                storage: multerS3({
-//     s3: s3,
-//     bucket: configuration.AWS_S3_BUCKET_NAME,
-//     acl: 'public-read',
-//     key: function (request, file, cb) {
-//     cb(null, `${Date.now().toString()} - ${file.originalname}`);
-// },
-// })
-
-
+    @UseGuards(JwtAuthGuard)
     @UseInterceptors(
         FilesInterceptor('file', 1, {
             storage: multerS3({
@@ -55,12 +46,14 @@ export class DocumentController {
         return this.documentService.create(req.files);
     }
 
+    @UseGuards(JwtAuthGuard)
     @ApiOkResponse({type: Document, isArray: true})
     @Get()
     findAll() {
         return this.documentService.findAll();
     }
 
+    @UseGuards(JwtAuthGuard)
     @ApiOkResponse({type: Document})
     @Get(':id')
     findOne(@Param('id') id: string) {
@@ -72,6 +65,7 @@ export class DocumentController {
     //     return this.documentService.update(+id, updateDocumentDto);
     // }
 
+    @UseGuards(JwtAuthGuard)
     @Delete(':id')
     remove(@Param('id') id: string) {
         return this.documentService.remove(+id);
