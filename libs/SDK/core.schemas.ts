@@ -5,12 +5,67 @@
  * desc
  * OpenAPI spec version: 1.0
  */
+export interface Invoice {
+  id: number;
+  customer: Customer;
+  billingAddress: Company;
+  shippingAddress: Company;
+  items: InvoiceField[];
+  title: string;
+  description: string;
+  date: Date;
+  dueDate: Date;
+  terms: string;
+  notes: string;
+  tax: number;
+  globalDiscount: number;
+  owner: User;
+  createdAt: Date;
+  updatedAt: Date;
+  status: InvoiceStatus;
+  exports: InvoiceExport[];
+}
+
+export interface InvoiceField {
+  id: number;
+  invoice: Invoice;
+  title: string;
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  discount: number;
+  tax: number;
+}
+
+export interface UpdateInvoiceDto {
+  id?: number;
+  customer?: Customer;
+  billingAddress?: Company;
+  shippingAddress?: Company;
+  items?: InvoiceField[];
+  title?: string;
+  description?: string;
+  date?: Date;
+  dueDate?: Date;
+  terms?: string;
+  notes?: string;
+  tax?: number;
+  globalDiscount?: number;
+  owner?: User;
+  createdAt?: Date;
+  updatedAt?: Date;
+  status?: InvoiceStatus;
+  exports?: InvoiceExport[];
+}
+
 export interface Document {
   readonly id: number;
   readonly createdAt: Date;
   readonly updatedAt: Date;
   readonly url: string;
 }
+
+export type ExportDocument = Document | null;
 
 export type ExportStatus = typeof ExportStatus[keyof typeof ExportStatus];
 
@@ -31,7 +86,13 @@ export interface Export {
   readonly processedAt: Date;
   readonly errorAt: Date;
   readonly doneAt: Date;
-  readonly document: Document;
+  readonly document: ExportDocument;
+}
+
+export interface InvoiceExport {
+  id: number;
+  invoice: Invoice;
+  export: Export;
 }
 
 export type InvoiceStatus = typeof InvoiceStatus[keyof typeof InvoiceStatus];
@@ -47,7 +108,7 @@ export const InvoiceStatus = {
   expired: "expired",
 } as const;
 
-export interface Invoice {
+export interface CreateInvoiceDto {
   id: number;
   customer: Customer;
   billingAddress: Company;
@@ -65,17 +126,7 @@ export interface Invoice {
   createdAt: Date;
   updatedAt: Date;
   status: InvoiceStatus;
-}
-
-export interface InvoiceField {
-  id: number;
-  invoice: Invoice;
-  title: string;
-  description: string;
-  quantity: number;
-  unitPrice: number;
-  discount: number;
-  tax: number;
+  exports: InvoiceExport[];
 }
 
 export type CreateCustomerDtoCompany = Company | null;
@@ -257,46 +308,6 @@ export interface Customer {
   phone: string;
   email: string;
   company: CustomerCompany;
-}
-
-export interface UpdateInvoiceDto {
-  id?: number;
-  customer?: Customer;
-  billingAddress?: Company;
-  shippingAddress?: Company;
-  items?: InvoiceField[];
-  title?: string;
-  description?: string;
-  date?: Date;
-  dueDate?: Date;
-  terms?: string;
-  notes?: string;
-  tax?: number;
-  globalDiscount?: number;
-  owner?: User;
-  createdAt?: Date;
-  updatedAt?: Date;
-  status?: InvoiceStatus;
-}
-
-export interface CreateInvoiceDto {
-  id: number;
-  customer: Customer;
-  billingAddress: Company;
-  shippingAddress: Company;
-  items: InvoiceField[];
-  title: string;
-  description: string;
-  date: Date;
-  dueDate: Date;
-  terms: string;
-  notes: string;
-  tax: number;
-  globalDiscount: number;
-  owner: User;
-  createdAt: Date;
-  updatedAt: Date;
-  status: InvoiceStatus;
 }
 
 export interface ChangePasswordDTO {

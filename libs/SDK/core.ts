@@ -27,8 +27,8 @@ import type {
   Invoice,
   CreateInvoiceDto,
   UpdateInvoiceDto,
-  Export,
   Document,
+  Export,
 } from "./core.schemas";
 import { customInstance } from "./custom-instance";
 import type { ErrorType, BodyType } from "./custom-instance";
@@ -851,101 +851,12 @@ export const invoiceControllerRemove = (
   );
 };
 
-export const exportControllerFindAll = (
-  options?: SecondParameter<typeof customInstance>
-) => {
-  return customInstance<Export[]>({ url: `/export`, method: "get" }, options);
-};
-
-export const getExportControllerFindAllKey = () => [`/export`];
-
-export type ExportControllerFindAllQueryResult = NonNullable<
-  Awaited<ReturnType<typeof exportControllerFindAll>>
->;
-export type ExportControllerFindAllQueryError = ErrorType<unknown>;
-
-export const useExportControllerFindAll = <
-  TError = ErrorType<unknown>
->(options?: {
-  swr?: SWRConfiguration<
-    Awaited<ReturnType<typeof exportControllerFindAll>>,
-    TError
-  > & { swrKey?: Key; enabled?: boolean };
-  request?: SecondParameter<typeof customInstance>;
-}) => {
-  const { swr: swrOptions, request: requestOptions } = options ?? {};
-
-  const isEnabled = swrOptions?.enabled !== false;
-  const swrKey =
-    swrOptions?.swrKey ??
-    (() => (isEnabled ? getExportControllerFindAllKey() : null));
-  const swrFn = () => exportControllerFindAll(requestOptions);
-
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
-    swrKey,
-    swrFn,
-    swrOptions
-  );
-
-  return {
-    swrKey,
-    ...query,
-  };
-};
-
-export const exportControllerFindOne = (
-  id: string,
-  options?: SecondParameter<typeof customInstance>
-) => {
-  return customInstance<Export>(
-    { url: `/export/${id}`, method: "get" },
-    options
-  );
-};
-
-export const getExportControllerFindOneKey = (id: string) => [`/export/${id}`];
-
-export type ExportControllerFindOneQueryResult = NonNullable<
-  Awaited<ReturnType<typeof exportControllerFindOne>>
->;
-export type ExportControllerFindOneQueryError = ErrorType<unknown>;
-
-export const useExportControllerFindOne = <TError = ErrorType<unknown>>(
-  id: string,
-  options?: {
-    swr?: SWRConfiguration<
-      Awaited<ReturnType<typeof exportControllerFindOne>>,
-      TError
-    > & { swrKey?: Key; enabled?: boolean };
-    request?: SecondParameter<typeof customInstance>;
-  }
-) => {
-  const { swr: swrOptions, request: requestOptions } = options ?? {};
-
-  const isEnabled = swrOptions?.enabled !== false && !!id;
-  const swrKey =
-    swrOptions?.swrKey ??
-    (() => (isEnabled ? getExportControllerFindOneKey(id) : null));
-  const swrFn = () => exportControllerFindOne(id, requestOptions);
-
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
-    swrKey,
-    swrFn,
-    swrOptions
-  );
-
-  return {
-    swrKey,
-    ...query,
-  };
-};
-
-export const exportControllerRemove = (
+export const invoiceControllerExport = (
   id: string,
   options?: SecondParameter<typeof customInstance>
 ) => {
   return customInstance<void>(
-    { url: `/export/${id}`, method: "delete" },
+    { url: `/invoice/${id}/export`, method: "post" },
     options
   );
 };
@@ -1059,6 +970,114 @@ export const documentControllerRemove = (
 ) => {
   return customInstance<void>(
     { url: `/document/${id}`, method: "delete" },
+    options
+  );
+};
+
+export const exportControllerCreate = (
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Export>(
+    { url: `/export/test`, method: "post" },
+    options
+  );
+};
+
+export const exportControllerFindAll = (
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Export[]>({ url: `/export`, method: "get" }, options);
+};
+
+export const getExportControllerFindAllKey = () => [`/export`];
+
+export type ExportControllerFindAllQueryResult = NonNullable<
+  Awaited<ReturnType<typeof exportControllerFindAll>>
+>;
+export type ExportControllerFindAllQueryError = ErrorType<unknown>;
+
+export const useExportControllerFindAll = <
+  TError = ErrorType<unknown>
+>(options?: {
+  swr?: SWRConfiguration<
+    Awaited<ReturnType<typeof exportControllerFindAll>>,
+    TError
+  > & { swrKey?: Key; enabled?: boolean };
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getExportControllerFindAllKey() : null));
+  const swrFn = () => exportControllerFindAll(requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const exportControllerFindOne = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Export>(
+    { url: `/export/${id}`, method: "get" },
+    options
+  );
+};
+
+export const getExportControllerFindOneKey = (id: string) => [`/export/${id}`];
+
+export type ExportControllerFindOneQueryResult = NonNullable<
+  Awaited<ReturnType<typeof exportControllerFindOne>>
+>;
+export type ExportControllerFindOneQueryError = ErrorType<unknown>;
+
+export const useExportControllerFindOne = <TError = ErrorType<unknown>>(
+  id: string,
+  options?: {
+    swr?: SWRConfiguration<
+      Awaited<ReturnType<typeof exportControllerFindOne>>,
+      TError
+    > & { swrKey?: Key; enabled?: boolean };
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false && !!id;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getExportControllerFindOneKey(id) : null));
+  const swrFn = () => exportControllerFindOne(id, requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const exportControllerRemove = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<void>(
+    { url: `/export/${id}`, method: "delete" },
     options
   );
 };

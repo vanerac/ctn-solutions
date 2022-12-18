@@ -52,9 +52,14 @@ export class Export {
     @Column({type: 'timestamp', nullable: true})
     doneAt: Date;
 
-    @ApiProperty({readOnly: true})
+    @ApiProperty({readOnly: true, nullable: true})
     @OneToOne(() => Document, {nullable: true}) @JoinColumn()
-    document: Document;
+    document?: Document;
+
+
+    // @ApiProperty({readOnly: true})
+    // @ManyToOne(type => Invoice, {nullable: true, onDelete: "CASCADE"}) @JoinColumn()
+    // invoice: Invoice;
 
 
 }

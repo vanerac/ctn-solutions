@@ -5,14 +5,15 @@ import {Export} from "./export.entity";
 import {ExportController} from "./export.controller";
 import {ExportService} from "./export.service";
 import {exportProviders} from "./export.provider";
-import {DocumentService} from "../document/document.service";
-import {documentProviders} from "../document/document.provider";
+import {DocumentModule} from "../document/document.module";
 
 
 @Module({
-    imports: [DatabaseModule, TypeOrmModule.forFeature([Export])],
+    imports: [DatabaseModule, TypeOrmModule.forFeature([Export]), DocumentModule],
     controllers: [ExportController],
-    providers: [ExportService, ...exportProviders, DocumentService, ...documentProviders],
+    providers: [ExportService, ...exportProviders,],
+    exports: [ExportService, ...exportProviders,]
+
 })
 export class ExportModule {
 }

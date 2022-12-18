@@ -45,4 +45,10 @@ export class InvoiceController {
     remove(@Param('id') id: string) {
         return this.invoiceService.remove(+id);
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Post(':id/export')
+    export(@Param('id') id: string, @Req() req) {
+        return this.invoiceService.export(+id);
+    }
 }
