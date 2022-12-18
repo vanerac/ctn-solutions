@@ -27,6 +27,8 @@ import type {
   Invoice,
   CreateInvoiceDto,
   UpdateInvoiceDto,
+  Export,
+  Document,
 } from "./core.schemas";
 import { customInstance } from "./custom-instance";
 import type { ErrorType, BodyType } from "./custom-instance";
@@ -845,6 +847,218 @@ export const invoiceControllerRemove = (
 ) => {
   return customInstance<void>(
     { url: `/invoice/${id}`, method: "delete" },
+    options
+  );
+};
+
+export const exportControllerFindAll = (
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Export[]>({ url: `/export`, method: "get" }, options);
+};
+
+export const getExportControllerFindAllKey = () => [`/export`];
+
+export type ExportControllerFindAllQueryResult = NonNullable<
+  Awaited<ReturnType<typeof exportControllerFindAll>>
+>;
+export type ExportControllerFindAllQueryError = ErrorType<unknown>;
+
+export const useExportControllerFindAll = <
+  TError = ErrorType<unknown>
+>(options?: {
+  swr?: SWRConfiguration<
+    Awaited<ReturnType<typeof exportControllerFindAll>>,
+    TError
+  > & { swrKey?: Key; enabled?: boolean };
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getExportControllerFindAllKey() : null));
+  const swrFn = () => exportControllerFindAll(requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const exportControllerFindOne = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Export>(
+    { url: `/export/${id}`, method: "get" },
+    options
+  );
+};
+
+export const getExportControllerFindOneKey = (id: string) => [`/export/${id}`];
+
+export type ExportControllerFindOneQueryResult = NonNullable<
+  Awaited<ReturnType<typeof exportControllerFindOne>>
+>;
+export type ExportControllerFindOneQueryError = ErrorType<unknown>;
+
+export const useExportControllerFindOne = <TError = ErrorType<unknown>>(
+  id: string,
+  options?: {
+    swr?: SWRConfiguration<
+      Awaited<ReturnType<typeof exportControllerFindOne>>,
+      TError
+    > & { swrKey?: Key; enabled?: boolean };
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false && !!id;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getExportControllerFindOneKey(id) : null));
+  const swrFn = () => exportControllerFindOne(id, requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const exportControllerRemove = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<void>(
+    { url: `/export/${id}`, method: "delete" },
+    options
+  );
+};
+
+export const documentControllerCreate = (
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Document>(
+    { url: `/document/upload`, method: "post" },
+    options
+  );
+};
+
+export const documentControllerFindAll = (
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Document[]>(
+    { url: `/document`, method: "get" },
+    options
+  );
+};
+
+export const getDocumentControllerFindAllKey = () => [`/document`];
+
+export type DocumentControllerFindAllQueryResult = NonNullable<
+  Awaited<ReturnType<typeof documentControllerFindAll>>
+>;
+export type DocumentControllerFindAllQueryError = ErrorType<unknown>;
+
+export const useDocumentControllerFindAll = <
+  TError = ErrorType<unknown>
+>(options?: {
+  swr?: SWRConfiguration<
+    Awaited<ReturnType<typeof documentControllerFindAll>>,
+    TError
+  > & { swrKey?: Key; enabled?: boolean };
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getDocumentControllerFindAllKey() : null));
+  const swrFn = () => documentControllerFindAll(requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const documentControllerFindOne = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Document>(
+    { url: `/document/${id}`, method: "get" },
+    options
+  );
+};
+
+export const getDocumentControllerFindOneKey = (id: string) => [
+  `/document/${id}`,
+];
+
+export type DocumentControllerFindOneQueryResult = NonNullable<
+  Awaited<ReturnType<typeof documentControllerFindOne>>
+>;
+export type DocumentControllerFindOneQueryError = ErrorType<unknown>;
+
+export const useDocumentControllerFindOne = <TError = ErrorType<unknown>>(
+  id: string,
+  options?: {
+    swr?: SWRConfiguration<
+      Awaited<ReturnType<typeof documentControllerFindOne>>,
+      TError
+    > & { swrKey?: Key; enabled?: boolean };
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false && !!id;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getDocumentControllerFindOneKey(id) : null));
+  const swrFn = () => documentControllerFindOne(id, requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const documentControllerRemove = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<void>(
+    { url: `/document/${id}`, method: "delete" },
     options
   );
 };

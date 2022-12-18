@@ -5,6 +5,35 @@
  * desc
  * OpenAPI spec version: 1.0
  */
+export interface Document {
+  readonly id: number;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
+  readonly url: string;
+}
+
+export type ExportStatus = typeof ExportStatus[keyof typeof ExportStatus];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ExportStatus = {
+  PENDING: "PENDING",
+  PROCESSING: "PROCESSING",
+  DONE: "DONE",
+  ERROR: "ERROR",
+} as const;
+
+export interface Export {
+  readonly id: number;
+  /** The status of the export */
+  readonly status: ExportStatus;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
+  readonly processedAt: Date;
+  readonly errorAt: Date;
+  readonly doneAt: Date;
+  readonly document: Document;
+}
+
 export type InvoiceStatus = typeof InvoiceStatus[keyof typeof InvoiceStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
