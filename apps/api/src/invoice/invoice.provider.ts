@@ -1,7 +1,6 @@
 import {DataSource} from 'typeorm';
 import {InvoiceField} from "./invoice-fields.entity";
-import {Invoice} from "./invoice.entity";
-import {InvoiceExport} from "./invoice-export.entity";
+import {Invoice, InvoiceExport} from "./invoice.entity";
 
 export const invoiceProviders = [
     {
