@@ -12,7 +12,9 @@
     "apps/web"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:api": "npm run start:dev -w apps/api",
+    "dev:web": "npm run dev -w apps/web",
+    "dev:sdk": "npx nodemon"
   },
   "repository": {
     "type": "git",

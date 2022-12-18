@@ -12,6 +12,7 @@ import {
 } from "../../../../../libs/SDK";
 import ContactForm from "../../../components/ContactForm";
 import HierarchyBar from "../../../components/HierarchyBar";
+import {toaster} from "evergreen-ui";
 
 export default function EditCustomerPage() {
     const router = useRouter()
@@ -27,6 +28,8 @@ export default function EditCustomerPage() {
             }
         }
     )
+
+
     const {
         data: company,
         error: companyError,
@@ -45,20 +48,22 @@ export default function EditCustomerPage() {
     //     return <div>failed to load</div>
     // }
 
-    if (!customer || !company) {
+    if (!customer && !company) {
         return <div>loading...</div>
     }
 
     const handleCustomerEdit = async (data: Customer) => {
         console.log(data);
         await customerControllerUpdate(String(id), data)
+        toaster.success('Update successful', {duration: 3, description: 'Customer updated successfully'})
         await mutateCustomer();
     }
 
     const handleCompanyEdit = async (data: Company) => {
 
         console.log(data)
-        await companyControllerUpdate(String(customer?.company), data)
+        await companyControllerUpdate(String(customer?.company?.id), data)
+        toaster.success('Update successful', {duration: 3, description: 'Company updated successfully'})
         await mutateCompany()
 
     }
@@ -72,14 +77,15 @@ export default function EditCustomerPage() {
                     <HierarchyBar items={[
                         {href: "/", name: "Home"},
                         {href: "/customers", name: "Customers"},
-                        {href: "/customers/" + id, name: customer?.email},
+                        {href: "/customers/" + id, name: customer?.email ?? "Loading..."},
                         {href: null, name: "Edit"}
                     ]}/>
 
 
                     <div className="flex flex-row">
                         <ContactForm customerData={customer} submitAction={handleCustomerEdit}></ContactForm>
-                        <CompanyDetailsForm companyData={company} submitAction={handleCompanyEdit}></CompanyDetailsForm>
+                        <CompanyDetailsForm companyData={customer?.company ?? undefined}
+                                            submitAction={handleCompanyEdit}></CompanyDetailsForm>
                     </div>
                 </div>
             </div>

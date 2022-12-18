@@ -1,7 +1,7 @@
 import {defineConfig} from 'orval'
 
 export default defineConfig({
-    danae: {
+    ctn: {
         input: {
             target: './swagger.json',
             validation: false

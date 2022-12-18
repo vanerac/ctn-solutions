@@ -1,6 +1,7 @@
 import SideBar from "../components/Sidebar/SideBar";
 import TopBar from "../components/TopBar";
 import HierarchyBar from "../components/HierarchyBar";
+import InvoiceForm from "../components/invoice/InvoiceForm";
 
 function Home() {
     return (
@@ -10,6 +11,8 @@ function Home() {
                 <SideBar/>
                 <HierarchyBar items={[
                     {href: null, name: "Home"}]}/>
+                <InvoiceForm invoice={null} onSubmit={() => {
+                }}/>
             </div>
 
         </>

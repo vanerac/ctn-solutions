@@ -21,14 +21,17 @@ export class EstimateService {
     async create(createEstimateDto: CreateEstimateDto, user: User) {
 
 
+        const {items, ...estimateData} = createEstimateDto;
+
         const estimate = this.estimateRepository.create({
-            ...createEstimateDto,
+            ...estimateData,
             owner: user
         })
 
-        await this.estimateRepository.save(estimate);
+        const estimateDB = await this.estimateRepository.save(estimate);
 
-        for (const item of createEstimateDto.items) {
+
+        estimateDB.items = await Promise.all((items ?? [])?.map(async (item) => {
             const estimateField = new EstimateField();
             estimateField.title = item.title;
             estimateField.quantity = item.quantity;
@@ -38,9 +41,10 @@ export class EstimateService {
             estimateField.description = item.description;
             estimateField.estimate = estimate;
 
-            await this.estimateFieldRepository.save(estimateField);
+            return await this.estimateFieldRepository.save(estimateField);
+        }))
 
-        }
+        return estimateDB;
 
     }
 
@@ -49,6 +53,7 @@ export class EstimateService {
             relations:
                 [
                     "customer",
+                    "customer.company",
                     "items"
                 ],
             relationLoadStrategy: "join"
@@ -62,6 +67,7 @@ export class EstimateService {
                 relations:
                     [
                         "customer",
+                        "customer.company",
                         "items"
                     ],
                 relationLoadStrategy: "join"
@@ -70,10 +76,47 @@ export class EstimateService {
     }
 
     async update(id: number, updateEstimateDto: UpdateEstimateDto) {
+
+        const estimate = await this.estimateRepository.findOne({
+            where: {id: id},
+        });
+
+        const itemsPromise = Promise.all(updateEstimateDto.items.map(async item => {
+            const i = new EstimateField();
+            i.id = item.id;
+            i.title = item.title;
+            i.quantity = item.quantity;
+            i.unitPrice = item.unitPrice;
+            i.tax = item.tax;
+            i.discount = item.discount;
+            i.description = item.description;
+            i.estimate = estimate;
+
+
+            if (item.id) {
+                return this.estimateRepository.update(item.id, i);
+            } else {
+                return this.estimateRepository.save(i);
+            }
+        }))
+
+
+        const {items, ...estimateData} = updateEstimateDto;
+        const updatePromise = this.estimateRepository.update(id, {
+            ...estimateData,
+        });
+
+        await Promise.all([itemsPromise, updatePromise]);
+
+
         return this.estimateRepository.update(id, updateEstimateDto);
     }
 
     async remove(id: number) {
         return this.estimateRepository.delete(id);
+    }
+
+    async removeBulk(ids: number[]) {
+        return this.estimateRepository.delete(ids);
     }
 }

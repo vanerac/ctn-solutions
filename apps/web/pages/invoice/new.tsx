@@ -3,6 +3,8 @@ import SideBar from "../../components/Sidebar/SideBar";
 import HierarchyBar from "../../components/HierarchyBar";
 import InvoiceForm from "../../components/invoice/InvoiceForm";
 import {Invoice, invoiceControllerCreate} from "../../../../libs/SDK";
+import Router from "next/router";
+import {toaster} from "evergreen-ui";
 
 
 export default function NewInvoice() {
@@ -10,7 +12,9 @@ export default function NewInvoice() {
 
     const handleInvoiceCreate = async (data: Invoice) => {
         console.log(data);
-        await invoiceControllerCreate(data);
+        const invoice = await invoiceControllerCreate(data);
+        toaster.success('Create successful', {duration: 3, description: 'Invoice created successfully'})
+        Router.push('/invoice/' + invoice.id);
     }
 
     return (

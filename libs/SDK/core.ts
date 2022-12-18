@@ -360,6 +360,21 @@ export const useEstimateControllerFindAll = <
   };
 };
 
+export const estimateControllerRemoveBulk = (
+  estimateControllerRemoveBulkBody: string[],
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<void>(
+    {
+      url: `/estimate`,
+      method: "delete",
+      headers: { "Content-Type": "application/json" },
+      data: estimateControllerRemoveBulkBody,
+    },
+    options
+  );
+};
+
 export const estimateControllerFindOne = (
   id: string,
   options?: SecondParameter<typeof customInstance>

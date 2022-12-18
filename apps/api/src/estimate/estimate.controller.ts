@@ -45,4 +45,11 @@ export class EstimateController {
     remove(@Param('id') id: string) {
         return this.estimateService.remove(+id);
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Delete('/')
+    removeBulk(@Body() ids: number[]) {
+        return this.estimateService.removeBulk(ids);
+    }
+    
 }
