@@ -22,13 +22,9 @@ export class ExportService {
         this.init();
     }
 
-    async export() {
+    async text() {
         const template = fs.readFileSync(path.join(__dirname, 'invoice/default.html'), {encoding: 'utf8'});
-
-        Mustache.parse(template);
-
-        const HTML = Mustache.render(template, {invoiceNumber: "#12345"});
-
+        const HTML = Mustache.render(template, {invoiceNumber: "12345"});
         return this.queue(HTML);
 
     }

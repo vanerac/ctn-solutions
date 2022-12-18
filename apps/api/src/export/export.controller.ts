@@ -14,7 +14,7 @@ export class ExportController {
     @ApiOkResponse({type: Export})
     @Post('test')
     create() {
-        return this.exportService.export();
+        return this.exportService.text();
     }
 
     @UseGuards(JwtAuthGuard)
