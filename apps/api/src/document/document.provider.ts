@@ -1,5 +1,6 @@
 import {DataSource} from 'typeorm';
-import {Document, Signature} from './document.entity'
+import {Document} from './document.entity'
+import {Signature} from "./signature.entity";
 
 export const documentProviders = [
     {

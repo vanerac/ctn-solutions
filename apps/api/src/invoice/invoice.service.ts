@@ -2,7 +2,7 @@ import * as mustache from 'mustache'
 import {Inject, Injectable} from '@nestjs/common';
 import {Repository} from "typeorm";
 import {User} from "../user/user.entity";
-import {Invoice, InvoiceExport} from "./invoice.entity";
+import {Invoice} from "./invoice.entity";
 import {InvoiceField} from "./invoice-fields.entity";
 import {CreateInvoiceDto} from "./dto/create-invoice.dto";
 import {UpdateInvoiceDto} from "./dto/update-invoice.dto";
@@ -10,6 +10,7 @@ import * as path from "path";
 import * as fs from "fs";
 import {data} from "../templates/invoice/default";
 import {ExportService} from "../export/export.service";
+import {InvoiceExport} from "./invoice-export.entity";
 
 @Injectable()
 export class InvoiceService {

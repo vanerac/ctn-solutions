@@ -3,7 +3,7 @@ import {Cluster} from "puppeteer-cluster";
 import {Repository} from "typeorm";
 import {Export, ExportStatus} from "./export.entity";
 import {DocumentService} from "../document/document.service";
-import {Signature, SignatureStatus, SignatureType} from "../document/document.entity";
+import {Signature, SignatureStatus, SignatureType} from "../document/signature.entity";
 
 @Injectable()
 export class ExportService {
