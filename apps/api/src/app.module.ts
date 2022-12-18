@@ -8,7 +8,9 @@ import {TypeOrmModule} from "@nestjs/typeorm";
 import {EstimateModule} from './estimate/estimate.module';
 import {AuthModule} from "./auth/auth.module";
 import {CompanyModule} from "./company/company.module";
-import { InvoiceModule } from './invoice/invoice.module';
+import {InvoiceModule} from './invoice/invoice.module';
+import {ExportModule} from "./export/export.module";
+import { DocumentModule } from './document/document.module';
 
 @Module({
     imports: [
@@ -32,6 +34,8 @@ import { InvoiceModule } from './invoice/invoice.module';
         CompanyModule,
         CustomerModule,
         InvoiceModule,
+        ExportModule,
+        DocumentModule
     ],
     controllers: [AppController],
     providers: [AppService],
