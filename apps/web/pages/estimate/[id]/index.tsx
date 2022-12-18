@@ -4,11 +4,15 @@ import HierarchyBar from "../../../components/HierarchyBar";
 import {estimateControllerRemove, useEstimateControllerFindOne} from "../../../../../libs/SDK";
 import Router, {useRouter} from "next/router";
 import EstimateViewer from "../../../components/estimate/EstimateViewer";
+import {Button, Dialog, EditIcon, HighlightIcon, Pane, TrashIcon} from "evergreen-ui";
+import Signature from "../../../components/Signature";
+import {useState} from "react";
 
 export default function ViewEstimate() {
 
     const router = useRouter()
     const {id} = router.query
+    const [showDialog, setShowDialog] = useState(false)
 
     const {data: estimate, error: estimateError, mutate: mutateEstimate} = useEstimateControllerFindOne(String(id), {
         swr: {
@@ -46,24 +50,66 @@ export default function ViewEstimate() {
                         {href: "/estimate", name: "Estimates"},
                         {href: null, name: String(estimate?.title)}]}/>
 
+                    <div className={"flex flex-row m-5 w-full"}>
+                        <Button appearance={"primary"}
+                                intent={""}
+                                marginRight={42} size="medium"
+                                iconBefore={EditIcon}
+                                onClick={() => {
+                                    Router.push(`/invoice/${id}/edit`)
+                                }}>
+                            Edit
+                        </Button>
+                        {/*    Deliete button*/}
+
+
+                        <Button
+                            appearance={"primary"}
+                            intent={"success"}
+                            marginRight={42} size="medium"
+                            iconBefore={HighlightIcon}
+                            className={"justify-self-start"}
+                            onClick={() => {
+                                setShowDialog(true)
+                            }}>
+                            Sign
+                        </Button>
+                        <Button appearance={"primary"}
+                                intent={"danger"}
+                                iconBefore={TrashIcon}
+                                marginRight={42} size="medium"
+                                onClick={deleteButton
+                                }
+                                className={"justify-self-end"}>
+
+                            Delete
+                        </Button>
+                    </div>
                     <EstimateViewer estimate={estimate}/>
+                    <Pane>
+                        <Dialog
+                            isShown={showDialog}
+                            title="Sign"
+                            onConfirm={() => {
+                                
+                                setShowDialog(false)
+                            }}
+                            intent="success"
+                            onCloseComplete={() => {
+
+                                setShowDialog(false)
+                            }}
+                            confirmLabel="Save"
+                            onCancel={() => setShowDialog(false)}
+                            shouldCloseOnEscapePress={true}
+                        >
+
+                            <Signature/>
+                        </Dialog>
+                    </Pane>
+
+
                 </div>
-                {/*Edit button*/}
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2 h-10"
-                        onClick={() => {
-                            Router.push(`/estimate/${id}/edit`)
-                        }}>
-                    Edit
-                </button>
-                {/*    Deliete button*/}
-                <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2 h-10"
-                        onClick={deleteButton
-                        }
-                >
-                    Delete
-                </button>
-
-
             </div>
         </div>
     )

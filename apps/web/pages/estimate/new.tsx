@@ -3,6 +3,8 @@ import SideBar from "../../components/Sidebar/SideBar";
 import HierarchyBar from "../../components/HierarchyBar";
 import EstimateForm from "../../components/estimate/EstimateForm";
 import {Estimate, estimateControllerCreate} from "../../../../libs/SDK";
+import {toaster} from "evergreen-ui";
+import Router from "next/router";
 
 
 export default function NewEstimate() {
@@ -10,7 +12,9 @@ export default function NewEstimate() {
 
     const handleEstimateCreate = async (data: Estimate) => {
         console.log(data);
-        await estimateControllerCreate(data);
+        const estimate = await estimateControllerCreate(data);
+        toaster.success('Create successful', {duration: 3, description: 'Estimate created successfully'})
+        Router.push('/estimate/' + estimate.id);
     }
 
     return (

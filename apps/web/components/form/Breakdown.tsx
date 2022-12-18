@@ -8,7 +8,7 @@ export default function Breakdown({
     tax: number,
 }) {
     return (
-        <div className="mt-6">
+        <div className="mt-6 w-full">
             <div className="grid grid-cols-1 gap-4 p-8 bg-white border rounded shadow">
                 <div className="flex justify-between">
                     <div className="text-gray-700">Total</div>
