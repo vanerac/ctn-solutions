@@ -4,6 +4,7 @@ import {Customer} from "../customer/customer.entity";
 import {Company} from "../company/company.entity";
 import {User} from "../user/user.entity";
 import {InvoiceField} from "./invoice-fields.entity";
+import {Export} from "../export/export.entity";
 
 enum InvoiceStatus {
     DRAFT = 'draft',
@@ -98,4 +99,26 @@ export class Invoice {
     })
     @Column()
     status: InvoiceStatus;
+
+    @ApiProperty({type: () => InvoiceExport, isArray: true})
+    @OneToMany(type => InvoiceExport, (item) => item.invoice, {nullable: true}) @JoinColumn()
+    exports: InvoiceExport[];
+}
+
+
+@Entity()
+export class InvoiceExport {
+    @ApiProperty()
+    @PrimaryGeneratedColumn()
+    id: number;
+
+
+    @ApiProperty({nullable: false, type: () => Invoice})
+    @ManyToOne(type => Invoice, {nullable: true}) @JoinColumn()
+    invoice: Invoice;
+
+
+    @ApiProperty({nullable: false, type: () => Export})
+    @ManyToOne(type => Export, {nullable: true}) @JoinColumn()
+    export: Export;
 }

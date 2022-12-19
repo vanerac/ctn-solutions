@@ -5,48 +5,6 @@
  * desc
  * OpenAPI spec version: 1.0
  */
-export interface Document {
-  readonly id: number;
-  readonly createdAt: Date;
-  readonly updatedAt: Date;
-  readonly url: string;
-}
-
-export type ExportStatus = typeof ExportStatus[keyof typeof ExportStatus];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ExportStatus = {
-  PENDING: "PENDING",
-  PROCESSING: "PROCESSING",
-  DONE: "DONE",
-  ERROR: "ERROR",
-} as const;
-
-export interface Export {
-  readonly id: number;
-  /** The status of the export */
-  readonly status: ExportStatus;
-  readonly createdAt: Date;
-  readonly updatedAt: Date;
-  readonly processedAt: Date;
-  readonly errorAt: Date;
-  readonly doneAt: Date;
-  readonly document: Document;
-}
-
-export type InvoiceStatus = typeof InvoiceStatus[keyof typeof InvoiceStatus];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const InvoiceStatus = {
-  draft: "draft",
-  sent: "sent",
-  accepted: "accepted",
-  declined: "declined",
-  cancelled: "cancelled",
-  changes_requested: "changes_requested",
-  expired: "expired",
-} as const;
-
 export interface Invoice {
   id: number;
   customer: Customer;
@@ -65,6 +23,7 @@ export interface Invoice {
   createdAt: Date;
   updatedAt: Date;
   status: InvoiceStatus;
+  exports: InvoiceExport[];
 }
 
 export interface InvoiceField {
@@ -77,6 +36,142 @@ export interface InvoiceField {
   discount: number;
   tax: number;
 }
+
+export interface UpdateInvoiceDto {
+  id?: number;
+  customer?: Customer;
+  billingAddress?: Company;
+  shippingAddress?: Company;
+  items?: InvoiceField[];
+  title?: string;
+  description?: string;
+  date?: Date;
+  dueDate?: Date;
+  terms?: string;
+  notes?: string;
+  tax?: number;
+  globalDiscount?: number;
+  owner?: User;
+  createdAt?: Date;
+  updatedAt?: Date;
+  status?: InvoiceStatus;
+  exports?: InvoiceExport[];
+}
+
+export interface CreateInvoiceDto {
+  id: number;
+  customer: Customer;
+  billingAddress: Company;
+  shippingAddress: Company;
+  items: InvoiceField[];
+  title: string;
+  description: string;
+  date: Date;
+  dueDate: Date;
+  terms: string;
+  notes: string;
+  tax: number;
+  globalDiscount: number;
+  owner: User;
+  createdAt: Date;
+  updatedAt: Date;
+  status: InvoiceStatus;
+  exports: InvoiceExport[];
+}
+
+export interface Document {
+  readonly id: number;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
+  readonly url: string;
+  readonly signatures: Signature[] | null;
+}
+
+export type ExportDocument = Document | null;
+
+export interface Export {
+  readonly id: number;
+  /** The status of the export */
+  readonly status: ExportStatus;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
+  readonly processedAt: Date;
+  readonly errorAt: Date;
+  readonly doneAt: Date;
+  readonly document: ExportDocument;
+}
+
+export interface InvoiceExport {
+  id: number;
+  invoice: Invoice;
+  export: Export;
+}
+
+export type SignatureDocument = Document | null;
+
+export type SignatureAnchors = {
+  readonly top?: number;
+  readonly left?: number;
+  readonly width?: number;
+  readonly height?: number;
+  readonly winWidth?: number;
+  readonly winHeight?: number;
+  readonly scale?: number;
+  readonly id?: string;
+};
+
+export type SignatureType = typeof SignatureType[keyof typeof SignatureType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const SignatureType = {
+  SIGNATURE: "SIGNATURE",
+  INITIALS: "INITIALS",
+} as const;
+
+export type SignatureStatus =
+  typeof SignatureStatus[keyof typeof SignatureStatus];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const SignatureStatus = {
+  PENDING: "PENDING",
+  COMPLETE: "COMPLETE",
+} as const;
+
+export interface Signature {
+  readonly id: number;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
+  readonly anchors: SignatureAnchors;
+  readonly signatureUrl: string | null;
+  /** The status of the signature */
+  readonly status: SignatureStatus;
+  /** The type of the signature */
+  readonly type: SignatureType;
+  readonly document: SignatureDocument;
+}
+
+export type ExportStatus = typeof ExportStatus[keyof typeof ExportStatus];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ExportStatus = {
+  PENDING: "PENDING",
+  PROCESSING: "PROCESSING",
+  DONE: "DONE",
+  ERROR: "ERROR",
+} as const;
+
+export type InvoiceStatus = typeof InvoiceStatus[keyof typeof InvoiceStatus];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const InvoiceStatus = {
+  draft: "draft",
+  sent: "sent",
+  accepted: "accepted",
+  declined: "declined",
+  cancelled: "cancelled",
+  changes_requested: "changes_requested",
+  expired: "expired",
+} as const;
 
 export type CreateCustomerDtoCompany = Company | null;
 
@@ -257,46 +352,6 @@ export interface Customer {
   phone: string;
   email: string;
   company: CustomerCompany;
-}
-
-export interface UpdateInvoiceDto {
-  id?: number;
-  customer?: Customer;
-  billingAddress?: Company;
-  shippingAddress?: Company;
-  items?: InvoiceField[];
-  title?: string;
-  description?: string;
-  date?: Date;
-  dueDate?: Date;
-  terms?: string;
-  notes?: string;
-  tax?: number;
-  globalDiscount?: number;
-  owner?: User;
-  createdAt?: Date;
-  updatedAt?: Date;
-  status?: InvoiceStatus;
-}
-
-export interface CreateInvoiceDto {
-  id: number;
-  customer: Customer;
-  billingAddress: Company;
-  shippingAddress: Company;
-  items: InvoiceField[];
-  title: string;
-  description: string;
-  date: Date;
-  dueDate: Date;
-  terms: string;
-  notes: string;
-  tax: number;
-  globalDiscount: number;
-  owner: User;
-  createdAt: Date;
-  updatedAt: Date;
-  status: InvoiceStatus;
 }
 
 export interface ChangePasswordDTO {

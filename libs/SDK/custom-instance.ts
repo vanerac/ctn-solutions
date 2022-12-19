@@ -13,6 +13,7 @@ AXIOS_INSTANCE.interceptors.request.use(
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded',
+                "Access-Control-Allow-Origin": "*",
             }
         }
         return config;

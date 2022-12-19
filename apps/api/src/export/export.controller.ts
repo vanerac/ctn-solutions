@@ -1,4 +1,4 @@
-import {Controller, Delete, Get, Param, UseGuards} from '@nestjs/common';
+import {Controller, Delete, Get, Param, Post, UseGuards} from '@nestjs/common';
 import {JwtAuthGuard} from "../auth/jwt.guard";
 import {ApiOkResponse, ApiTags} from "@nestjs/swagger";
 import {ExportService} from "./export.service";
@@ -11,11 +11,11 @@ export class ExportController {
     }
 
     // @UseGuards(JwtAuthGuard)
-    // @ApiOkResponse({type: Export})
-    // @Post('test')
-    // create() {
-    //     return this.exportService.text();
-    // }
+    @ApiOkResponse({type: Export})
+    @Post('test')
+    create() {
+        return this.exportService.test();
+    }
 
     @UseGuards(JwtAuthGuard)
     @ApiOkResponse({type: Export, isArray: true})

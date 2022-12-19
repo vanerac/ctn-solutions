@@ -8,6 +8,7 @@ import {documentProviders} from "./document.provider";
     imports: [DatabaseModule],
     controllers: [DocumentController],
     providers: [DocumentService, ...documentProviders],
+    exports: [DocumentService, ...documentProviders]
 })
 export class DocumentModule {
 }

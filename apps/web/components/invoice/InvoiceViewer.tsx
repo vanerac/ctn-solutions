@@ -64,6 +64,11 @@ export default function InvoiceViewer({
                         </tbody>
                     </table>
                 </div>
+
+
+                {/*Breakdown*/}
+
+
                 <div className="mb-6">
                     <Breakdown total={
                         invoice.items.reduce((acc, item) => {
@@ -74,6 +79,19 @@ export default function InvoiceViewer({
                                tax={invoice.tax}
                                discount={invoice.globalDiscount}
                     />
+                </div>
+                {/*Terms*/}
+                <div className="mb-4">
+                    <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="terms">
+                        Terms
+                    </label>
+                    <p>{invoice.terms}</p>
+                </div>
+                <div className="mb-4">
+                    <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="notes">
+                        Notes
+                    </label>
+                    <p>{invoice.notes}</p>
                 </div>
 
             </div>

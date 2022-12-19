@@ -1,7 +1,7 @@
 import TopBar from "../../../components/TopBar";
 import SideBar from "../../../components/Sidebar/SideBar";
 import HierarchyBar from "../../../components/HierarchyBar";
-import {invoiceControllerRemove, useInvoiceControllerFindOne} from "../../../../../libs/SDK";
+import {invoiceControllerExport, invoiceControllerRemove, useInvoiceControllerFindOne} from "../../../../../libs/SDK";
 import Router, {useRouter} from "next/router";
 import InvoiceViewer from "../../../components/invoice/InvoiceViewer";
 import Signature from "../../../components/Signature";
@@ -32,6 +32,11 @@ export default function ViewInvoice() {
 
     const deleteButton = async () => {
         await invoiceControllerRemove(String(id))
+        mutateInvoice()
+    }
+
+    const exportInvoice = async () => {
+        await invoiceControllerExport(String(id))
         mutateInvoice()
     }
 
@@ -93,6 +98,51 @@ export default function ViewInvoice() {
 
                             Delete
                         </Button>
+
+                        {
+
+                            (!invoice.exports[0] || invoice.exports[0]?.export.createdAt < invoice.updatedAt) ?
+                                <Button appearance={"minimal"}
+                                        intent={""}
+                                        marginRight={42} size="medium"
+                                        onClick={exportInvoice}
+                                        className={"justify-self-end"}
+                                        disabled={invoice.exports[0]?.export.status === "PENDING"}
+                                >
+                                    Export
+                                </Button> :
+                                // download button
+                                <a href={invoice.exports[0]?.export?.document?.url} download>
+                                    <Button appearance={"minimal"}
+                                            intent={""}
+                                            marginRight={42} size="medium"
+                                            className={"justify-self-end"}
+                                            disabled={invoice.exports[0]?.export.status === "PENDING"}
+                                    >
+                                        Download
+                                    </Button>
+                                </a>
+
+
+                        }
+
+                        {
+                            invoice.exports[0]?.export?.document?.url ?
+                                <Button appearance={"minimal"}
+                                        intent={""}
+                                        marginRight={42} size="medium"
+                                        className={"justify-self-end"}
+                                        disabled={invoice.exports[0]?.export.status === "PENDING"}
+                                        onClick={() => {
+                                            Router.push(`/invoice/${id}/sign`)
+                                        }}
+                                >
+                                    Sign
+                                </Button> : null
+                            
+                        }
+
+
                     </div>
                     <InvoiceViewer invoice={invoice}/>
                     <Pane>
