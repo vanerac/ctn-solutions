@@ -27,12 +27,18 @@ export default function CustomPDFPage({page, parentContainer, pageNr, signatureA
         parentContainer?.current?.appendChild(canvas);
 
         const renderContext = {canvasContext: ctx, viewport};
-        
-        signatureAnchors = signatureAnchors?.map(anchor => {
+
+        page.render(renderContext);
+        setViewport(viewport);
+    }, [])
+
+    useEffect(() => {
+        if (!viewport) return;
+        if (!signatureAnchors) return;
+
+        signatureAnchors = signatureAnchors.map(anchor => {
             const xScale = viewport.width / (anchor?.winWidth ?? 1);
             const yScale = viewport.height / (anchor.winHeight ?? 2);
-
-            console.log(xScale, yScale);
 
             return {
                 ...anchor,
@@ -46,8 +52,7 @@ export default function CustomPDFPage({page, parentContainer, pageNr, signatureA
             }
         })
 
-
-        const pageSignatureAnchors = signatureAnchors?.filter((signatureAnchor) => {
+        const pageSignatureAnchors = signatureAnchors.filter((signatureAnchor) => {
             const {top} = signatureAnchor;
 
             const pageBounderies = {
@@ -55,34 +60,21 @@ export default function CustomPDFPage({page, parentContainer, pageNr, signatureA
                 bottom: (pageNr + 1) * viewport.height,
             }
 
-            console.log(pageNr, pageBounderies)
-
-            console.log(top, pageBounderies.top, pageBounderies.bottom);
-
             return !((top as number) > pageBounderies.top && (top as number) < pageBounderies.bottom);
-
-            // return pageNr * viewport.height < (top as number) && (top as number) < (pageNr + 1) * viewport.height;
         })
 
+        const newAnchors = pageSignatureAnchors.map((signatureAnchor) => {
+            const {height, left, top, width} = signatureAnchor;
+            return {
+                y: (top as number) - ((pageNr - 1) * (viewport.height)),
+                x: left as number,
+                height: height as number,
+                width: width as number
+            }
+        })
 
-        setComputedSigAnchors(
-            pageSignatureAnchors?.map((signatureAnchor) => {
-                const {height, left, top, width} = signatureAnchor;
-
-                console.log(top, pageNr, height);
-                return {
-                    y: (top as number) - ((pageNr - 1) * (viewport.height)),
-                    x: left as number,
-                    height: height as number,
-                    width: width as number
-                }
-            }) as any
-        );
-
-        page.render(renderContext);
-        setViewport(viewport);
-    }, [])
-
+        setComputedSigAnchors(newAnchors);
+    }, [viewport])
 
     console.log(computedSigAnchors);
 
