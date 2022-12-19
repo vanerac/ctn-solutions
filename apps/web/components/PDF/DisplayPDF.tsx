@@ -5,17 +5,23 @@ import {PDFPageProxy} from 'pdfjs-dist';
 import CustomPDFPage from "./CustomPDFPage";
 import {GetDocumentParameters} from "pdfjs-dist/types/src/display/api";
 import {Pane, Spinner} from "evergreen-ui";
+import {SignatureAnchors} from "../../../../libs/SDK";
 
 export default function DisplayPDF({
-                                       src
+                                       src,
+
+                                       signatureAnchors
                                    }: {
-    src: GetDocumentParameters
+    src: GetDocumentParameters,
+    signatureAnchors?: SignatureAnchors[]
 }) {
     const canvasContainer = useRef<any>(null);
     const [pages, setPages] = useState<PDFPageProxy[]>([]);
 
 
     useEffect(() => {
+
+        console.log(src);
         (async function () {
             // @ts-ignore
             pdfJS.GlobalWorkerOptions.workerSrc =
@@ -32,7 +38,7 @@ export default function DisplayPDF({
             const pages = await Promise.all(pagesPromise)
             setPages(pages);
         })();
-    }, []);
+    }, [src]);
 
 
     if (pages.length === 0) {
@@ -47,7 +53,8 @@ export default function DisplayPDF({
         <div>
             {
                 pages.map((page, index) =>
-                    <CustomPDFPage page={page} key={index} parentContainer={canvasContainer}/>
+                    <CustomPDFPage page={page} pageNr={index} key={index} parentContainer={canvasContainer}
+                                   signatureAnchors={signatureAnchors}/>
                 )
             }
         </div>

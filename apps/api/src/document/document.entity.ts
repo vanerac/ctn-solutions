@@ -55,15 +55,31 @@ export class Signature {
     updatedAt: Date;
 
     // Anchors
-    @ApiProperty({readOnly: true})
+    @ApiProperty({
+        readOnly: true, properties: {
+            top: {type: 'number', nullable: false},
+            left: {type: 'number', nullable: false},
+            width: {type: 'number', nullable: false},
+            height: {type: 'number', nullable: false},
+            winWidth: {type: 'number', nullable: false},
+            winHeight: {type: 'number', nullable: false},
+            scale: {type: 'number', nullable: false},
+            id: {type: 'string', nullable: false},
+        },
+        nullable: false
+    })
     @Column({type: 'json', nullable: true})
     anchors: {
         top: number
         left: number
         width: number
         height: number
+        winWidth: number
+        winHeight: number
+        scale: number
         id: string
     };
+
 
     // URL
     @ApiProperty({readOnly: true, nullable: true})

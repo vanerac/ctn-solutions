@@ -126,6 +126,22 @@ export default function ViewInvoice() {
 
                         }
 
+                        {
+                            invoice.exports[0]?.export?.document?.url ?
+                                <Button appearance={"minimal"}
+                                        intent={""}
+                                        marginRight={42} size="medium"
+                                        className={"justify-self-end"}
+                                        disabled={invoice.exports[0]?.export.status === "PENDING"}
+                                        onClick={() => {
+                                            Router.push(`/invoice/${id}/sign`)
+                                        }}
+                                >
+                                    Sign
+                                </Button> : null
+                            
+                        }
+
 
                     </div>
                     <InvoiceViewer invoice={invoice}/>

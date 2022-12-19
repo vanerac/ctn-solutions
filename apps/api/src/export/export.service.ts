@@ -101,6 +101,9 @@ export class ExportService {
         this.cluster = await Cluster.launch({
             concurrency: Cluster.CONCURRENCY_CONTEXT,
             maxConcurrency: 5,
+            puppeteerOptions: {
+                headless: true
+            }
         });
 
         await this.cluster.task(async ({page, data: {html, exportId}}) => {
@@ -108,20 +111,38 @@ export class ExportService {
             console.time('Render ' + exportId);
 
             const base64 = Buffer.from(html).toString('base64');
+
+            // A4 Format
+            // await page.setViewport({width: 595, height: 842});
+
             await page.goto(`data:text/html;base64,${base64}`, {waitUntil: 'networkidle0'});
             // Inject script to run function in browser
 
 
             console.log(html)
 
+            const bodyBounds = await page.$eval('body', (element) => {
+                const {width, height} = element.getBoundingClientRect()
+                return {width, height};
+            })
+
             // TODO: implement signature anchors
             const signatureMetaDataPromise = page.$$eval(".signature", (elements) => {
                 return elements.map((element) => {
                     const {x, y, width, height} = element.getBoundingClientRect()
                     const id = element.getAttribute('id');
-                    return {x, y, width, height, anchorId: id};
+                    const winWidth =
+                        document.documentElement.clientWidth
+                        || document.body.clientWidth;
+
+                    const winHeight =
+                        // window.innerHeight ||
+                        document.documentElement.clientHeight
+                        || document.body.clientHeight;
+                    return {x, y, width, height, anchorId: id, winWidth, winHeight};
                 })
             })
+
 
             const pdfPromise = page.pdf({format: 'A4'});
 
@@ -142,7 +163,10 @@ export class ExportService {
                         height: metaData.height,
                         width: metaData.width,
                         left: metaData.x,
-                        top: metaData.y
+                        top: metaData.y,
+                        winHeight: bodyBounds.height,
+                        winWidth: bodyBounds.width,
+                        scale: 1
                     },
                     type: SignatureType.SIGNATURE,
                     createdAt: new Date(),
@@ -165,6 +189,12 @@ export class ExportService {
             });
 
             console.log(doc.url)
+
+            await new Promise<void>((resolve, reject) => {
+                setTimeout(() => {
+                    resolve();
+                }, 600000)
+            })
 
             return {url: doc.url, signatureMetaData};
         })

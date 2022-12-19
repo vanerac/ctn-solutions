@@ -109,7 +109,16 @@ export interface InvoiceExport {
 
 export type SignatureDocument = Document | null;
 
-export type SignatureAnchors = { [key: string]: any };
+export type SignatureAnchors = {
+  readonly top?: number;
+  readonly left?: number;
+  readonly width?: number;
+  readonly height?: number;
+  readonly winWidth?: number;
+  readonly winHeight?: number;
+  readonly scale?: number;
+  readonly id?: string;
+};
 
 export type SignatureType = typeof SignatureType[keyof typeof SignatureType];
 
