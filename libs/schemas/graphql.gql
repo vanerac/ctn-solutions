@@ -1,0 +1,215 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+interface SignatureAnchor {
+  top: Int!
+  left: Int!
+  width: Int!
+  height: Int!
+  winWidth: Int!
+  winHeight: Int!
+  scale: Int!
+  id: Int!
+}
+
+type Company {
+  id: Int!
+  legalname: String!
+  taxid: String!
+  address: String!
+  city: String!
+  state: String!
+  zip: String!
+  siret: String!
+  ape: String!
+  legalform: LegalForm!
+  website: String!
+  logo: String!
+  description: String!
+  industry: String!
+}
+
+enum LegalForm {
+  AE
+  SARL
+  SAS
+  SASU
+  EURL
+  EI
+  EIRL
+}
+
+type Customer {
+  id: Int!
+  firstname: String!
+  lastname: String!
+  phone: String!
+  email: String!
+  company: Company
+  user: User!
+}
+
+type User {
+  id: Int!
+  email: String!
+  Company: Company
+  customers: [Customer!]
+}
+
+type Estimate {
+  id: Int!
+  customer: Customer!
+  billingAddress: Company!
+  shippingAddress: Company!
+  items: [EstimateField!]!
+  title: String!
+  description: String!
+  date: DateTime!
+  dueDate: DateTime!
+  terms: String!
+  notes: String!
+  tax: Float!
+  globalDiscount: Float!
+  owner: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  status: EstimateStatus!
+  user: User!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+enum EstimateStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  DECLINED
+  CANCELLED
+  CHANGES_REQUESTED
+  EXPIRED
+}
+
+type EstimateField {
+  id: Int!
+  estimate: Estimate!
+  title: String!
+  description: String!
+  quantity: Float!
+  unitPrice: Float!
+  discount: Float!
+  tax: Float!
+}
+
+type Document {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  url: String
+  signatures: [Signature!]
+}
+
+type Signature {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  anchors: SignatureAnchor
+  signatureUrl: String
+  status: SignatureStatus!
+  type: SignatureType!
+  document: Document
+}
+
+enum SignatureStatus {
+  PENDING
+  COMPLETE
+}
+
+enum SignatureType {
+  SIGNATURE
+  INITIALS
+}
+
+type Export {
+  id: Int!
+  status: ExportStatus!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  processedAt: DateTime
+  errorAt: DateTime
+  doneAt: DateTime
+  document: Document
+}
+
+enum ExportStatus {
+  PENDING
+  PROCESSING
+  DONE
+  ERROR
+}
+
+type Invoice {
+  id: Int!
+  customer: Customer!
+  billingAddress: Company
+  shippingAddress: Company
+  items: [InvoiceField!]!
+  title: String!
+  description: String!
+  date: DateTime!
+  dueDate: DateTime!
+  terms: String!
+  notes: String!
+  tax: Float!
+  globalDiscount: Float!
+  owner: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  status: InvoiceStatus!
+  exports: [InvoiceExport!]
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  DECLINED
+  CANCELLED
+  CHANGES_REQUESTED
+  EXPIRED
+}
+
+type InvoiceExport {
+  id: Int!
+  invoice: Invoice
+  export: Export
+}
+
+type InvoiceField {
+  id: Int!
+  invoice: Invoice!
+  title: String!
+  description: String!
+  quantity: Float!
+  unitPrice: Float!
+  discount: Float!
+  tax: Float!
+}
+
+type Query {
+  users: [User!]!
+  user(id: Float!): User!
+  customers: [Customer!]!
+  estimates: [Estimate!]!
+  estimate(id: Float!): Estimate!
+  companies: [Company!]!
+  invoices: [Invoice!]!
+  invoice(id: Float!): Invoice!
+  documents: [Document!]!
+  document(id: Float!): Document!
+  exports: [Export!]!
+  export(id: Float!): Export!
+}
