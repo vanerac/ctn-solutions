@@ -10,7 +10,7 @@ async function bootstrap() {
     app.enableCors({})
 
 
-    const path = '../../swagger.json'
+    const path = '../../libs/schemas/swagger.json'
 
 
     writeFileSync(path,
