@@ -109,17 +109,6 @@ export interface InvoiceExport {
 
 export type SignatureDocument = Document | null;
 
-export type SignatureAnchors = {
-  readonly top?: number;
-  readonly left?: number;
-  readonly width?: number;
-  readonly height?: number;
-  readonly winWidth?: number;
-  readonly winHeight?: number;
-  readonly scale?: number;
-  readonly id?: string;
-};
-
 export type SignatureType = typeof SignatureType[keyof typeof SignatureType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
@@ -137,11 +126,22 @@ export const SignatureStatus = {
   COMPLETE: "COMPLETE",
 } as const;
 
+export interface SignatureAnchor {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+  winWidth: number;
+  winHeight: number;
+  scale: number;
+  id: string;
+}
+
 export interface Signature {
   readonly id: number;
   readonly createdAt: Date;
   readonly updatedAt: Date;
-  readonly anchors: SignatureAnchors;
+  readonly anchors: SignatureAnchor;
   readonly signatureUrl: string | null;
   /** The status of the signature */
   readonly status: SignatureStatus;
