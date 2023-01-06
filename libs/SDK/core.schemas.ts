@@ -109,17 +109,6 @@ export interface InvoiceExport {
 
 export type SignatureDocument = Document | null;
 
-export type SignatureAnchors = {
-  readonly top?: number;
-  readonly left?: number;
-  readonly width?: number;
-  readonly height?: number;
-  readonly winWidth?: number;
-  readonly winHeight?: number;
-  readonly scale?: number;
-  readonly id?: string;
-};
-
 export type SignatureType = typeof SignatureType[keyof typeof SignatureType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
@@ -137,11 +126,22 @@ export const SignatureStatus = {
   COMPLETE: "COMPLETE",
 } as const;
 
+export interface SignatureAnchor {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+  winWidth: number;
+  winHeight: number;
+  scale: number;
+  id: string;
+}
+
 export interface Signature {
   readonly id: number;
   readonly createdAt: Date;
   readonly updatedAt: Date;
-  readonly anchors: SignatureAnchors;
+  readonly anchors: SignatureAnchor;
   readonly signatureUrl: string | null;
   /** The status of the signature */
   readonly status: SignatureStatus;
@@ -172,17 +172,6 @@ export const InvoiceStatus = {
   changes_requested: "changes_requested",
   expired: "expired",
 } as const;
-
-export type CreateCustomerDtoCompany = Company | null;
-
-export interface CreateCustomerDto {
-  readonly id: number;
-  firstname: string;
-  lastname: string;
-  phone: string;
-  email: string;
-  company: CreateCustomerDtoCompany;
-}
 
 export interface UpdateCompanyDto {
   id?: number;
@@ -231,46 +220,6 @@ export const EstimateStatus = {
   expired: "expired",
 } as const;
 
-export interface UpdateEstimateDto {
-  id?: number;
-  customer?: Customer;
-  billingAddress?: Company;
-  shippingAddress?: Company;
-  items?: EstimateField[];
-  title?: string;
-  description?: string;
-  date?: Date;
-  dueDate?: Date;
-  terms?: string;
-  notes?: string;
-  tax?: number;
-  globalDiscount?: number;
-  owner?: User;
-  createdAt?: Date;
-  updatedAt?: Date;
-  status?: EstimateStatus;
-}
-
-export interface CreateEstimateDto {
-  id: number;
-  customer: Customer;
-  billingAddress: Company;
-  shippingAddress: Company;
-  items: EstimateField[];
-  title: string;
-  description: string;
-  date: Date;
-  dueDate: Date;
-  terms: string;
-  notes: string;
-  tax: number;
-  globalDiscount: number;
-  owner: User;
-  createdAt: Date;
-  updatedAt: Date;
-  status: EstimateStatus;
-}
-
 export interface Estimate {
   id: number;
   customer: Customer;
@@ -300,6 +249,75 @@ export interface EstimateField {
   unitPrice: number;
   discount: number;
   tax: number;
+}
+
+export interface UpdateEstimateDto {
+  id?: number;
+  customer?: Customer;
+  billingAddress?: Company;
+  shippingAddress?: Company;
+  items?: EstimateField[];
+  title?: string;
+  description?: string;
+  date?: Date;
+  dueDate?: Date;
+  terms?: string;
+  notes?: string;
+  tax?: number;
+  globalDiscount?: number;
+  owner?: User;
+  createdAt?: Date;
+  updatedAt?: Date;
+  status?: EstimateStatus;
+}
+
+export interface ChangePasswordDTO {
+  oldpassword: string;
+  newpassword: string;
+  confirmpassword: string;
+}
+
+export interface LoginResponse {
+  access_token: string;
+}
+
+export interface LoginDTO {
+  email?: string;
+  password?: string;
+}
+
+export interface RegisterDTO {
+  email: string;
+  password: string;
+}
+
+export type UpdateCustomerDtoCompany = Company | null;
+
+export interface UpdateCustomerDto {
+  readonly id?: number;
+  firstname?: string;
+  lastname?: string;
+  phone?: string;
+  email?: string;
+  company?: UpdateCustomerDtoCompany;
+}
+
+export interface Customer {
+  readonly id: number;
+  firstname: string;
+  lastname: string;
+  phone: string;
+  email: string;
+  company: CustomerCompany;
+}
+
+export interface CreateCustomerDto {
+  readonly id: number;
+  firstname: string;
+  lastname: string;
+  phone: string;
+  email: string;
+  company: CreateCustomerDtoCompany;
 }
 
 export type LegalForm = typeof LegalForm[keyof typeof LegalForm];
@@ -332,47 +350,29 @@ export interface Company {
   industry: string;
 }
 
-export type UpdateCustomerDtoCompany = Company | null;
-
-export interface UpdateCustomerDto {
-  readonly id?: number;
-  firstname?: string;
-  lastname?: string;
-  phone?: string;
-  email?: string;
-  company?: UpdateCustomerDtoCompany;
+export interface CreateEstimateDto {
+  id: number;
+  customer: Customer;
+  billingAddress: Company;
+  shippingAddress: Company;
+  items: EstimateField[];
+  title: string;
+  description: string;
+  date: Date;
+  dueDate: Date;
+  terms: string;
+  notes: string;
+  tax: number;
+  globalDiscount: number;
+  owner: User;
+  createdAt: Date;
+  updatedAt: Date;
+  status: EstimateStatus;
 }
 
 export type CustomerCompany = Company | null;
 
-export interface Customer {
-  readonly id: number;
-  firstname: string;
-  lastname: string;
-  phone: string;
-  email: string;
-  company: CustomerCompany;
-}
-
-export interface ChangePasswordDTO {
-  oldpassword: string;
-  newpassword: string;
-  confirmpassword: string;
-}
-
-export interface LoginResponse {
-  access_token: string;
-}
-
-export interface LoginDTO {
-  email?: string;
-  password?: string;
-}
-
-export interface RegisterDTO {
-  email: string;
-  password: string;
-}
+export type CreateCustomerDtoCompany = Company | null;
 
 export interface DeleteResult {
   [key: string]: any;

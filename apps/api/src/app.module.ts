@@ -10,7 +10,10 @@ import {AuthModule} from "./auth/auth.module";
 import {CompanyModule} from "./company/company.module";
 import {InvoiceModule} from './invoice/invoice.module';
 import {ExportModule} from "./export/export.module";
-import { DocumentModule } from './document/document.module';
+import {DocumentModule} from './document/document.module';
+import {GraphQLModule} from "@nestjs/graphql";
+import {ApolloDriver, ApolloDriverConfig} from "@nestjs/apollo";
+import * as path from "path";
 
 @Module({
     imports: [
@@ -26,6 +29,10 @@ import { DocumentModule } from './document/document.module';
             ],
             synchronize: true,
             autoLoadEntities: true,
+        }),
+        GraphQLModule.forRoot<ApolloDriverConfig>({
+            driver: ApolloDriver,
+            autoSchemaFile: path.join('../../libs/schemas/graphql.gql'),
         }),
         UserModule,
         DatabaseModule,

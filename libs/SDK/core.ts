@@ -11,6 +11,9 @@ import type {
   User,
   CreateUserDto,
   UpdateUserDto,
+  Customer,
+  CreateCustomerDto,
+  UpdateCustomerDto,
   RegisterDTO,
   LoginResponse,
   LoginDTO,
@@ -21,9 +24,6 @@ import type {
   Company,
   CreateCompanyDto,
   UpdateCompanyDto,
-  Customer,
-  CreateCustomerDto,
-  UpdateCustomerDto,
   Invoice,
   CreateInvoiceDto,
   UpdateInvoiceDto,
@@ -211,6 +211,141 @@ export const userControllerRemove = (
 ) => {
   return customInstance<unknown>(
     { url: `/user/${id}`, method: "delete" },
+    options
+  );
+};
+
+export const customerControllerCreate = (
+  createCustomerDto: BodyType<CreateCustomerDto>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Customer>(
+    {
+      url: `/customer`,
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      data: createCustomerDto,
+    },
+    options
+  );
+};
+
+export const customerControllerFindAll = (
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Customer[]>(
+    { url: `/customer`, method: "get" },
+    options
+  );
+};
+
+export const getCustomerControllerFindAllKey = () => [`/customer`];
+
+export type CustomerControllerFindAllQueryResult = NonNullable<
+  Awaited<ReturnType<typeof customerControllerFindAll>>
+>;
+export type CustomerControllerFindAllQueryError = ErrorType<unknown>;
+
+export const useCustomerControllerFindAll = <
+  TError = ErrorType<unknown>
+>(options?: {
+  swr?: SWRConfiguration<
+    Awaited<ReturnType<typeof customerControllerFindAll>>,
+    TError
+  > & { swrKey?: Key; enabled?: boolean };
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getCustomerControllerFindAllKey() : null));
+  const swrFn = () => customerControllerFindAll(requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const customerControllerFindOne = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Customer>(
+    { url: `/customer/${id}`, method: "get" },
+    options
+  );
+};
+
+export const getCustomerControllerFindOneKey = (id: string) => [
+  `/customer/${id}`,
+];
+
+export type CustomerControllerFindOneQueryResult = NonNullable<
+  Awaited<ReturnType<typeof customerControllerFindOne>>
+>;
+export type CustomerControllerFindOneQueryError = ErrorType<unknown>;
+
+export const useCustomerControllerFindOne = <TError = ErrorType<unknown>>(
+  id: string,
+  options?: {
+    swr?: SWRConfiguration<
+      Awaited<ReturnType<typeof customerControllerFindOne>>,
+      TError
+    > & { swrKey?: Key; enabled?: boolean };
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false && !!id;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getCustomerControllerFindOneKey(id) : null));
+  const swrFn = () => customerControllerFindOne(id, requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const customerControllerUpdate = (
+  id: string,
+  updateCustomerDto: BodyType<UpdateCustomerDto>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Customer>(
+    {
+      url: `/customer/${id}`,
+      method: "patch",
+      headers: { "Content-Type": "application/json" },
+      data: updateCustomerDto,
+    },
+    options
+  );
+};
+
+export const customerControllerRemove = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<void>(
+    { url: `/customer/${id}`, method: "delete" },
     options
   );
 };
@@ -580,141 +715,6 @@ export const companyControllerRemove = (
 ) => {
   return customInstance<void>(
     { url: `/company/${id}`, method: "delete" },
-    options
-  );
-};
-
-export const customerControllerCreate = (
-  createCustomerDto: BodyType<CreateCustomerDto>,
-  options?: SecondParameter<typeof customInstance>
-) => {
-  return customInstance<Customer>(
-    {
-      url: `/customer`,
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      data: createCustomerDto,
-    },
-    options
-  );
-};
-
-export const customerControllerFindAll = (
-  options?: SecondParameter<typeof customInstance>
-) => {
-  return customInstance<Customer[]>(
-    { url: `/customer`, method: "get" },
-    options
-  );
-};
-
-export const getCustomerControllerFindAllKey = () => [`/customer`];
-
-export type CustomerControllerFindAllQueryResult = NonNullable<
-  Awaited<ReturnType<typeof customerControllerFindAll>>
->;
-export type CustomerControllerFindAllQueryError = ErrorType<unknown>;
-
-export const useCustomerControllerFindAll = <
-  TError = ErrorType<unknown>
->(options?: {
-  swr?: SWRConfiguration<
-    Awaited<ReturnType<typeof customerControllerFindAll>>,
-    TError
-  > & { swrKey?: Key; enabled?: boolean };
-  request?: SecondParameter<typeof customInstance>;
-}) => {
-  const { swr: swrOptions, request: requestOptions } = options ?? {};
-
-  const isEnabled = swrOptions?.enabled !== false;
-  const swrKey =
-    swrOptions?.swrKey ??
-    (() => (isEnabled ? getCustomerControllerFindAllKey() : null));
-  const swrFn = () => customerControllerFindAll(requestOptions);
-
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
-    swrKey,
-    swrFn,
-    swrOptions
-  );
-
-  return {
-    swrKey,
-    ...query,
-  };
-};
-
-export const customerControllerFindOne = (
-  id: string,
-  options?: SecondParameter<typeof customInstance>
-) => {
-  return customInstance<Customer>(
-    { url: `/customer/${id}`, method: "get" },
-    options
-  );
-};
-
-export const getCustomerControllerFindOneKey = (id: string) => [
-  `/customer/${id}`,
-];
-
-export type CustomerControllerFindOneQueryResult = NonNullable<
-  Awaited<ReturnType<typeof customerControllerFindOne>>
->;
-export type CustomerControllerFindOneQueryError = ErrorType<unknown>;
-
-export const useCustomerControllerFindOne = <TError = ErrorType<unknown>>(
-  id: string,
-  options?: {
-    swr?: SWRConfiguration<
-      Awaited<ReturnType<typeof customerControllerFindOne>>,
-      TError
-    > & { swrKey?: Key; enabled?: boolean };
-    request?: SecondParameter<typeof customInstance>;
-  }
-) => {
-  const { swr: swrOptions, request: requestOptions } = options ?? {};
-
-  const isEnabled = swrOptions?.enabled !== false && !!id;
-  const swrKey =
-    swrOptions?.swrKey ??
-    (() => (isEnabled ? getCustomerControllerFindOneKey(id) : null));
-  const swrFn = () => customerControllerFindOne(id, requestOptions);
-
-  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
-    swrKey,
-    swrFn,
-    swrOptions
-  );
-
-  return {
-    swrKey,
-    ...query,
-  };
-};
-
-export const customerControllerUpdate = (
-  id: string,
-  updateCustomerDto: BodyType<UpdateCustomerDto>,
-  options?: SecondParameter<typeof customInstance>
-) => {
-  return customInstance<Customer>(
-    {
-      url: `/customer/${id}`,
-      method: "patch",
-      headers: { "Content-Type": "application/json" },
-      data: updateCustomerDto,
-    },
-    options
-  );
-};
-
-export const customerControllerRemove = (
-  id: string,
-  options?: SecondParameter<typeof customInstance>
-) => {
-  return customInstance<void>(
-    { url: `/customer/${id}`, method: "delete" },
     options
   );
 };

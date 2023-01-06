@@ -3,7 +3,7 @@ import {defineConfig} from 'orval'
 export default defineConfig({
     ctn: {
         input: {
-            target: './swagger.json',
+            target: './libs/schemas/swagger.json',
             validation: false
         },
         output: {
