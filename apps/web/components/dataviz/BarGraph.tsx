@@ -2,17 +2,29 @@ import {Bar} from "@visx/shape";
 import {scaleBand, scaleLinear} from "@visx/scale";
 import {Group} from "@visx/group";
 
+import letterFrequency, {LetterFrequency} from '@visx/mock-data/lib/mocks/letterFrequency';
+
+const sampleData = letterFrequency.slice(5).map((d) => ({
+    value: d.frequency,
+    label: d.letter
+}));
+const verticalMargin = 120;
+
+// accessors
+const getLetter = (d: LetterFrequency) => d.letter;
+const getLetterFrequency = (d: LetterFrequency) => Number(d.frequency) * 100;
+
 interface BarGraphData {
     label: string;
     value: number;
 }
 
 interface BarGraphProps {
-    data: BarGraphData[];
+    data?: BarGraphData[];
 }
 
 export function BarGraph({
-                             data,
+                             data = sampleData,
                          }: BarGraphProps) {
     const width = 500;
     const height = 500;
@@ -47,13 +59,13 @@ export function BarGraph({
                             y={yMax - barHeight}
                             height={barHeight}
                             width={xScale.bandwidth()}
-                            fill="#f0f0f0"
+                            fill="#1b998b"
                         />
                     );
                 })}
             </Group>
         </svg>
     );
-    
+
 
 }

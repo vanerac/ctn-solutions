@@ -1,7 +1,7 @@
 import SideBar from "../components/Sidebar/SideBar";
 import TopBar from "../components/TopBar";
 import HierarchyBar from "../components/HierarchyBar";
-import DisplayPDF from "../components/PDF/DisplayPDF";
+import CurveGraph from "../components/dataviz/CurveGraph";
 
 
 function Home() {
@@ -13,7 +13,8 @@ function Home() {
                 <HierarchyBar items={[
                     {href: null, name: "Home"}]}/>
 
-                <DisplayPDF src={'../document.pdf'}/>
+                <CurveGraph/>
+                {/*<DisplayPDF src={'../document.pdf'}/>*/}
 
             </div>
 
