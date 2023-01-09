@@ -1,4 +1,4 @@
-import generateDateValue, {DateValue} from '@visx/mock-data/lib/generators/genDateValue';
+import {DateValue} from '@visx/mock-data/lib/generators/genDateValue';
 
 import * as allCurves from '@visx/curve';
 import {Group} from '@visx/group';
@@ -7,10 +7,10 @@ import {scaleLinear, scaleTime} from "@visx/scale";
 import {extent, max} from 'd3-array';
 import {useState} from "react";
 
-type CurveGraphDataPoint = DateValue
+type CurveGraphDataPoint = DateValue & { color?: string };
 
 type CurveGraphProps = {
-    inData?: CurveGraphDataPoint[][];
+    data: CurveGraphDataPoint[] [];
     // height: number;
     // width: number;
     // xLabel: string;
@@ -23,37 +23,36 @@ const getY = (d: DateValue) => d.value;
 
 type CurveType = keyof typeof allCurves;
 
-const curveTypes = Object.keys(allCurves);
-const lineCount = 5;
-const series = new Array(lineCount).fill(null).map((_, i) =>
-    // vary each series value deterministically
-    generateDateValue(25, /* seed= */ i / 72).sort(
-        (a: DateValue, b: DateValue) => a.date.getTime() - b.date.getTime(),
-    ),
-);
-
-
-const allData = series.reduce((rec, d) => rec.concat(d), []);
-
-const xScale = scaleTime<number>({
-    domain: extent(allData, getX) as [Date, Date],
+const setXScale = (data: DateValue[]) => scaleTime<number>({
+    domain: extent(data, getX) as [Date, Date],
 });
-const yScale = scaleLinear<number>({
-    domain: [0, max(allData, getY) as number],
+const setYScale = (data: DateValue[]) => scaleLinear<number>({
+    domain: [0, max(data, getY) as number],
 });
 
 const width = 500;
 const height = 500;
 
+
+// Todo: Should overlap
 export default function CurveGraph({
 
-                                       inData = [allData]
+                                       data
                                    }: CurveGraphProps) {
+
+    if (!data) {
+        return <div>No data</div>;
+    }
+
+    const xScale = setXScale(data.reduce((rec, d) => rec.concat(d), []));
+    const yScale = setYScale(data.reduce((rec, d) => rec.concat(d), []));
 
 
     const [showPoints, setShowPoints] = useState(true);
     const [curveType, setCurveType] = useState<CurveType>('curveLinear');
     const [showControls, setShowControls] = useState(true);
+
+    const lineCount = data.length;
 
     const svgHeight = showControls ? height - 40 : height;
     const lineHeight = svgHeight / lineCount;
@@ -62,36 +61,11 @@ export default function CurveGraph({
     yScale.range([lineHeight - 2, 0]);
 
 
-    console.log(allData)
-    const [data] = inData
-
-
-    // console.log(data)
-
     return (
         <svg width={width} height={svgHeight}>
-            {/*<MarkerX*/}
-            {/*    id="marker-x"*/}
-            {/*    stroke="#333"*/}
-            {/*    size={22}*/}
-            {/*    strokeWidth={4}*/}
-            {/*    markerUnits="userSpaceOnUse"*/}
-            {/*/>*/}
-            {/*<MarkerCross*/}
-            {/*    id="marker-cross"*/}
-            {/*    stroke="#333"*/}
-            {/*    size={22}*/}
-            {/*    strokeWidth={4}*/}
-            {/*    strokeOpacity={0.6}*/}
-            {/*    markerUnits="userSpaceOnUse"*/}
-            {/*/>*/}
-            {/*<MarkerCircle id="marker-circle" fill="#333" size={2} refX={2}/>*/}
-            {/*<MarkerArrow id="marker-arrow-odd" stroke="#333" size={8} strokeWidth={1}/>*/}
-            {/*<MarkerLine id="marker-line" fill="#333" size={16} strokeWidth={1}/>*/}
-            {/*<MarkerArrow id="marker-arrow" fill="#333" refX={2} size={6}/>*/}
             <rect width={width} height={svgHeight} fill="#efefef" rx={14} ry={14}/>
             {width > 8 &&
-                series.map((lineData, i) => {
+                data.map((lineData, i) => {
                     const even = i % 2 === 0;
                     let markerStart = even ? 'url(#marker-cross)' : 'url(#marker-x)';
                     if (i === 1) markerStart = 'url(#marker-line)';
@@ -105,7 +79,7 @@ export default function CurveGraph({
                                         r={3}
                                         cx={xScale(getX(d))}
                                         cy={yScale(getY(d))}
-                                        stroke="rgba(33,33,33,0.5)"
+                                        stroke={d.color ?? "rgba(33,33,33,0.5)"}
                                         fill="transparent"
                                     />
                                 ))}

@@ -1,25 +1,33 @@
 import SideBar from "../components/Sidebar/SideBar";
 import TopBar from "../components/TopBar";
 import HierarchyBar from "../components/HierarchyBar";
-import CurveGraph from "../components/dataviz/CurveGraph";
-import LabelValue from "../components/dataviz/LabelValue";
+import InvoicesWidget from "../components/widgets/InvoicesWidget";
+import {ApolloClient, ApolloProvider, InMemoryCache} from "@apollo/client";
 
+
+const client = new ApolloClient({
+    uri: 'http://localhost:3000/graphql',
+    cache: new InMemoryCache(),
+
+});
 
 function Home() {
     return (
         <>
-            <TopBar/>
-            <div className="flex flex-row">
-                <SideBar/>
-                <HierarchyBar items={[
-                    {href: null, name: "Home"}]}/>
+            <ApolloProvider client={client}>
+                <TopBar/>
+                <div className="flex flex-row">
+                    <SideBar/>
+                    <HierarchyBar items={[
+                        {href: null, name: "Home"}]}/>
 
-                <CurveGraph/>
-                <LabelValue data={123} label={"test"}/>
-                
-                {/*<DisplayPDF src={'../document.pdf'}/>*/}
+                    {/*<CurveGraph/>*/}
+                    {/*<LabelValue data={123} label={"test"}/>*/}
+                    <InvoicesWidget/>
+                    {/*<DisplayPDF src={'../document.pdf'}/>*/}
 
-            </div>
+                </div>
+            </ApolloProvider>
 
         </>
     )
