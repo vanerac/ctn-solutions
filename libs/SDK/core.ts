@@ -29,6 +29,15 @@ import type {
   UpdateInvoiceDto,
   Document,
   Export,
+  Payment,
+  CreatePaymentDto,
+  UpdatePaymentDto,
+  Expense,
+  CreateExpenseDto,
+  UpdateExpenseDto,
+  Project,
+  CreateProjectDto,
+  UpdateProjectDto,
 } from "./core.schemas";
 import { customInstance } from "./custom-instance";
 import type { ErrorType, BodyType } from "./custom-instance";
@@ -1078,6 +1087,402 @@ export const exportControllerRemove = (
 ) => {
   return customInstance<void>(
     { url: `/export/${id}`, method: "delete" },
+    options
+  );
+};
+
+export const paymentControllerCreate = (
+  createPaymentDto: BodyType<CreatePaymentDto>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Payment>(
+    {
+      url: `/payment`,
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      data: createPaymentDto,
+    },
+    options
+  );
+};
+
+export const paymentControllerFindAll = (
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Payment[]>({ url: `/payment`, method: "get" }, options);
+};
+
+export const getPaymentControllerFindAllKey = () => [`/payment`];
+
+export type PaymentControllerFindAllQueryResult = NonNullable<
+  Awaited<ReturnType<typeof paymentControllerFindAll>>
+>;
+export type PaymentControllerFindAllQueryError = ErrorType<unknown>;
+
+export const usePaymentControllerFindAll = <
+  TError = ErrorType<unknown>
+>(options?: {
+  swr?: SWRConfiguration<
+    Awaited<ReturnType<typeof paymentControllerFindAll>>,
+    TError
+  > & { swrKey?: Key; enabled?: boolean };
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getPaymentControllerFindAllKey() : null));
+  const swrFn = () => paymentControllerFindAll(requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const paymentControllerFindOne = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Payment>(
+    { url: `/payment/${id}`, method: "get" },
+    options
+  );
+};
+
+export const getPaymentControllerFindOneKey = (id: string) => [
+  `/payment/${id}`,
+];
+
+export type PaymentControllerFindOneQueryResult = NonNullable<
+  Awaited<ReturnType<typeof paymentControllerFindOne>>
+>;
+export type PaymentControllerFindOneQueryError = ErrorType<unknown>;
+
+export const usePaymentControllerFindOne = <TError = ErrorType<unknown>>(
+  id: string,
+  options?: {
+    swr?: SWRConfiguration<
+      Awaited<ReturnType<typeof paymentControllerFindOne>>,
+      TError
+    > & { swrKey?: Key; enabled?: boolean };
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false && !!id;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getPaymentControllerFindOneKey(id) : null));
+  const swrFn = () => paymentControllerFindOne(id, requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const paymentControllerUpdate = (
+  id: string,
+  updatePaymentDto: BodyType<UpdatePaymentDto>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Payment>(
+    {
+      url: `/payment/${id}`,
+      method: "patch",
+      headers: { "Content-Type": "application/json" },
+      data: updatePaymentDto,
+    },
+    options
+  );
+};
+
+export const paymentControllerRemove = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Payment>(
+    { url: `/payment/${id}`, method: "delete" },
+    options
+  );
+};
+
+export const expenseControllerCreate = (
+  createExpenseDto: BodyType<CreateExpenseDto>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Expense>(
+    {
+      url: `/expense`,
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      data: createExpenseDto,
+    },
+    options
+  );
+};
+
+export const expenseControllerFindAll = (
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Expense[]>({ url: `/expense`, method: "get" }, options);
+};
+
+export const getExpenseControllerFindAllKey = () => [`/expense`];
+
+export type ExpenseControllerFindAllQueryResult = NonNullable<
+  Awaited<ReturnType<typeof expenseControllerFindAll>>
+>;
+export type ExpenseControllerFindAllQueryError = ErrorType<unknown>;
+
+export const useExpenseControllerFindAll = <
+  TError = ErrorType<unknown>
+>(options?: {
+  swr?: SWRConfiguration<
+    Awaited<ReturnType<typeof expenseControllerFindAll>>,
+    TError
+  > & { swrKey?: Key; enabled?: boolean };
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getExpenseControllerFindAllKey() : null));
+  const swrFn = () => expenseControllerFindAll(requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const expenseControllerFindOne = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Expense>(
+    { url: `/expense/${id}`, method: "get" },
+    options
+  );
+};
+
+export const getExpenseControllerFindOneKey = (id: string) => [
+  `/expense/${id}`,
+];
+
+export type ExpenseControllerFindOneQueryResult = NonNullable<
+  Awaited<ReturnType<typeof expenseControllerFindOne>>
+>;
+export type ExpenseControllerFindOneQueryError = ErrorType<unknown>;
+
+export const useExpenseControllerFindOne = <TError = ErrorType<unknown>>(
+  id: string,
+  options?: {
+    swr?: SWRConfiguration<
+      Awaited<ReturnType<typeof expenseControllerFindOne>>,
+      TError
+    > & { swrKey?: Key; enabled?: boolean };
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false && !!id;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getExpenseControllerFindOneKey(id) : null));
+  const swrFn = () => expenseControllerFindOne(id, requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const expenseControllerUpdate = (
+  id: string,
+  updateExpenseDto: BodyType<UpdateExpenseDto>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Expense>(
+    {
+      url: `/expense/${id}`,
+      method: "patch",
+      headers: { "Content-Type": "application/json" },
+      data: updateExpenseDto,
+    },
+    options
+  );
+};
+
+export const expenseControllerRemove = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Expense>(
+    { url: `/expense/${id}`, method: "delete" },
+    options
+  );
+};
+
+export const projectControllerCreate = (
+  createProjectDto: BodyType<CreateProjectDto>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Project>(
+    {
+      url: `/project`,
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      data: createProjectDto,
+    },
+    options
+  );
+};
+
+export const projectControllerFindAll = (
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Project[]>({ url: `/project`, method: "get" }, options);
+};
+
+export const getProjectControllerFindAllKey = () => [`/project`];
+
+export type ProjectControllerFindAllQueryResult = NonNullable<
+  Awaited<ReturnType<typeof projectControllerFindAll>>
+>;
+export type ProjectControllerFindAllQueryError = ErrorType<unknown>;
+
+export const useProjectControllerFindAll = <
+  TError = ErrorType<unknown>
+>(options?: {
+  swr?: SWRConfiguration<
+    Awaited<ReturnType<typeof projectControllerFindAll>>,
+    TError
+  > & { swrKey?: Key; enabled?: boolean };
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getProjectControllerFindAllKey() : null));
+  const swrFn = () => projectControllerFindAll(requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const projectControllerFindOne = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Project>(
+    { url: `/project/${id}`, method: "get" },
+    options
+  );
+};
+
+export const getProjectControllerFindOneKey = (id: string) => [
+  `/project/${id}`,
+];
+
+export type ProjectControllerFindOneQueryResult = NonNullable<
+  Awaited<ReturnType<typeof projectControllerFindOne>>
+>;
+export type ProjectControllerFindOneQueryError = ErrorType<unknown>;
+
+export const useProjectControllerFindOne = <TError = ErrorType<unknown>>(
+  id: string,
+  options?: {
+    swr?: SWRConfiguration<
+      Awaited<ReturnType<typeof projectControllerFindOne>>,
+      TError
+    > & { swrKey?: Key; enabled?: boolean };
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false && !!id;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getProjectControllerFindOneKey(id) : null));
+  const swrFn = () => projectControllerFindOne(id, requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const projectControllerUpdate = (
+  id: string,
+  updateProjectDto: BodyType<UpdateProjectDto>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Project>(
+    {
+      url: `/project/${id}`,
+      method: "patch",
+      headers: { "Content-Type": "application/json" },
+      data: updateProjectDto,
+    },
+    options
+  );
+};
+
+export const projectControllerRemove = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Project>(
+    { url: `/project/${id}`, method: "delete" },
     options
   );
 };

@@ -5,25 +5,67 @@
  * desc
  * OpenAPI spec version: 1.0
  */
-export interface Invoice {
+export interface UpdateProjectDto {
+  id?: number;
+  title?: string;
+  description?: string;
+  customer?: Customer;
+  invoices?: Invoice[];
+  estimates?: Estimate[];
+  user?: User;
+}
+
+export type ExpenseCategory =
+  typeof ExpenseCategory[keyof typeof ExpenseCategory];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ExpenseCategory = {
+  travel: "travel",
+  food: "food",
+  materials: "materials",
+  other: "other",
+} as const;
+
+export interface Expense {
   id: number;
-  customer: Customer;
-  billingAddress: Company;
-  shippingAddress: Company;
-  items: InvoiceField[];
-  title: string;
-  description: string;
   date: Date;
-  dueDate: Date;
-  terms: string;
+  amount: number;
+  customer: Customer;
+  user: User;
+  invoice: Invoice;
+  category: ExpenseCategory;
+  document: Document[];
+}
+
+export interface CreateExpenseDto {
+  id: number;
+  date: Date;
+  amount: number;
+  customer: Customer;
+  user: User;
+  invoice: Invoice;
+  category: ExpenseCategory;
+  document: Document[];
+}
+
+export interface UpdatePaymentDto {
+  id?: number;
+  user?: User;
+  invoices?: Invoice[];
+  amount?: number;
+  date?: Date;
+  notes?: string;
+  paymentMethod?: PaymentMethod;
+}
+
+export interface CreatePaymentDto {
+  id: number;
+  user: User;
+  invoices: Invoice[];
+  amount: number;
+  date: Date;
   notes: string;
-  tax: number;
-  globalDiscount: number;
-  owner: User;
-  createdAt: Date;
-  updatedAt: Date;
-  status: InvoiceStatus;
-  exports: InvoiceExport[];
+  paymentMethod: PaymentMethod;
 }
 
 export interface InvoiceField {
@@ -37,33 +79,13 @@ export interface InvoiceField {
   tax: number;
 }
 
-export interface UpdateInvoiceDto {
-  id?: number;
-  customer?: Customer;
-  billingAddress?: Company;
-  shippingAddress?: Company;
-  items?: InvoiceField[];
-  title?: string;
-  description?: string;
-  date?: Date;
-  dueDate?: Date;
-  terms?: string;
-  notes?: string;
-  tax?: number;
-  globalDiscount?: number;
-  owner?: User;
-  createdAt?: Date;
-  updatedAt?: Date;
-  status?: InvoiceStatus;
-  exports?: InvoiceExport[];
-}
-
 export interface CreateInvoiceDto {
   id: number;
   customer: Customer;
   billingAddress: Company;
   shippingAddress: Company;
   items: InvoiceField[];
+  payment: Payment;
   title: string;
   description: string;
   date: Date;
@@ -77,14 +99,6 @@ export interface CreateInvoiceDto {
   updatedAt: Date;
   status: InvoiceStatus;
   exports: InvoiceExport[];
-}
-
-export interface Document {
-  readonly id: number;
-  readonly createdAt: Date;
-  readonly updatedAt: Date;
-  readonly url: string;
-  readonly signatures: Signature[] | null;
 }
 
 export type ExportDocument = Document | null;
@@ -105,6 +119,70 @@ export interface InvoiceExport {
   id: number;
   invoice: Invoice;
   export: Export;
+}
+
+export interface UpdateInvoiceDto {
+  id?: number;
+  customer?: Customer;
+  billingAddress?: Company;
+  shippingAddress?: Company;
+  items?: InvoiceField[];
+  payment?: Payment;
+  title?: string;
+  description?: string;
+  date?: Date;
+  dueDate?: Date;
+  terms?: string;
+  notes?: string;
+  tax?: number;
+  globalDiscount?: number;
+  owner?: User;
+  createdAt?: Date;
+  updatedAt?: Date;
+  status?: InvoiceStatus;
+  exports?: InvoiceExport[];
+}
+
+export interface Invoice {
+  id: number;
+  customer: Customer;
+  billingAddress: Company;
+  shippingAddress: Company;
+  items: InvoiceField[];
+  payment: Payment;
+  title: string;
+  description: string;
+  date: Date;
+  dueDate: Date;
+  terms: string;
+  notes: string;
+  tax: number;
+  globalDiscount: number;
+  owner: User;
+  createdAt: Date;
+  updatedAt: Date;
+  status: InvoiceStatus;
+  exports: InvoiceExport[];
+}
+
+export interface Project {
+  id: number;
+  title: string;
+  description: string;
+  customer: Customer;
+  invoices: Invoice[];
+  estimates: Estimate[];
+  user: User;
+}
+
+export interface CreateProjectDto {
+  id: number;
+  title: string;
+  description: string;
+  customer: Customer;
+  invoices: Invoice[];
+  estimates: Estimate[];
+  user: User;
 }
 
 export type SignatureDocument = Document | null;
@@ -150,6 +228,25 @@ export interface Signature {
   readonly document: SignatureDocument;
 }
 
+export interface Document {
+  readonly id: number;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
+  readonly url: string;
+  readonly signatures: Signature[] | null;
+}
+
+export interface UpdateExpenseDto {
+  id?: number;
+  date?: Date;
+  amount?: number;
+  customer?: Customer;
+  user?: User;
+  invoice?: Invoice;
+  category?: ExpenseCategory;
+  document?: Document[];
+}
+
 export type ExportStatus = typeof ExportStatus[keyof typeof ExportStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
@@ -172,6 +269,27 @@ export const InvoiceStatus = {
   changes_requested: "changes_requested",
   expired: "expired",
 } as const;
+
+export type PaymentMethod = typeof PaymentMethod[keyof typeof PaymentMethod];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PaymentMethod = {
+  cash: "cash",
+  check: "check",
+  card: "card",
+  bank_transfer: "bank_transfer",
+  other: "other",
+} as const;
+
+export interface Payment {
+  id: number;
+  user: User;
+  invoices: Invoice[];
+  amount: number;
+  date: Date;
+  notes: string;
+  paymentMethod: PaymentMethod;
+}
 
 export interface UpdateCompanyDto {
   id?: number;

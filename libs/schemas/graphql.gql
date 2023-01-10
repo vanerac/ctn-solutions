@@ -151,12 +151,31 @@ enum ExportStatus {
   ERROR
 }
 
+type Payment {
+  id: Int!
+  user: User!
+  invoices: [Invoice!]!
+  amount: Int!
+  date: DateTime!
+  notes: String!
+  paymentMethod: PaymentMethod!
+}
+
+enum PaymentMethod {
+  CASH
+  CHECK
+  CARD
+  BANK_TRANSFER
+  OTHER
+}
+
 type Invoice {
   id: Int!
   customer: Customer!
   billingAddress: Company
   shippingAddress: Company
   items: [InvoiceField!]!
+  payment: Payment
   title: String!
   description: String!
   date: DateTime!
@@ -199,6 +218,35 @@ type InvoiceField {
   tax: Float!
 }
 
+type Expense {
+  id: Int!
+  date: DateTime!
+  amount: Float!
+  customer: Customer!
+  user: User!
+  invoice: Invoice!
+  category: ExpenseCategory!
+  document: [Document!]!
+  documents: Document!
+}
+
+enum ExpenseCategory {
+  TRAVEL
+  FOOD
+  MATERIALS
+  OTHER
+}
+
+type Project {
+  id: Int!
+  title: String!
+  description: String!
+  customer: Customer!
+  invoices: [Invoice!]!
+  estimates: [Estimate!]!
+  user: User!
+}
+
 type Query {
   users: [User!]!
   user(id: Float!): User!
@@ -212,4 +260,10 @@ type Query {
   document(id: Float!): Document!
   exports: [Export!]!
   export(id: Float!): Export!
+  payments: [Payment!]!
+  payment(id: Float!): Payment!
+  expenses: [Expense!]!
+  expense(id: Float!): Expense!
+  projects: [Project!]!
+  project(id: Float!): Project!
 }
