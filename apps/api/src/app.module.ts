@@ -13,6 +13,7 @@ import {ExportModule} from "./export/export.module";
 import {DocumentModule} from './document/document.module';
 import {GraphQLModule} from "@nestjs/graphql";
 import {ApolloDriver, ApolloDriverConfig} from "@nestjs/apollo";
+import {PaymentModule} from './payment/payment.module';
 import * as path from "path";
 
 @Module({
@@ -32,7 +33,14 @@ import * as path from "path";
         }),
         GraphQLModule.forRoot<ApolloDriverConfig>({
             driver: ApolloDriver,
-            autoSchemaFile: path.join('../../libs/schemas/graphql.gql'),
+            autoSchemaFile: path.join('..', "..", 'libs', 'schemas', 'graphql.gql'),
+            logger: {
+                info: (message) => console.log(message),
+                warn: (message) => console.warn(message),
+                error: (message) => console.error(message),
+                debug: (message) => console.debug(message)
+            },
+            debug: true,
         }),
         UserModule,
         DatabaseModule,
@@ -42,7 +50,8 @@ import * as path from "path";
         CustomerModule,
         InvoiceModule,
         ExportModule,
-        DocumentModule
+        DocumentModule,
+        PaymentModule
     ],
     controllers: [AppController],
     providers: [AppService],

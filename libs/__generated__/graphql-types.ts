@@ -177,6 +177,25 @@ export enum LegalForm {
   Sasu = 'SASU'
 }
 
+export type Payment = {
+  __typename?: 'Payment';
+  amount: Scalars['Int'];
+  customer: Customer;
+  date: Scalars['DateTime'];
+  id: Scalars['Int'];
+  notes: Scalars['String'];
+  paymentMethod: PaymentMethod;
+  user: User;
+};
+
+export enum PaymentMethod {
+  BankTransfer = 'BANK_TRANSFER',
+  Card = 'CARD',
+  Cash = 'CASH',
+  Check = 'CHECK',
+  Other = 'OTHER'
+}
+
 export type Query = {
   __typename?: 'Query';
   companies: Array<Company>;
@@ -189,6 +208,8 @@ export type Query = {
   exports: Array<Export>;
   invoice: Invoice;
   invoices: Array<Invoice>;
+  payment: Payment;
+  payments: Array<Payment>;
   user: User;
   users: Array<User>;
 };
@@ -210,6 +231,11 @@ export type QueryExportArgs = {
 
 
 export type QueryInvoiceArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type QueryPaymentArgs = {
   id: Scalars['Float'];
 };
 
@@ -346,6 +372,8 @@ export type ResolversTypes = ResolversObject<{
   InvoiceField: ResolverTypeWrapper<InvoiceField>;
   InvoiceStatus: InvoiceStatus;
   LegalForm: LegalForm;
+  Payment: ResolverTypeWrapper<Payment>;
+  PaymentMethod: PaymentMethod;
   Query: ResolverTypeWrapper<{}>;
   Signature: ResolverTypeWrapper<Signature>;
   SignatureAnchor: never;
@@ -370,6 +398,7 @@ export type ResolversParentTypes = ResolversObject<{
   Invoice: Invoice;
   InvoiceExport: InvoiceExport;
   InvoiceField: InvoiceField;
+  Payment: Payment;
   Query: {};
   Signature: Signature;
   SignatureAnchor: never;
@@ -506,6 +535,17 @@ export type InvoiceFieldResolvers<ContextType = any, ParentType extends Resolver
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type PaymentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Payment'] = ResolversParentTypes['Payment']> = ResolversObject<{
+  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  customer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType>;
+  date?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  notes?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  paymentMethod?: Resolver<ResolversTypes['PaymentMethod'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   companies?: Resolver<Array<ResolversTypes['Company']>, ParentType, ContextType>;
   customers?: Resolver<Array<ResolversTypes['Customer']>, ParentType, ContextType>;
@@ -517,6 +557,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   exports?: Resolver<Array<ResolversTypes['Export']>, ParentType, ContextType>;
   invoice?: Resolver<ResolversTypes['Invoice'], ParentType, ContextType, RequireFields<QueryInvoiceArgs, 'id'>>;
   invoices?: Resolver<Array<ResolversTypes['Invoice']>, ParentType, ContextType>;
+  payment?: Resolver<ResolversTypes['Payment'], ParentType, ContextType, RequireFields<QueryPaymentArgs, 'id'>>;
+  payments?: Resolver<Array<ResolversTypes['Payment']>, ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
 }>;
@@ -564,6 +606,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Invoice?: InvoiceResolvers<ContextType>;
   InvoiceExport?: InvoiceExportResolvers<ContextType>;
   InvoiceField?: InvoiceFieldResolvers<ContextType>;
+  Payment?: PaymentResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Signature?: SignatureResolvers<ContextType>;
   SignatureAnchor?: SignatureAnchorResolvers<ContextType>;

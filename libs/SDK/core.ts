@@ -29,6 +29,9 @@ import type {
   UpdateInvoiceDto,
   Document,
   Export,
+  Payment,
+  CreatePaymentDto,
+  UpdatePaymentDto,
 } from "./core.schemas";
 import { customInstance } from "./custom-instance";
 import type { ErrorType, BodyType } from "./custom-instance";
@@ -1078,6 +1081,138 @@ export const exportControllerRemove = (
 ) => {
   return customInstance<void>(
     { url: `/export/${id}`, method: "delete" },
+    options
+  );
+};
+
+export const paymentControllerCreate = (
+  createPaymentDto: BodyType<CreatePaymentDto>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Payment>(
+    {
+      url: `/payment`,
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      data: createPaymentDto,
+    },
+    options
+  );
+};
+
+export const paymentControllerFindAll = (
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Payment[]>({ url: `/payment`, method: "get" }, options);
+};
+
+export const getPaymentControllerFindAllKey = () => [`/payment`];
+
+export type PaymentControllerFindAllQueryResult = NonNullable<
+  Awaited<ReturnType<typeof paymentControllerFindAll>>
+>;
+export type PaymentControllerFindAllQueryError = ErrorType<unknown>;
+
+export const usePaymentControllerFindAll = <
+  TError = ErrorType<unknown>
+>(options?: {
+  swr?: SWRConfiguration<
+    Awaited<ReturnType<typeof paymentControllerFindAll>>,
+    TError
+  > & { swrKey?: Key; enabled?: boolean };
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getPaymentControllerFindAllKey() : null));
+  const swrFn = () => paymentControllerFindAll(requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const paymentControllerFindOne = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Payment>(
+    { url: `/payment/${id}`, method: "get" },
+    options
+  );
+};
+
+export const getPaymentControllerFindOneKey = (id: string) => [
+  `/payment/${id}`,
+];
+
+export type PaymentControllerFindOneQueryResult = NonNullable<
+  Awaited<ReturnType<typeof paymentControllerFindOne>>
+>;
+export type PaymentControllerFindOneQueryError = ErrorType<unknown>;
+
+export const usePaymentControllerFindOne = <TError = ErrorType<unknown>>(
+  id: string,
+  options?: {
+    swr?: SWRConfiguration<
+      Awaited<ReturnType<typeof paymentControllerFindOne>>,
+      TError
+    > & { swrKey?: Key; enabled?: boolean };
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { swr: swrOptions, request: requestOptions } = options ?? {};
+
+  const isEnabled = swrOptions?.enabled !== false && !!id;
+  const swrKey =
+    swrOptions?.swrKey ??
+    (() => (isEnabled ? getPaymentControllerFindOneKey(id) : null));
+  const swrFn = () => paymentControllerFindOne(id, requestOptions);
+
+  const query = useSwr<Awaited<ReturnType<typeof swrFn>>, TError>(
+    swrKey,
+    swrFn,
+    swrOptions
+  );
+
+  return {
+    swrKey,
+    ...query,
+  };
+};
+
+export const paymentControllerUpdate = (
+  id: string,
+  updatePaymentDto: BodyType<UpdatePaymentDto>,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Payment>(
+    {
+      url: `/payment/${id}`,
+      method: "patch",
+      headers: { "Content-Type": "application/json" },
+      data: updatePaymentDto,
+    },
+    options
+  );
+};
+
+export const paymentControllerRemove = (
+  id: string,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<Payment>(
+    { url: `/payment/${id}`, method: "delete" },
     options
   );
 };

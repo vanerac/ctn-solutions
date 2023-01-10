@@ -199,6 +199,24 @@ type InvoiceField {
   tax: Float!
 }
 
+type Payment {
+  id: Int!
+  customer: Customer!
+  user: User!
+  amount: Int!
+  date: DateTime!
+  notes: String!
+  paymentMethod: PaymentMethod!
+}
+
+enum PaymentMethod {
+  CASH
+  CHECK
+  CARD
+  BANK_TRANSFER
+  OTHER
+}
+
 type Query {
   users: [User!]!
   user(id: Float!): User!
@@ -212,4 +230,6 @@ type Query {
   document(id: Float!): Document!
   exports: [Export!]!
   export(id: Float!): Export!
+  payments: [Payment!]!
+  payment(id: Float!): Payment!
 }

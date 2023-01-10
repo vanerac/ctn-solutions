@@ -5,6 +5,47 @@
  * desc
  * OpenAPI spec version: 1.0
  */
+export type PaymentMethod = typeof PaymentMethod[keyof typeof PaymentMethod];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PaymentMethod = {
+  cash: "cash",
+  check: "check",
+  card: "card",
+  bank_transfer: "bank_transfer",
+  other: "other",
+} as const;
+
+export interface UpdatePaymentDto {
+  id?: number;
+  customer?: Customer;
+  user?: User;
+  amount?: number;
+  date?: Date;
+  notes?: string;
+  paymentMethod?: PaymentMethod;
+}
+
+export interface Payment {
+  id: number;
+  customer: Customer;
+  user: User;
+  amount: number;
+  date: Date;
+  notes: string;
+  paymentMethod: PaymentMethod;
+}
+
+export interface CreatePaymentDto {
+  id: number;
+  customer: Customer;
+  user: User;
+  amount: number;
+  date: Date;
+  notes: string;
+  paymentMethod: PaymentMethod;
+}
+
 export interface Invoice {
   id: number;
   customer: Customer;
