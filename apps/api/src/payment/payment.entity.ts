@@ -1,8 +1,8 @@
 import {Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Field, Int, ObjectType, registerEnumType} from "@nestjs/graphql";
 import {ApiProperty} from "@nestjs/swagger";
-import {Customer} from "../customer/customer.entity";
 import {User} from "../user/user.entity";
+import {Invoice} from "../invoice/invoice.entity";
 
 
 enum PaymentMethod {
@@ -25,17 +25,18 @@ export class Payment {
     @Field(() => Int)
     id: number;
 
-    // Customer
-    @ApiProperty({type: () => Customer})
-    @OneToOne(type => Customer, {nullable: false, onDelete: "CASCADE"}) @JoinColumn()
-    @Field(() => Customer)
-    customer: Customer;
 
     // User
     @ApiProperty({type: () => User})
     @OneToOne(type => User, {nullable: false, onDelete: "CASCADE"}) @JoinColumn()
     @Field(() => User)
     user: User;
+
+    // Invoices
+    @ApiProperty({type: () => [Invoice]})
+    @OneToOne(type => Invoice, {nullable: false, onDelete: "CASCADE"}) @JoinColumn()
+    @Field(() => [Invoice])
+    invoices: Invoice[];
 
 
     // Amount

@@ -130,6 +130,7 @@ export type Invoice = {
   items: Array<InvoiceField>;
   notes: Scalars['String'];
   owner: User;
+  payment?: Maybe<Payment>;
   shippingAddress?: Maybe<Company>;
   status: InvoiceStatus;
   tax: Scalars['Float'];
@@ -180,9 +181,9 @@ export enum LegalForm {
 export type Payment = {
   __typename?: 'Payment';
   amount: Scalars['Int'];
-  customer: Customer;
   date: Scalars['DateTime'];
   id: Scalars['Int'];
+  invoices: Array<Invoice>;
   notes: Scalars['String'];
   paymentMethod: PaymentMethod;
   user: User;
@@ -507,6 +508,7 @@ export type InvoiceResolvers<ContextType = any, ParentType extends ResolversPare
   items?: Resolver<Array<ResolversTypes['InvoiceField']>, ParentType, ContextType>;
   notes?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  payment?: Resolver<Maybe<ResolversTypes['Payment']>, ParentType, ContextType>;
   shippingAddress?: Resolver<Maybe<ResolversTypes['Company']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['InvoiceStatus'], ParentType, ContextType>;
   tax?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
@@ -537,9 +539,9 @@ export type InvoiceFieldResolvers<ContextType = any, ParentType extends Resolver
 
 export type PaymentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Payment'] = ResolversParentTypes['Payment']> = ResolversObject<{
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  customer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType>;
   date?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  invoices?: Resolver<Array<ResolversTypes['Invoice']>, ParentType, ContextType>;
   notes?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   paymentMethod?: Resolver<ResolversTypes['PaymentMethod'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;

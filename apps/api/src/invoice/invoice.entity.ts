@@ -6,6 +6,7 @@ import {User} from "../user/user.entity";
 import {InvoiceField} from "./invoice-fields.entity";
 import {Export} from "../export/export.entity";
 import {Field, Int, ObjectType, registerEnumType} from "@nestjs/graphql";
+import {Payment} from "../payment/payment.entity";
 
 enum InvoiceStatus {
     DRAFT = 'draft',
@@ -51,6 +52,11 @@ export class Invoice {
     @OneToMany(type => InvoiceField, item => item.invoice)
     @Field(() => [InvoiceField])
     items: InvoiceField[];
+
+    @ApiProperty({type: () => Payment})
+    @ManyToOne(type => Payment, {nullable: true}) @JoinColumn()
+    @Field(() => Payment, {nullable: true})
+    payment: Payment;
 
     @ApiProperty()
     @Column()
