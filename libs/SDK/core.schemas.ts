@@ -5,6 +5,16 @@
  * desc
  * OpenAPI spec version: 1.0
  */
+export interface UpdateProjectDto {
+  id?: number;
+  title?: string;
+  description?: string;
+  customer?: Customer;
+  invoices?: Invoice[];
+  estimates?: Estimate[];
+  user?: User;
+}
+
 export type ExpenseCategory =
   typeof ExpenseCategory[keyof typeof ExpenseCategory];
 
@@ -151,6 +161,26 @@ export interface Invoice {
   updatedAt: Date;
   status: InvoiceStatus;
   exports: InvoiceExport[];
+}
+
+export interface Project {
+  id: number;
+  title: string;
+  description: string;
+  customer: Customer;
+  invoices: Invoice[];
+  estimates: Estimate[];
+  user: User;
+}
+
+export interface CreateProjectDto {
+  id: number;
+  title: string;
+  description: string;
+  customer: Customer;
+  invoices: Invoice[];
+  estimates: Estimate[];
+  user: User;
 }
 
 export interface UpdateExpenseDto {

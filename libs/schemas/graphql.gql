@@ -235,6 +235,16 @@ enum ExpenseCategory {
   OTHER
 }
 
+type Project {
+  id: Int!
+  title: String!
+  description: String!
+  customer: Customer!
+  invoices: [Invoice!]!
+  estimates: [Estimate!]!
+  user: User!
+}
+
 type Query {
   users: [User!]!
   user(id: Float!): User!
@@ -252,4 +262,6 @@ type Query {
   payment(id: Float!): Payment!
   expenses: [Expense!]!
   expense(id: Float!): Expense!
+  projects: [Project!]!
+  project(id: Float!): Project!
 }
