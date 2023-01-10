@@ -34,6 +34,7 @@ export interface Expense {
   user: User;
   invoice: Invoice;
   category: ExpenseCategory;
+  document: Document[];
 }
 
 export interface CreateExpenseDto {
@@ -44,6 +45,7 @@ export interface CreateExpenseDto {
   user: User;
   invoice: Invoice;
   category: ExpenseCategory;
+  document: Document[];
 }
 
 export interface UpdatePaymentDto {
@@ -183,16 +185,6 @@ export interface CreateProjectDto {
   user: User;
 }
 
-export interface UpdateExpenseDto {
-  id?: number;
-  date?: Date;
-  amount?: number;
-  customer?: Customer;
-  user?: User;
-  invoice?: Invoice;
-  category?: ExpenseCategory;
-}
-
 export type SignatureDocument = Document | null;
 
 export type SignatureType = typeof SignatureType[keyof typeof SignatureType];
@@ -242,6 +234,17 @@ export interface Document {
   readonly updatedAt: Date;
   readonly url: string;
   readonly signatures: Signature[] | null;
+}
+
+export interface UpdateExpenseDto {
+  id?: number;
+  date?: Date;
+  amount?: number;
+  customer?: Customer;
+  user?: User;
+  invoice?: Invoice;
+  category?: ExpenseCategory;
+  document?: Document[];
 }
 
 export type ExportStatus = typeof ExportStatus[keyof typeof ExportStatus];

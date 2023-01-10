@@ -4,6 +4,7 @@ import {Expense} from "./expense.entity";
 import {User} from "../user/user.entity";
 import {Invoice} from "../invoice/invoice.entity";
 import {Customer} from "../customer/customer.entity";
+import {Document} from "../document/document.entity";
 
 @Resolver(of => Expense)
 export default class ExpenseResolver {
@@ -39,6 +40,12 @@ export default class ExpenseResolver {
     @ResolveField(() => Customer)
     async customer(@Parent() expense: Expense) {
         return expense.customer
+    }
+
+    // Documents
+    @ResolveField(() => Document)
+    async documents(@Parent() expense: Expense) {
+        return expense.document
     }
 
 

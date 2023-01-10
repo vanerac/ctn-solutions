@@ -226,6 +226,8 @@ type Expense {
   user: User!
   invoice: Invoice!
   category: ExpenseCategory!
+  document: [Document!]!
+  documents: Document!
 }
 
 enum ExpenseCategory {

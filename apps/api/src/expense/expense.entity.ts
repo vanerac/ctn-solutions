@@ -1,9 +1,10 @@
-import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Field, Int, ObjectType, registerEnumType} from "@nestjs/graphql";
 import {ApiProperty} from "@nestjs/swagger";
 import {Customer} from "../customer/customer.entity";
 import {User} from "../user/user.entity";
 import {Invoice} from "../invoice/invoice.entity";
+import {Document} from '../document/document.entity';
 
 enum ExpenseCategory {
     TRAVEL = 'travel',
@@ -62,5 +63,11 @@ export class Expense {
     @Field(() => ExpenseCategory)
     @Column({type: 'enum', enum: ExpenseCategory})
     category: ExpenseCategory;
+
+    // Document
+    @ApiProperty({type: () => Document, isArray: true})
+    @Field(() => [Document])
+    @OneToOne(type => Document, {nullable: true, onDelete: "CASCADE"}) @JoinColumn()
+    document: Document;
 
 }

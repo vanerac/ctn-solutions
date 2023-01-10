@@ -103,6 +103,8 @@ export type Expense = {
   category: ExpenseCategory;
   customer: Customer;
   date: Scalars['DateTime'];
+  document: Array<Document>;
+  documents: Document;
   id: Scalars['Int'];
   invoice: Invoice;
   user: User;
@@ -536,6 +538,8 @@ export type ExpenseResolvers<ContextType = any, ParentType extends ResolversPare
   category?: Resolver<ResolversTypes['ExpenseCategory'], ParentType, ContextType>;
   customer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType>;
   date?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  document?: Resolver<Array<ResolversTypes['Document']>, ParentType, ContextType>;
+  documents?: Resolver<ResolversTypes['Document'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   invoice?: Resolver<ResolversTypes['Invoice'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
