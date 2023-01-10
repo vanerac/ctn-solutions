@@ -151,12 +151,31 @@ enum ExportStatus {
   ERROR
 }
 
+type Payment {
+  id: Int!
+  user: User!
+  invoices: [Invoice!]!
+  amount: Int!
+  date: DateTime!
+  notes: String!
+  paymentMethod: PaymentMethod!
+}
+
+enum PaymentMethod {
+  CASH
+  CHECK
+  CARD
+  BANK_TRANSFER
+  OTHER
+}
+
 type Invoice {
   id: Int!
   customer: Customer!
   billingAddress: Company
   shippingAddress: Company
   items: [InvoiceField!]!
+  payment: Payment
   title: String!
   description: String!
   date: DateTime!
@@ -212,4 +231,6 @@ type Query {
   document(id: Float!): Document!
   exports: [Export!]!
   export(id: Float!): Export!
+  payments: [Payment!]!
+  payment(id: Float!): Payment!
 }
