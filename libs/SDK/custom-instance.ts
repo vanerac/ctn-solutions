@@ -6,15 +6,15 @@ export const AXIOS_INSTANCE = Axios.create({baseURL: process.env.API_URL ?? 'htt
 
 AXIOS_INSTANCE.interceptors.request.use(
     config => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token'); // Todo: Migrate to cookies
         if (token) {
-            config.headers = {
+            config.headers = Object.assign(config.headers, {
                 ...config.headers,
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded',
                 "Access-Control-Allow-Origin": "*",
-            }
+            })
         }
         return config;
     });

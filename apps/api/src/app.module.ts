@@ -15,6 +15,7 @@ import {GraphQLModule} from "@nestjs/graphql";
 import {ApolloDriver, ApolloDriverConfig} from "@nestjs/apollo";
 import {PaymentModule} from './payment/payment.module';
 import { ExpenseModule } from './expense/expense.module';
+import { ProjectModule } from './project/project.module';
 import * as path from "path";
 
 @Module({
@@ -53,7 +54,8 @@ import * as path from "path";
         ExportModule,
         DocumentModule,
         PaymentModule,
-        ExpenseModule
+        ExpenseModule,
+        ProjectModule
     ],
     controllers: [AppController],
     providers: [AppService],
