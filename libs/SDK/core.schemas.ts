@@ -5,6 +5,37 @@
  * desc
  * OpenAPI spec version: 1.0
  */
+export type ExpenseCategory =
+  typeof ExpenseCategory[keyof typeof ExpenseCategory];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ExpenseCategory = {
+  travel: "travel",
+  food: "food",
+  materials: "materials",
+  other: "other",
+} as const;
+
+export interface Expense {
+  id: number;
+  date: Date;
+  amount: number;
+  customer: Customer;
+  user: User;
+  invoice: Invoice;
+  category: ExpenseCategory;
+}
+
+export interface CreateExpenseDto {
+  id: number;
+  date: Date;
+  amount: number;
+  customer: Customer;
+  user: User;
+  invoice: Invoice;
+  category: ExpenseCategory;
+}
+
 export interface UpdatePaymentDto {
   id?: number;
   user?: User;
@@ -120,6 +151,16 @@ export interface Invoice {
   updatedAt: Date;
   status: InvoiceStatus;
   exports: InvoiceExport[];
+}
+
+export interface UpdateExpenseDto {
+  id?: number;
+  date?: Date;
+  amount?: number;
+  customer?: Customer;
+  user?: User;
+  invoice?: Invoice;
+  category?: ExpenseCategory;
 }
 
 export type SignatureDocument = Document | null;

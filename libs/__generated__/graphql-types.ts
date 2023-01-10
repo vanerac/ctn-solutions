@@ -97,6 +97,24 @@ export enum EstimateStatus {
   Sent = 'SENT'
 }
 
+export type Expense = {
+  __typename?: 'Expense';
+  amount: Scalars['Float'];
+  category: ExpenseCategory;
+  customer: Customer;
+  date: Scalars['DateTime'];
+  id: Scalars['Int'];
+  invoice: Invoice;
+  user: User;
+};
+
+export enum ExpenseCategory {
+  Food = 'FOOD',
+  Materials = 'MATERIALS',
+  Other = 'OTHER',
+  Travel = 'TRAVEL'
+}
+
 export type Export = {
   __typename?: 'Export';
   createdAt: Scalars['DateTime'];
@@ -205,6 +223,8 @@ export type Query = {
   documents: Array<Document>;
   estimate: Estimate;
   estimates: Array<Estimate>;
+  expense: Expense;
+  expenses: Array<Expense>;
   export: Export;
   exports: Array<Export>;
   invoice: Invoice;
@@ -222,6 +242,11 @@ export type QueryDocumentArgs = {
 
 
 export type QueryEstimateArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type QueryExpenseArgs = {
   id: Scalars['Float'];
 };
 
@@ -364,6 +389,8 @@ export type ResolversTypes = ResolversObject<{
   Estimate: ResolverTypeWrapper<Estimate>;
   EstimateField: ResolverTypeWrapper<EstimateField>;
   EstimateStatus: EstimateStatus;
+  Expense: ResolverTypeWrapper<Expense>;
+  ExpenseCategory: ExpenseCategory;
   Export: ResolverTypeWrapper<Export>;
   ExportStatus: ExportStatus;
   Float: ResolverTypeWrapper<Scalars['Float']>;
@@ -393,6 +420,7 @@ export type ResolversParentTypes = ResolversObject<{
   Document: Document;
   Estimate: Estimate;
   EstimateField: EstimateField;
+  Expense: Expense;
   Export: Export;
   Float: Scalars['Float'];
   Int: Scalars['Int'];
@@ -483,6 +511,17 @@ export type EstimateFieldResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type ExpenseResolvers<ContextType = any, ParentType extends ResolversParentTypes['Expense'] = ResolversParentTypes['Expense']> = ResolversObject<{
+  amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  category?: Resolver<ResolversTypes['ExpenseCategory'], ParentType, ContextType>;
+  customer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType>;
+  date?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  invoice?: Resolver<ResolversTypes['Invoice'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type ExportResolvers<ContextType = any, ParentType extends ResolversParentTypes['Export'] = ResolversParentTypes['Export']> = ResolversObject<{
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   document?: Resolver<Maybe<ResolversTypes['Document']>, ParentType, ContextType>;
@@ -555,6 +594,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   documents?: Resolver<Array<ResolversTypes['Document']>, ParentType, ContextType>;
   estimate?: Resolver<ResolversTypes['Estimate'], ParentType, ContextType, RequireFields<QueryEstimateArgs, 'id'>>;
   estimates?: Resolver<Array<ResolversTypes['Estimate']>, ParentType, ContextType>;
+  expense?: Resolver<ResolversTypes['Expense'], ParentType, ContextType, RequireFields<QueryExpenseArgs, 'id'>>;
+  expenses?: Resolver<Array<ResolversTypes['Expense']>, ParentType, ContextType>;
   export?: Resolver<ResolversTypes['Export'], ParentType, ContextType, RequireFields<QueryExportArgs, 'id'>>;
   exports?: Resolver<Array<ResolversTypes['Export']>, ParentType, ContextType>;
   invoice?: Resolver<ResolversTypes['Invoice'], ParentType, ContextType, RequireFields<QueryInvoiceArgs, 'id'>>;
@@ -604,6 +645,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Document?: DocumentResolvers<ContextType>;
   Estimate?: EstimateResolvers<ContextType>;
   EstimateField?: EstimateFieldResolvers<ContextType>;
+  Expense?: ExpenseResolvers<ContextType>;
   Export?: ExportResolvers<ContextType>;
   Invoice?: InvoiceResolvers<ContextType>;
   InvoiceExport?: InvoiceExportResolvers<ContextType>;

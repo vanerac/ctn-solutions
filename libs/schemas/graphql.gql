@@ -218,6 +218,23 @@ type InvoiceField {
   tax: Float!
 }
 
+type Expense {
+  id: Int!
+  date: DateTime!
+  amount: Float!
+  customer: Customer!
+  user: User!
+  invoice: Invoice!
+  category: ExpenseCategory!
+}
+
+enum ExpenseCategory {
+  TRAVEL
+  FOOD
+  MATERIALS
+  OTHER
+}
+
 type Query {
   users: [User!]!
   user(id: Float!): User!
@@ -233,4 +250,6 @@ type Query {
   export(id: Float!): Export!
   payments: [Payment!]!
   payment(id: Float!): Payment!
+  expenses: [Expense!]!
+  expense(id: Float!): Expense!
 }
